@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Prof qui Compte</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #E4EAEF;
+    --paper-dark: #D6DEE6;
+    --ink: #16232F;
+    --ink-soft: #2A3A48;
+    --graphite: #5B6B78;
+    --amber: #F2A93B;
+    --amber-dark: #C9860F;
+    --red: #D64541;
+    --teal: #2E8B87;
+    --card: #F4F7F9;
+    --radius: 6px;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  body{
+    background-image:
+      linear-gradient(var(--paper-dark) 1px, transparent 1px),
+      linear-gradient(90deg, var(--paper-dark) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit;}
+
+  /* ---------- Header ---------- */
+  header{
+    background:var(--ink);
+    color:var(--paper);
+    padding:2.2rem 1.5rem 2.6rem;
+  }
+  .header-inner{
+    max-width:980px;
+    margin:0 auto;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin:0 0 0.6rem;
+  }
+  h1{
+    font-family:'Oswald', sans-serif;
+    font-weight:700;
+    letter-spacing:0.01em;
+    font-size:clamp(2rem, 5vw, 3rem);
+    margin:0 0 0.5rem;
+    line-height:1.05;
+  }
+  header p.sub{
+    font-size:1rem;
+    color:#B9C6D1;
+    max-width:520px;
+    margin:0;
+    line-height:1.5;
+  }
+
+  /* ---------- Class tabs ---------- */
+  nav.tabs{
+    max-width:980px;
+    margin:-1.3rem auto 0;
+    padding:0 1.5rem;
+    position:relative;
+    z-index:3;
+  }
+  .tabs-scroll{
+    display:flex;
+    gap:0.5rem;
+    overflow-x:auto;
+    padding-bottom:0.3rem;
+  }
+  .tab{
+    flex:0 0 auto;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.03em;
+    background:var(--card);
+    color:var(--ink-soft);
+    border:1px solid var(--paper-dark);
+    border-bottom:3px solid var(--paper-dark);
+    padding:0.65rem 0.9rem;
+    border-radius:var(--radius) var(--radius) 0 0;
+    cursor:pointer;
+    white-space:nowrap;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  .tab.active{
+    color:var(--ink);
+    border-bottom:3px solid var(--amber);
+  }
+  .tab:hover{ color: var(--ink); }
+
+  /* ---------- Main ---------- */
+  main{
+    max-width:980px;
+    margin:0 auto;
+    padding:2.2rem 1.5rem 3rem;
+  }
+
+  .panel{ display:none; }
+  .panel.active{ display:block; }
+
+  /* Chapter grid (level 1) */
+  .chapter-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(210px, 1fr));
+    gap:1rem;
+  }
+  .chapter-card{
+    background:var(--card);
+    border:1px solid var(--paper-dark);
+    border-left:4px solid var(--ink);
+    border-radius:var(--radius);
+    padding:1.15rem 1.2rem;
+    cursor:pointer;
+    transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    display:flex;
+    flex-direction:column;
+    gap:0.35rem;
+  }
+  .chapter-card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 18px rgba(22,35,47,0.12);
+    border-left-color:var(--amber);
+  }
+  .chapter-card h2{
+    font-family:'Oswald', sans-serif;
+    font-weight:600;
+    font-size:1.05rem;
+    margin:0;
+    color:var(--ink);
+    text-transform:none;
+  }
+  .chapter-card .count{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    color:var(--graphite);
+  }
+
+  /* Chapter detail (level 2) */
+  .chapter-detail{ display:none; }
+  .chapter-detail.active{ display:block; }
+
+  .back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:0.4rem;
+    background:none;
+    border:none;
+    color:var(--ink-soft);
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    font-weight:600;
+    cursor:pointer;
+    padding:0.4rem 0;
+    margin-bottom:1.2rem;
+  }
+  .back-btn:hover{ color:var(--amber-dark); }
+
+  .detail-title{
+    font-family:'Oswald', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.05em;
+    font-size:1rem;
+    color:var(--ink-soft);
+    margin:0 0 1.2rem;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px, 1fr));
+    gap:1.1rem;
+  }
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--paper-dark);
+    border-radius:var(--radius);
+    padding:1.2rem 1.1rem 1.1rem;
+    position:relative;
+    transition:transform .15s ease, box-shadow .15s ease;
+    display:flex;
+    flex-direction:column;
+    gap:0.55rem;
+    min-height:150px;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 18px rgba(22,35,47,0.12);
+  }
+  .card.disabled{
+    opacity:0.55;
+    filter:grayscale(0.3);
+  }
+  .card.disabled:hover{ transform:none; box-shadow:none; }
+
+  .badge{
+    position:absolute;
+    top:-9px; left:14px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.66rem;
+    font-weight:600;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#fff;
+    padding:0.22rem 0.55rem;
+    border-radius:3px;
+  }
+  .badge.jeu{ background:var(--amber-dark); }
+  .badge.qcm{ background:var(--red); }
+  .badge.video{ background:var(--teal); }
+
+  .card h3{
+    font-family:'Inter', sans-serif;
+    font-weight:700;
+    font-size:1.02rem;
+    margin:0.4rem 0 0;
+    color:var(--ink);
+  }
+  .card p{
+    margin:0;
+    font-size:0.86rem;
+    color:var(--graphite);
+    line-height:1.4;
+    flex:1;
+  }
+  .card .meta{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    color:var(--graphite);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-top:0.3rem;
+    border-top:1px dashed var(--paper-dark);
+  }
+  .status-dot{
+    display:inline-block;
+    width:7px; height:7px;
+    border-radius:50%;
+    background:var(--graphite);
+    margin-right:0.3rem;
+  }
+  .status-dot.soon{ background: var(--amber); }
+
+  footer{
+    text-align:center;
+    padding:1.5rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.68rem;
+    color:var(--graphite);
+  }
+
+  @media (max-width:560px){
+    header{ padding:1.8rem 1.2rem 2.2rem; }
+    main{ padding:1.8rem 1.2rem 2.6rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <p class="eyebrow">Les maths autrement</p>
+    <h1>La Prof qui Compte</h1>
+    <p class="sub">Jeux et QCM d'entraînement pour progresser à ton rythme. Choisis ta classe, puis ton chapitre.</p>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-scroll">
+    <div class="tab active" data-panel="cap">CAP 2A</div>
+    <div class="tab" data-panel="premiere">Première Pro</div>
+    <div class="tab" data-panel="terminale">Terminale Pro</div>
+    <div class="tab" data-panel="bonus">Bonus</div>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ================= CAP 2A ================= -->
+  <section class="panel active" id="panel-cap">
+
+    <div class="chapter-grid">
+      <div class="chapter-card" data-target="cap-automatismes">
+        <h2>Automatismes</h2>
+        <span class="count">1 activité</span>
+      </div>
+    </div>
+
+    <div class="chapter-detail" id="detail-cap-automatismes">
+      <button class="back-btn">← Retour aux chapitres</button>
+      <p class="detail-title">Automatismes</p>
+      <div class="grid">
+        <div class="card disabled">
+          <span class="badge qcm">QCM</span>
+          <h3>QCM d'automatismes</h3>
+          <p>Entraînement rapide, correction immédiate.</p>
+          <div class="meta"><span><span class="status-dot soon"></span>Bientôt</span><span>—</span></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= Première Pro ================= -->
+  <section class="panel" id="panel-premiere">
+
+    <div class="chapter-grid">
+      <div class="chapter-card" data-target="premiere-automatismes">
+        <h2>Automatismes</h2>
+        <span class="count">1 activité</span>
+      </div>
+      <div class="chapter-card" data-target="premiere-stats">
+        <h2>Statistiques à deux variables</h2>
+        <span class="count">1 activité</span>
+      </div>
+      <div class="chapter-card" data-target="premiere-suites">
+        <h2>Suites numériques et arithmétiques</h2>
+        <span class="count">1 activité</span>
+      </div>
+    </div>
+
+    <div class="chapter-detail" id="detail-premiere-automatismes">
+      <button class="back-btn">← Retour aux chapitres</button>
+      <p class="detail-title">Automatismes</p>
+      <div class="grid">
+        <div class="card disabled">
+          <span class="badge qcm">QCM</span>
+          <h3>QCM d'automatismes</h3>
+          <p>Entraînement rapide, correction immédiate.</p>
+          <div class="meta"><span><span class="status-dot soon"></span>Bientôt</span><span>—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-detail" id="detail-premiere-stats">
+      <button class="back-btn">← Retour aux chapitres</button>
+      <p class="detail-title">Statistiques à deux variables</p>
+      <div class="grid">
+        <div class="card disabled">
+          <span class="badge qcm">QCM</span>
+          <h3>À venir</h3>
+          <p>Contenu en préparation.</p>
+          <div class="meta"><span><span class="status-dot soon"></span>Bientôt</span><span>—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-detail" id="detail-premiere-suites">
+      <button class="back-btn">← Retour aux chapitres</button>
+      <p class="detail-title">Suites numériques et arithmétiques</p>
+      <div class="grid">
+        <a class="card" href="jeux/premiere-suites-arithmetiques.html">
+          <span class="badge jeu">Jeu</span>
+          <h3>Suites arithmétiques</h3>
+          <p>Entraîne-toi sur les suites arithmétiques.</p>
+          <div class="meta"><span><span class="status-dot"></span>Disponible</span><span>—</span></div>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= Terminale Pro ================= -->
+  <section class="panel" id="panel-terminale">
+
+    <div class="chapter-grid">
+      <div class="chapter-card" data-target="terminale-automatismes">
+        <h2>Automatismes</h2>
+        <span class="count">1 activité</span>
+      </div>
+      <div class="chapter-card" data-target="terminale-suites">
+        <h2>Suites numériques et géométriques</h2>
+        <span class="count">1 activité</span>
+      </div>
+    </div>
+
+    <div class="chapter-detail" id="detail-terminale-automatismes">
+      <button class="back-btn">← Retour aux chapitres</button>
+      <p class="detail-title">Automatismes</p>
+      <div class="grid">
+        <div class="card disabled">
+          <span class="badge qcm">QCM</span>
+          <h3>QCM d'automatismes</h3>
+          <p>Entraînement rapide, correction immédiate.</p>
+          <div class="meta"><span><span class="status-dot soon"></span>Bientôt</span><span>—</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chapter-detail" id="detail-terminale-suites">
+      <button class="back-btn">← Retour aux chapitres</button>
+      <p class="detail-title">Suites numériques et géométriques</p>
+      <div class="grid">
+        <a class="card" href="jeux/terminale-suites.html">
+          <span class="badge jeu">Jeu</span>
+          <h3>Suites arithmétiques et géométriques</h3>
+          <p>Entraîne-toi sur les deux types de suites.</p>
+          <div class="meta"><span><span class="status-dot"></span>Disponible</span><span>—</span></div>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ================= Bonus ================= -->
+  <section class="panel" id="panel-bonus">
+
+    <div class="chapter-grid">
+      <div class="chapter-card" data-target="bonus-securite">
+        <h2>Sécurité en physique-chimie</h2>
+        <span class="count">1 activité</span>
+      </div>
+    </div>
+
+    <div class="chapter-detail" id="detail-bonus-securite">
+      <button class="back-btn">← Retour aux chapitres</button>
+      <p class="detail-title">Sécurité en physique-chimie</p>
+      <div class="grid">
+        <div class="card disabled">
+          <span class="badge jeu">Jeu</span>
+          <h3>Jeu des paires — sécurité labo</h3>
+          <p>Électricité, chimie, acoustique, optique.</p>
+          <div class="meta"><span><span class="status-dot soon"></span>Bientôt</span><span>—</span></div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+</main>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+<script>
+  // Class-level tabs
+  document.querySelectorAll('.tab').forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+    });
+  });
+
+  // Chapter cards -> open detail view
+  document.querySelectorAll('.chapter-card').forEach(card=>{
+    card.addEventListener('click', ()=>{
+      const panel = card.closest('.panel');
+      panel.querySelector('.chapter-grid').style.display = 'none';
+      panel.querySelectorAll('.chapter-detail').forEach(d=>d.classList.remove('active'));
+      document.getElementById('detail-' + card.dataset.target).classList.add('active');
+    });
+  });
+
+  // Back buttons -> return to chapter grid
+  document.querySelectorAll('.back-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const panel = btn.closest('.panel');
+      panel.querySelectorAll('.chapter-detail').forEach(d=>d.classList.remove('active'));
+      panel.querySelector('.chapter-grid').style.display = 'grid';
+    });
+  });
+</script>
+
+</body>
+</html>
