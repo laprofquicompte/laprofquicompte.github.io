@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trouve le trio — fonctions affines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --board: #1b3a2f;
+    --board-dark: #10241c;
+    --board-light: #24493b;
+    --chalk: #f5f3e7;
+    --chalk-dim: rgba(245,243,231,0.55);
+    --yellow: #f2c744;
+    --blue: #6fb1d9;
+    --coral: #e8735d;
+    --green-ok: #7fd68a;
+    --red-no: #e06060;
+    --font-display: 'Kalam', cursive;
+    --font-ui: 'Space Grotesk', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(255,255,255,0.04), transparent 60%),
+      radial-gradient(ellipse at top, var(--board) 0%, var(--board-dark) 100%);
+    font-family: var(--font-ui);
+    color: var(--chalk);
+    padding: 28px 16px 60px;
+  }
+
+  header{
+    max-width: 1040px;
+    margin: 0 auto 22px;
+    text-align:center;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 2.9rem);
+    margin: 0 0 6px;
+    font-weight:700;
+    letter-spacing: 0.5px;
+    transform: rotate(-1deg);
+  }
+
+  h1 .accent{ color: var(--yellow); }
+
+  .subtitle{
+    font-size: 0.98rem;
+    color: var(--chalk-dim);
+    max-width: 640px;
+    margin: 0 auto;
+    line-height:1.5;
+  }
+
+  .subtitle strong{ color: var(--chalk); font-weight:600; }
+
+  .stats-bar{
+    max-width: 1040px;
+    margin: 20px auto 22px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap: 14px;
+  }
+
+  .pill{
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(245,243,231,0.18);
+    border-radius: 999px;
+    padding: 7px 16px;
+    font-size: 0.85rem;
+    color: var(--chalk-dim);
+  }
+
+  .pill b{ color: var(--chalk); font-family: var(--font-mono); font-weight:700; }
+
+  button.reset-btn{
+    font-family: var(--font-ui);
+    font-weight:600;
+    font-size: 0.85rem;
+    background: var(--board-light);
+    color: var(--chalk);
+    border: 1px solid rgba(245,243,231,0.3);
+    border-radius: 999px;
+    padding: 8px 18px;
+    cursor:pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+
+  button.reset-btn:hover{ background: #2d5b48; transform: translateY(-1px); }
+  button.reset-btn:focus-visible, .card:focus-visible{
+    outline: 3px solid var(--yellow);
+    outline-offset: 3px;
+  }
+
+  .board{
+    max-width: 1040px;
+    margin: 0 auto;
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(138px, 1fr));
+    gap: 14px;
+  }
+
+  .card{
+    all: unset;
+    cursor:pointer;
+    aspect-ratio: 3 / 4;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding: 10px;
+    text-align:center;
+    gap: 6px;
+    border-radius: 12px;
+    background: var(--board-dark);
+    border: 2px solid rgba(245,243,231,0.15);
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, opacity 0.4s ease, filter 0.4s ease;
+  }
+
+  .card:hover{ transform: translateY(-2px); }
+
+  .card.type-expr{ border-color: rgba(242,199,68,0.5); }
+  .card.type-graph{ border-color: rgba(111,177,217,0.5); }
+  .card.type-coef{ border-color: rgba(232,115,93,0.5); }
+
+  .card.selected{
+    box-shadow: 0 0 0 3px var(--yellow) inset;
+    transform: translateY(-3px);
+  }
+
+  .card.matched{
+    cursor: default;
+    opacity: 0.4;
+    filter: grayscale(0.7);
+    box-shadow: 0 0 0 3px var(--green-ok) inset;
+  }
+  .card.matched:hover{ transform: none; }
+
+  .card.wrong{
+    box-shadow: 0 0 0 3px var(--red-no) inset;
+  }
+
+  @keyframes shake{
+    0%,100%{ transform: translateX(0); }
+    25%{ transform: translateX(-6px); }
+    75%{ transform: translateX(6px); }
+  }
+  .card.shake{ animation: shake 0.3s ease; }
+
+  @media (prefers-reduced-motion: reduce){
+    .card{ transition: none; }
+    .card.shake{ animation: none; }
+  }
+
+  .eyebrow{
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+  }
+
+  .type-expr .eyebrow{ color: var(--yellow); }
+  .type-graph .eyebrow{ color: var(--blue); }
+  .type-coef .eyebrow{ color: var(--coral); }
+
+  .expr-text{
+    font-family: var(--font-mono);
+    font-size: clamp(0.85rem, 2.6vw, 1.05rem);
+    font-weight:700;
+    line-height:1.3;
+  }
+
+  .coef-text{
+    font-family: var(--font-mono);
+    font-weight:700;
+    font-size: clamp(0.95rem, 2.8vw, 1.15rem);
+    line-height:1.6;
+  }
+
+  .card.type-graph svg{ width:100%; height:80%; }
+
+  details.help{
+    max-width: 720px;
+    margin: 34px auto 0;
+    background: rgba(0,0,0,0.18);
+    border: 1px solid rgba(245,243,231,0.15);
+    border-radius: 12px;
+    padding: 14px 18px;
+  }
+  details.help summary{
+    cursor:pointer;
+    font-weight:600;
+    color: var(--yellow);
+  }
+  details.help ul{
+    font-size: 0.88rem;
+    line-height:1.6;
+    color: var(--chalk-dim);
+    padding-left: 20px;
+  }
+  details.help li{ margin-bottom: 6px; }
+  details.help code{ font-family: var(--font-mono); color: var(--chalk); }
+
+  .win-banner{
+    max-width: 1040px;
+    margin: 0 auto 20px;
+    text-align:center;
+    background: rgba(127,214,138,0.12);
+    border: 1px solid var(--green-ok);
+    border-radius: 12px;
+    padding: 14px;
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    display:none;
+  }
+  .win-banner.show{ display:block; }
+
+  footer{
+    max-width: 720px;
+    margin: 30px auto 0;
+    text-align:center;
+    font-size: 0.78rem;
+    color: var(--chalk-dim);
+    font-family: var(--font-ui);
+    letter-spacing: 0.3px;
+  }
+
+  .site-nav{
+    max-width: 1040px;
+    margin: 0 auto 20px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 12px;
+    padding: 10px 18px;
+    background: rgba(0,0,0,0.22);
+    border: 1px solid rgba(245,243,231,0.2);
+    border-radius: 999px;
+  }
+  .site-nav a.back{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    color: var(--chalk);
+    font-family: var(--font-ui);
+    font-weight:600;
+    font-size:0.85rem;
+    text-decoration:none;
+    transition: color 0.15s ease;
+  }
+  .site-nav a.back:hover{ color: var(--yellow); }
+  .site-nav .brand{
+    font-family: var(--font-mono);
+    font-size:0.68rem;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color: var(--chalk-dim);
+  }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="back" href="../index.html">← Accueil</a>
+  <span class="brand">La Prof qui Compte</span>
+</nav>
+
+<header>
+  <h1>Trouve le <span class="accent">trio</span> !</h1>
+  <p class="subtitle">Pour chaque fonction affine, clique sur les <strong>3 cartes</strong> qui vont ensemble :
+  l'expression <strong>f(x) = ax + b</strong>, sa <strong>représentation graphique</strong>, et ses <strong>coefficients a et b</strong>.</p>
+</header>
+
+<div class="win-banner" id="winBanner"></div>
+
+<div class="stats-bar">
+  <span class="pill">Essais : <b id="statAttempts">0</b></span>
+  <span class="pill">Trios trouvés : <b id="statFound">0</b> / 8</span>
+  <button class="reset-btn" id="resetBtn">🔀 Nouvelle partie</button>
+</div>
+
+<div class="board" id="board"></div>
+
+<details class="help">
+  <summary>📘 Rappel de cours : les fonctions affines</summary>
+  <p style="font-size:0.88rem; line-height:1.6; color:var(--chalk-dim);">Soit <code>a</code> et <code>b</code> deux nombres réels. Une <strong>fonction affine</strong> est une fonction définie sur ℝ qui, à un nombre <code>x</code>, associe le nombre <code>ax + b</code>. On note <code>f(x) = ax + b</code>.</p>
+  <ul>
+    <li><strong>Cas particuliers :</strong> si <code>b = 0</code>, <code>f(x) = ax</code> est une <strong>fonction linéaire</strong> ; si <code>a = 0</code>, <code>f(x) = b</code> est une <strong>fonction constante</strong>.</li>
+    <li><strong>Représentation graphique :</strong> dans un repère, la représentation graphique d'une fonction affine est une <strong>droite</strong> non parallèle à l'axe des ordonnées. Réciproquement, toute droite non parallèle à l'axe des ordonnées représente une fonction affine.</li>
+    <li><strong>Vocabulaire :</strong> <code>a</code> est le <strong>coefficient directeur</strong> de la droite (sa pente) ; <code>b</code> est l'<strong>ordonnée à l'origine</strong> (le point où la droite coupe l'axe des ordonnées, en <code>x = 0</code>).</li>
+    <li><strong>Tracer la droite :</strong> soit en calculant les coordonnées de deux points et en les plaçant dans le repère, soit directement à partir de <code>a</code> et <code>b</code> (placer <code>b</code> sur l'axe des ordonnées, puis avancer d'une unité en <code>x</code> et de <code>a</code> unités en <code>y</code>).</li>
+    <li><strong>Calculer <code>a</code> à partir de deux points :</strong> pour deux nombres distincts <code>m</code> et <code>n</code>, <code>a = (f(m) − f(n)) / (m − n)</code>. Ce quotient s'appelle le <strong>taux d'accroissement</strong>.</li>
+    <li><strong>Sens de variation :</strong> si <code>a &gt; 0</code>, <code>f</code> est <strong>croissante</strong> ; si <code>a &lt; 0</code>, <code>f</code> est <strong>décroissante</strong> ; si <code>a = 0</code>, <code>f</code> est <strong>constante</strong>.</li>
+  </ul>
+</details>
+
+<details class="help">
+  <summary>💡 Pourquoi ces 8 fonctions ? (à lire après avoir joué)</summary>
+  <ul>
+    <li><code>f(x) = 2x + 3</code> et <code>f(x) = 3x + 2</code> : piège classique de <strong>l'inversion de a et b</strong> (les deux nombres 2 et 3 sont les mêmes, mais leur rôle change tout).</li>
+    <li><code>f(x) = 2x + 3</code> et <code>f(x) = −2x + 3</code> : piège du <strong>signe du coefficient directeur</strong> — même ordonnée à l'origine, mais une droite <strong>croissante</strong> et une droite <strong>décroissante</strong>.</li>
+    <li><code>f(x) = 2x + 3</code> et <code>f(x) = 0,5x + 3</code> : piège du <strong>coefficient décimal</strong> — deux droites croissantes avec la même ordonnée à l'origine, mais des pentes très différentes.</li>
+    <li><code>f(x) = 2x + 3</code> et <code>f(x) = 2x − 3</code> : piège du <strong>signe de b</strong> — même pente, mais la droite ne coupe pas l'axe des ordonnées au même endroit.</li>
+    <li><code>f(x) = −x + 2</code> : piège du <strong>coefficient 1 sous-entendu</strong> devant x (souvent oublié ou confondu avec a = 0).</li>
+    <li><code>f(x) = −3x</code> : pas de « +b » visible → c'est une <strong>fonction linéaire</strong>, cas particulier où b = 0 (la droite passe par l'origine).</li>
+    <li><code>f(x) = 4</code> : pas de x du tout → c'est une <strong>fonction constante</strong>, cas particulier où a = 0 (la droite est horizontale).</li>
+  </ul>
+</details>
+
+<script>
+(function(){
+
+  const functions = [
+    { group: 1, a: 2,   b: 3,  expr: "f(x) = 2x + 3" },
+    { group: 2, a: 3,   b: 2,  expr: "f(x) = 3x + 2" },
+    { group: 3, a: -2,  b: 3,  expr: "f(x) = −2x + 3" },
+    { group: 4, a: 0.5, b: 3,  expr: "f(x) = 0,5x + 3" },
+    { group: 5, a: 2,   b: -3, expr: "f(x) = 2x − 3" },
+    { group: 6, a: -1,  b: 2,  expr: "f(x) = −x + 2" },
+    { group: 7, a: -3,  b: 0,  expr: "f(x) = −3x" },
+    { group: 8, a: 0,   b: 4,  expr: "f(x) = 4" },
+  ];
+
+  function fmt(n){
+    const sign = n < 0 ? "−" : "";
+    const abs = Math.abs(n);
+    const s = Number.isInteger(abs) ? String(abs) : String(abs).replace('.', ',');
+    return sign + s;
+  }
+
+  function graphSVG(a, b){
+    const W = 220, H = 220;
+    const xMin = -5, xMax = 5, yMin = -8, yMax = 8;
+
+    function toPx(x, y){
+      const px = (x - xMin) / (xMax - xMin) * W;
+      const py = H - (y - yMin) / (yMax - yMin) * H;
+      return [px, py];
+    }
+
+    let x1, y1, x2, y2, valid = true;
+    if (a === 0){
+      x1 = xMin; x2 = xMax; y1 = b; y2 = b;
+      if (y1 < yMin || y1 > yMax) valid = false;
+    } else {
+      const xa = (yMin - b) / a;
+      const xb = (yMax - b) / a;
+      const xLow = Math.min(xa, xb);
+      const xHigh = Math.max(xa, xb);
+      x1 = Math.max(xMin, xLow);
+      x2 = Math.min(xMax, xHigh);
+      if (x1 > x2) valid = false;
+      y1 = a * x1 + b;
+      y2 = a * x2 + b;
+    }
+
+    const [px1, py1] = toPx(x1, y1);
+    const [px2, py2] = toPx(x2, y2);
+    const [ax1, ay1] = toPx(xMin, 0);
+    const [ax2, ay2] = toPx(xMax, 0);
+    const [ay_1x, ay_1y] = toPx(0, yMin);
+    const [ay_2x, ay_2y] = toPx(0, yMax);
+
+    // fine grid, one square = 1 unit
+    let grid = '';
+    for (let gx = xMin; gx <= xMax; gx += 1){
+      const [p1x, p1y] = toPx(gx, yMin);
+      const [p2x, p2y] = toPx(gx, yMax);
+      grid += `<line x1="${p1x}" y1="${p1y}" x2="${p2x}" y2="${p2y}" stroke="rgba(245,243,231,0.09)" stroke-width="1"/>`;
+    }
+    for (let gy = yMin; gy <= yMax; gy += 1){
+      const [p1x, p1y] = toPx(xMin, gy);
+      const [p2x, p2y] = toPx(xMax, gy);
+      grid += `<line x1="${p1x}" y1="${p1y}" x2="${p2x}" y2="${p2y}" stroke="rgba(245,243,231,0.09)" stroke-width="1"/>`;
+    }
+
+    // unit labels: every integer on x-axis, every 2 units on y-axis
+    let labels = '';
+    for (let gx = xMin; gx <= xMax; gx += 1){
+      if (gx === 0) continue;
+      const [lx, ly] = toPx(gx, 0);
+      labels += `<text x="${lx}" y="${ly + 11}" font-size="8" fill="rgba(245,243,231,0.55)" text-anchor="middle" font-family="monospace">${gx}</text>`;
+    }
+    for (let gy = yMin; gy <= yMax; gy += 2){
+      if (gy === 0) continue;
+      const [lx, ly] = toPx(0, gy);
+      labels += `<text x="${lx - 6}" y="${ly + 3}" font-size="8" fill="rgba(245,243,231,0.55)" text-anchor="end" font-family="monospace">${gy}</text>`;
+    }
+    labels += `<text x="${toPx(0,0)[0] - 6}" y="${toPx(0,0)[1] + 11}" font-size="8" fill="rgba(245,243,231,0.55)" text-anchor="end" font-family="monospace">0</text>`;
+
+    const line = valid
+      ? `<line x1="${px1}" y1="${py1}" x2="${px2}" y2="${py2}" stroke="#6fb1d9" stroke-width="3" stroke-linecap="round"/>`
+      : '';
+
+    return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">
+      ${grid}
+      <line x1="${ax1}" y1="${ay1}" x2="${ax2}" y2="${ay2}" stroke="rgba(245,243,231,0.5)" stroke-width="1.5"/>
+      <line x1="${ay_1x}" y1="${ay_1y}" x2="${ay_2x}" y2="${ay_2y}" stroke="rgba(245,243,231,0.5)" stroke-width="1.5"/>
+      ${labels}
+      ${line}
+    </svg>`;
+  }
+
+  function buildDeck(){
+    let deck = [];
+    functions.forEach(f => {
+      deck.push({ group: f.group, type: 'expr',  content: f.expr });
+      deck.push({ group: f.group, type: 'graph', content: graphSVG(f.a, f.b) });
+      deck.push({ group: f.group, type: 'coef',  content: `a = ${fmt(f.a)}<br>b = ${fmt(f.b)}` });
+    });
+    for (let i = deck.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+    return deck;
+  }
+
+  const boardEl = document.getElementById('board');
+  const statAttempts = document.getElementById('statAttempts');
+  const statFound = document.getElementById('statFound');
+  const winBanner = document.getElementById('winBanner');
+  const resetBtn = document.getElementById('resetBtn');
+
+  let cardsData = [];
+  let cardsEls = [];
+  let selected = [];
+  let locked = false;
+  let attempts = 0;
+  let matchedGroups = 0;
+
+  const typeLabel = { expr: 'Expression', graph: 'Graphique', coef: 'Coefficients' };
+
+  function render(){
+    cardsData = buildDeck();
+    boardEl.innerHTML = '';
+    cardsEls = cardsData.map((data, idx) => {
+      const card = document.createElement('button');
+      card.className = `card type-${data.type}`;
+      card.dataset.idx = idx;
+
+      const eyebrow = `<span class="eyebrow">${typeLabel[data.type]}</span>`;
+      if (data.type === 'expr'){
+        card.innerHTML = `${eyebrow}<span class="expr-text">${data.content}</span>`;
+        card.setAttribute('aria-label', `Carte expression : ${data.content}`);
+      } else if (data.type === 'graph'){
+        card.innerHTML = `${eyebrow}${data.content}`;
+        card.setAttribute('aria-label', 'Carte graphique');
+      } else {
+        card.innerHTML = `${eyebrow}<span class="coef-text">${data.content}</span>`;
+        card.setAttribute('aria-label', `Carte coefficients : ${data.content.replace('<br>', ', ')}`);
+      }
+
+      card.addEventListener('click', () => onCardClick(idx));
+      boardEl.appendChild(card);
+      return card;
+    });
+
+    selected = [];
+    locked = false;
+    attempts = 0;
+    matchedGroups = 0;
+    winBanner.classList.remove('show');
+    updateStats();
+  }
+
+  function updateStats(){
+    statAttempts.textContent = attempts;
+    statFound.textContent = matchedGroups;
+  }
+
+  function onCardClick(idx){
+    if (locked) return;
+    const card = cardsEls[idx];
+    if (card.classList.contains('selected') || card.classList.contains('matched')) return;
+
+    card.classList.add('selected');
+    selected.push(idx);
+
+    if (selected.length === 3){
+      attempts++;
+      updateStats();
+      locked = true;
+      const [i1, i2, i3] = selected;
+      const same = cardsData[i1].group === cardsData[i2].group &&
+                   cardsData[i2].group === cardsData[i3].group;
+
+      if (same){
+        setTimeout(() => {
+          [i1, i2, i3].forEach(i => {
+            cardsEls[i].classList.remove('selected');
+            cardsEls[i].classList.add('matched');
+          });
+          matchedGroups++;
+          selected = [];
+          locked = false;
+          updateStats();
+          if (matchedGroups === 8) showWin();
+        }, 450);
+      } else {
+        [i1, i2, i3].forEach(i => cardsEls[i].classList.add('wrong', 'shake'));
+        setTimeout(() => {
+          [i1, i2, i3].forEach(i => {
+            cardsEls[i].classList.remove('selected', 'wrong', 'shake');
+          });
+          selected = [];
+          locked = false;
+        }, 900);
+      }
+    }
+  }
+
+  function showWin(){
+    winBanner.innerHTML = `🎉 Bravo ! Les 8 trios sont trouvés en <strong>${attempts}</strong> essais.`;
+    winBanner.classList.add('show');
+  }
+
+  resetBtn.addEventListener('click', render);
+
+  render();
+})();
+</script>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+</body>
+</html>
