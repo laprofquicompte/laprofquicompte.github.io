@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM — Suites numériques et géométriques</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #E4EAEF;
+    --ink: #16232F;
+    --ink-soft: rgba(22,35,47,0.65);
+    --ink-faint: rgba(22,35,47,0.4);
+    --amber: #F2A93B;
+    --amber-deep: #C6810F;
+    --card-bg: #EEF2F5;
+    --line: rgba(22,35,47,0.14);
+    --green: #3E8A5C;
+    --green-bg: rgba(62,138,92,0.14);
+    --red: #C0433A;
+    --red-bg: rgba(192,67,58,0.12);
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(rgba(22,35,47,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,47,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding: 26px 18px 50px;
+  }
+
+  .sheet{ max-width: 760px; margin: 0 auto; }
+
+  header{
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    font-weight: 700;
+    margin: 0 0 6px;
+    line-height: 1.1;
+  }
+
+  h1 .accent{ color: var(--amber-deep); }
+
+  .subtitle{
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  .score-bar{
+    position: sticky;
+    top: 46px;
+    z-index: 10;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 14px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 10px;
+    padding: 10px 18px;
+    margin-bottom: 22px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(22,35,47,0.18);
+  }
+
+  .score-bar .progress-track{
+    flex:1;
+    height: 6px;
+    background: rgba(228,234,239,0.2);
+    border-radius: 999px;
+    overflow:hidden;
+    margin: 0 14px;
+  }
+  .score-bar .progress-fill{
+    height: 100%;
+    width: 0%;
+    background: var(--amber);
+    transition: width 0.3s ease;
+  }
+
+  .score-bar .score-val{ color: var(--amber); font-family: var(--font-mono); }
+
+  button.reset-btn{
+    font-family: var(--font-body);
+    font-weight:600;
+    font-size: 0.78rem;
+    background: transparent;
+    color: var(--paper);
+    border: 1px solid rgba(228,234,239,0.35);
+    border-radius: 999px;
+    padding: 6px 14px;
+    cursor:pointer;
+    white-space:nowrap;
+    transition: background 0.15s ease;
+  }
+  button.reset-btn:hover{ background: rgba(228,234,239,0.12); }
+
+  .question{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-bottom: 16px;
+  }
+
+  .q-head{
+    display:flex;
+    align-items:baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .q-num{
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: var(--amber-deep);
+    white-space:nowrap;
+  }
+
+  .q-text{
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.98rem;
+    line-height: 1.4;
+  }
+
+  .q-text code, .options code{
+    font-family: var(--font-mono);
+    background: rgba(242,169,59,0.16);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-weight: 600;
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap: 8px;
+  }
+
+  .option{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    text-align:left;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--ink);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  }
+
+  .option:hover:not(:disabled){ border-color: var(--amber-deep); transform: translateX(2px); }
+
+  .option .letter{
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--amber-deep);
+    min-width: 18px;
+  }
+
+  .option:disabled{ cursor: default; }
+
+  .option.correct{
+    background: var(--green-bg);
+    border-color: var(--green);
+  }
+  .option.correct .letter{ color: var(--green); }
+
+  .option.incorrect{
+    background: var(--red-bg);
+    border-color: var(--red);
+  }
+  .option.incorrect .letter{ color: var(--red); }
+
+  .option.dim{ opacity: 0.55; }
+
+  .feedback{
+    margin-top: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    display:none;
+  }
+  .feedback.show{ display:block; }
+  .feedback.ok{ color: var(--green); }
+  .feedback.ko{ color: var(--red); }
+
+  .end-banner{
+    display:none;
+    text-align:center;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 22px;
+    margin-top: 10px;
+    font-family: var(--font-display);
+  }
+  .end-banner.show{ display:block; }
+  .end-banner .big-score{
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--amber);
+    margin-bottom: 6px;
+  }
+  .end-banner .msg{
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: rgba(228,234,239,0.85);
+    margin-bottom: 14px;
+  }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    font-family: var(--font-body);
+  }
+
+/* ---- Navbar retour accueil ---- */
+.site-navbar{
+  position: sticky; top: 0; z-index: 999;
+  background: #16232F; color:#E4EAEF;
+  padding: 0.65rem 1.2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  display:flex; align-items:center;
+}
+.site-navbar a{
+  color:#E4EAEF; text-decoration:none; font-weight:600;
+  display:inline-flex; align-items:center; gap:0.4rem;
+  transition: color .15s ease;
+}
+.site-navbar a:hover{ color:#F2A93B; }
+
+</style>
+</head>
+<body>
+<div class="site-navbar"><a href="../index.html">&#8592; Retour à l'accueil</a></div>
+
+<div class="sheet">
+
+  <header>
+    <p class="eyebrow">QCM d'entraînement · Terminale Pro</p>
+    <h1>Suites numériques <span class="accent">&amp; géométriques</span></h1>
+    <p class="subtitle">10 questions pour t'entraîner avant l'interro. Clique sur une réponse pour voir si c'est correct.</p>
+  </header>
+
+  <div class="score-bar">
+    <span>Score</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <span class="score-val" id="scoreVal">0 / 10</span>
+    <button class="reset-btn" id="resetBtn">🔀 Recommencer</button>
+  </div>
+
+  <div id="quiz"></div>
+
+  <div class="end-banner" id="endBanner">
+    <div class="big-score" id="endScore"></div>
+    <div class="msg" id="endMsg"></div>
+  </div>
+
+</div>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+<script>
+(function(){
+
+  const questions = [
+    {
+      text: `Suite donnée : 3 ; 9 ; 27 ; 81. Cette suite est :`,
+      options: ["arithmétique", "géométrique", "ni l'une ni l'autre"],
+      correct: 1,
+    },
+    {
+      text: `Pour vérifier qu'une suite est géométrique à partir d'un tableau de valeurs, on calcule :`,
+      options: ["la différence entre deux termes consécutifs", "le quotient entre deux termes consécutifs", "la moyenne des termes"],
+      correct: 1,
+    },
+    {
+      text: `La relation <code>u<sub>n+1</sub> = 5 × u<sub>n</sub></code> signifie que la raison q vaut :`,
+      options: ["5", "u<sub>n</sub>", "n"],
+      correct: 0,
+    },
+    {
+      text: `Pour une suite géométrique de premier terme u<sub>0</sub> et de raison q, la formule explicite est :`,
+      options: [`u<sub>n</sub> = u<sub>0</sub> + n × q`, `u<sub>n</sub> = u<sub>0</sub> × q<sup>n</sup>`, `u<sub>n</sub> = q<sup>n</sup>`],
+      correct: 1,
+    },
+    {
+      text: `Soit une suite géométrique de premier terme u<sub>0</sub> = 4 et de raison q = 2. Que vaut u<sub>1</sub> ?`,
+      options: ["6", "8", "2"],
+      correct: 1,
+    },
+    {
+      text: `Soit une suite géométrique de premier terme u<sub>0</sub> = 10 et de raison q = 3. Que vaut u<sub>2</sub> ?`,
+      options: ["30", "60", "90"],
+      correct: 2,
+    },
+    {
+      text: `Une suite géométrique a un premier terme positif et une raison q = 0,8. Elle est :`,
+      options: ["croissante", "décroissante", "constante"],
+      correct: 1,
+    },
+    {
+      text: `Une suite géométrique a un premier terme négatif et une raison q = 2. Elle est :`,
+      options: ["croissante", "décroissante", "constante"],
+      correct: 1,
+    },
+    {
+      text: `Une suite géométrique a une raison q = 1. Elle est :`,
+      options: ["croissante", "décroissante", "constante"],
+      correct: 2,
+    },
+    {
+      text: `La somme des n premiers termes d'une suite géométrique de premier terme u<sub>0</sub> et de raison q se calcule avec la formule :`,
+      options: [`Somme = u<sub>0</sub> × (q<sup>n</sup> − 1) / (q − 1)`, `Somme = u<sub>0</sub> × n × q`, `Somme = u<sub>0</sub> + (n − 1) × q`],
+      correct: 0,
+    },
+  ];
+
+  const quizEl = document.getElementById('quiz');
+  const scoreVal = document.getElementById('scoreVal');
+  const progressFill = document.getElementById('progressFill');
+  const endBanner = document.getElementById('endBanner');
+  const endScore = document.getElementById('endScore');
+  const endMsg = document.getElementById('endMsg');
+  const resetBtn = document.getElementById('resetBtn');
+
+  const letters = ['A', 'B', 'C'];
+  let score = 0;
+  let answered = 0;
+
+  function updateBar(){
+    scoreVal.textContent = `${score} / ${questions.length}`;
+    progressFill.style.width = `${(answered / questions.length) * 100}%`;
+  }
+
+  function endMessage(pct){
+    if (pct === 100) return "Sans faute ! Le chapitre est acquis.";
+    if (pct >= 70) return "Très solide — encore un petit tour du côté des pièges (signe de u0, raison décimale) et c'est parfait.";
+    if (pct >= 40) return "Pas mal, mais retourne voir la fiche mémo avant l'interro.";
+    return "Reprends la fiche mémo et les formules avant de retenter.";
+  }
+
+  function render(){
+    quizEl.innerHTML = '';
+    questions.forEach((q, qi) => {
+      const card = document.createElement('div');
+      card.className = 'question';
+
+      const head = document.createElement('div');
+      head.className = 'q-head';
+      head.innerHTML = `<span class="q-num">Q${qi + 1}</span><span class="q-text">${q.text}</span>`;
+      card.appendChild(head);
+
+      const optsWrap = document.createElement('div');
+      optsWrap.className = 'options';
+
+      const feedback = document.createElement('div');
+      feedback.className = 'feedback';
+
+      q.options.forEach((opt, oi) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'option';
+        btn.innerHTML = `<span class="letter">${letters[oi]}.</span><span>${opt}</span>`;
+        btn.addEventListener('click', () => {
+          const buttons = optsWrap.querySelectorAll('.option');
+          buttons.forEach(b => b.disabled = true);
+
+          if (oi === q.correct){
+            btn.classList.add('correct');
+            score++;
+            feedback.textContent = '✓ Bonne réponse !';
+            feedback.className = 'feedback show ok';
+          } else {
+            btn.classList.add('incorrect');
+            buttons[q.correct].classList.add('correct');
+            feedback.textContent = "✗ Ce n'était pas la bonne réponse.";
+            feedback.className = 'feedback show ko';
+          }
+          buttons.forEach(b => { if (!b.classList.contains('correct') && !b.classList.contains('incorrect')) b.classList.add('dim'); });
+
+          answered++;
+          updateBar();
+          if (answered === questions.length) showEnd();
+        });
+        optsWrap.appendChild(btn);
+      });
+
+      card.appendChild(optsWrap);
+      card.appendChild(feedback);
+      quizEl.appendChild(card);
+    });
+  }
+
+  function showEnd(){
+    const pct = Math.round((score / questions.length) * 100);
+    endScore.textContent = `${score} / ${questions.length}`;
+    endMsg.textContent = endMessage(pct);
+    endBanner.classList.add('show');
+  }
+
+  function reset(){
+    score = 0;
+    answered = 0;
+    endBanner.classList.remove('show');
+    updateBar();
+    render();
+  }
+
+  resetBtn.addEventListener('click', reset);
+
+  render();
+  updateBar();
+})();
+</script>
+
+</body>
+</html>
