@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche mémo — Suites numériques et arithmétiques</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #E4EAEF;
+    --ink: #16232F;
+    --ink-soft: rgba(22,35,47,0.65);
+    --ink-faint: rgba(22,35,47,0.4);
+    --amber: #F2A93B;
+    --amber-deep: #C6810F;
+    --teal: #2E7D6B;
+    --card-bg: #EEF2F5;
+    --line: rgba(22,35,47,0.14);
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(rgba(22,35,47,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,47,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding: 26px 18px 50px;
+  }
+
+  .sheet{
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.05;
+    letter-spacing: 0.2px;
+  }
+
+  h1 .accent{ color: var(--amber-deep); }
+
+  .header-note{
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    max-width: 260px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  /* ---------- base notion strip ---------- */
+  .basics{
+    display:flex;
+    align-items:center;
+    gap: 18px;
+    flex-wrap: wrap;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+  }
+
+  .basics .label{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+
+  .basics p{
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+
+  .basics code{
+    font-family: var(--font-mono);
+    background: rgba(242,169,59,0.18);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .basics .warning{
+    width: 100%;
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--line);
+    font-size: 0.82rem;
+    color: var(--amber-deep);
+    font-weight: 600;
+  }
+
+  /* ---------- card grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 18px;
+  }
+
+  @media (max-width: 780px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+
+  .card{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px 20px;
+    position: relative;
+  }
+
+  .card.c1{ border-top: 4px solid var(--ink); }
+  .card.c2{ border-top: 4px solid var(--teal); }
+  .card.c3{ border-top: 4px solid var(--amber-deep); }
+  .card.c4{ border-top: 4px solid var(--ink); }
+
+  .card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .card-head h2{
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .card.c2 .card-head h2{ color: var(--teal); }
+  .card.c3 .card-head h2{ color: var(--amber-deep); }
+
+  .mini-graph{ flex-shrink:0; }
+
+  .def{
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0 0 12px;
+  }
+
+  .def strong{ color: var(--ink); }
+
+  .formula-box{
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .formula-box .tag{
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .variation{
+    margin: 12px 0 14px;
+    font-size: 0.82rem;
+  }
+
+  .variation .vtitle{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+
+  .vrow{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    padding: 3px 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .vrow .arrow{
+    display:inline-block;
+    min-width: 74px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--ink);
+  }
+
+  .method{
+    background: rgba(22,35,47,0.05);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.83rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .method .mtitle{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-soft);
+    display:block;
+    margin-bottom: 5px;
+  }
+
+  .method ul{
+    margin: 4px 0 0;
+    padding-left: 18px;
+  }
+
+  .method li{ margin-bottom: 3px; }
+
+  .example{
+    background: rgba(242,169,59,0.14);
+    border: 1px dashed var(--amber-deep);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.83rem;
+    line-height: 1.45;
+  }
+
+  .example.teal{
+    background: rgba(46,125,107,0.12);
+    border: 1px dashed var(--teal);
+  }
+
+  .example .ex-label{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--amber-deep);
+    display:block;
+    margin-bottom: 4px;
+  }
+
+  .example.teal .ex-label{ color: var(--teal); }
+
+  .pitfall{
+    display:flex;
+    align-items:flex-start;
+    gap: 8px;
+    background: rgba(198,129,15,0.1);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin-top: 10px;
+  }
+
+  .pitfall .icon{ flex-shrink:0; }
+
+  /* ---------- reflex strip ---------- */
+  .reflex{
+    display:grid;
+    grid-template-columns: auto 1fr 1fr;
+    align-items:center;
+    gap: 14px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 780px){
+    .reflex{ grid-template-columns: 1fr; text-align:left; }
+  }
+
+  .reflex .rtitle{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+  .reflex .rtitle .accent{ color: var(--amber); }
+
+  .reflex .rline{
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+  .reflex .rline b{ color: var(--amber); }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    font-family: var(--font-body);
+  }
+
+/* ---- Navbar retour accueil ---- */
+.site-navbar{
+  position: sticky; top: 0; z-index: 999;
+  background: #16232F; color:#E4EAEF;
+  padding: 0.65rem 1.2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  display:flex; align-items:center;
+}
+.site-navbar a{
+  color:#E4EAEF; text-decoration:none; font-weight:600;
+  display:inline-flex; align-items:center; gap:0.4rem;
+  transition: color .15s ease;
+}
+.site-navbar a:hover{ color:#F2A93B; }
+
+</style>
+</head>
+<body>
+<div class="site-navbar"><a href="../index.html">&#8592; Retour à l'accueil</a></div>
+
+<div class="sheet">
+
+  <header>
+    <div>
+      <p class="eyebrow">Fiche mémo · Chapitre 2</p>
+      <h1>Suites numériques <span class="accent">&amp; arithmétiques</span></h1>
+    </div>
+    <p class="header-note">À relire juste avant un exercice ou une évaluation — pas le cours complet, juste l'essentiel.</p>
+  </header>
+
+  <div class="basics">
+    <span class="label">Une suite, c'est quoi ?</span>
+    <p>Une liste ordonnée de nombres <code>u<sub>0</sub>, u<sub>1</sub>, u<sub>2</sub>...</code> où à chaque entier <code>n</code> on associe un nombre réel <code>u<sub>n</sub></code>, le terme de rang <code>n</code>. Le terme précédent est <code>u<sub>n−1</sub></code>, le terme suivant est <code>u<sub>n+1</sub></code>.</p>
+    <p class="warning">⚠️ Ne pas confondre <code>u<sub>n+1</sub></code> (le terme de rang n+1) et <code>u<sub>n</sub> + 1</code> (le terme de rang n, plus 1) !</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card c1">
+      <div class="card-head">
+        <h2>Représentation graphique</h2>
+        <svg class="mini-graph" width="70" height="46" viewBox="0 0 70 46">
+          <line x1="6" y1="40" x2="64" y2="40" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+          <line x1="6" y1="40" x2="6" y2="6" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+          <circle cx="8" cy="34" r="3" fill="#16232F"/>
+          <circle cx="20" cy="24" r="3" fill="#16232F"/>
+          <circle cx="32" cy="30" r="3" fill="#16232F"/>
+          <circle cx="44" cy="16" r="3" fill="#16232F"/>
+          <circle cx="56" cy="22" r="3" fill="#16232F"/>
+        </svg>
+      </div>
+      <p class="def">Dans un repère, on place les points <code>A<sub>n</sub>(n ; u<sub>n</sub>)</code>. On obtient un <strong>nuage de points</strong>, pour chaque rang <code>n</code>.</p>
+      <div class="pitfall">
+        <span class="icon">⚠️</span>
+        <span>On ne relie <strong>jamais</strong> les points entre eux : ce n'est pas la courbe d'une fonction, juste un nuage de points isolés.</span>
+      </div>
+    </div>
+
+    <div class="card c2">
+      <div class="card-head">
+        <h2>Sens de variation</h2>
+        <svg class="mini-graph" width="70" height="46" viewBox="0 0 70 46">
+          <line x1="6" y1="40" x2="64" y2="40" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+          <line x1="6" y1="40" x2="6" y2="6" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+          <circle cx="8" cy="34" r="3" fill="#2E7D6B"/>
+          <circle cx="24" cy="27" r="3" fill="#2E7D6B"/>
+          <circle cx="40" cy="20" r="3" fill="#2E7D6B"/>
+          <circle cx="56" cy="13" r="3" fill="#2E7D6B"/>
+        </svg>
+      </div>
+      <p class="def"><code>(u<sub>n</sub>)</code> est <strong>croissante</strong> si pour tout <code>n</code>, <code>u<sub>n+1</sub> ≥ u<sub>n</sub></code>. Elle est <strong>décroissante</strong> si <code>u<sub>n+1</sub> ≤ u<sub>n</sub></code>. Elle est <strong>constante</strong> si <code>u<sub>n+1</sub> = u<sub>n</sub></code>.</p>
+      <div class="method">
+        <span class="mtitle">Méthode — étudier le signe de u(n+1) − u(n)</span>
+        <ul>
+          <li>Différence <strong>positive</strong> pour tout n → suite croissante</li>
+          <li>Différence <strong>négative</strong> pour tout n → suite décroissante</li>
+        </ul>
+      </div>
+      <div class="method">
+        <span class="mtitle">Lecture graphique</span>
+        <ul>
+          <li>Ordonnées de plus en plus grandes → on conjecture croissante</li>
+          <li>Ordonnées de plus en plus petites → on conjecture décroissante</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card c3">
+      <div class="card-head">
+        <h2>Suites arithmétiques</h2>
+        <svg class="mini-graph" width="70" height="46" viewBox="0 0 70 46">
+          <line x1="6" y1="40" x2="64" y2="40" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+          <line x1="6" y1="40" x2="6" y2="6" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+          <line x1="8" y1="34" x2="60" y2="10" stroke="#C6810F" stroke-width="1.4" stroke-dasharray="2 3" opacity="0.6"/>
+          <circle cx="8" cy="34" r="3" fill="#C6810F"/>
+          <circle cx="24" cy="27" r="3" fill="#C6810F"/>
+          <circle cx="40" cy="20" r="3" fill="#C6810F"/>
+          <circle cx="56" cy="13" r="3" fill="#C6810F"/>
+        </svg>
+      </div>
+      <p class="def">On <strong>ajoute toujours le même nombre</strong> <code>r</code> (la raison) au terme précédent.</p>
+      <div class="formula-box"><span>u<sub>n+1</sub> = u<sub>n</sub> + r</span><span class="tag">récurrence</span></div>
+      <div class="formula-box"><span>u<sub>n</sub> = u<sub>0</sub> + n × r</span><span class="tag">formule explicite</span></div>
+      <div class="variation">
+        <div class="vtitle">Théorème — sens de variation</div>
+        <div class="vrow"><span class="arrow">r &gt; 0</span> strictement croissante</div>
+        <div class="vrow"><span class="arrow">r &lt; 0</span> strictement décroissante</div>
+        <div class="vrow"><span class="arrow">r = 0</span> constante</div>
+      </div>
+      <div class="example">
+        <span class="ex-label">Exemple</span>
+        Ton argent de poche : <b>20 €</b> au départ, puis <b>+10 €</b> chaque semaine.
+        <code>u<sub>0</sub> = 20, r = 10</code> → semaine 5 : <code>u<sub>5</sub> = 20 + 5×10 = 70 €</code>.
+      </div>
+    </div>
+
+    <div class="card c4">
+      <div class="card-head">
+        <h2>Reconnaître une suite arithmétique</h2>
+      </div>
+      <p class="def">Si <code>(u<sub>n</sub>)</code> est arithmétique, la différence entre deux termes consécutifs est toujours la même (la raison) : <code>u<sub>n+1</sub> − u<sub>n</sub> = r</code>.</p>
+      <div class="method">
+        <span class="mtitle">Sur le graphique</span>
+        <ul>
+          <li>Points <strong>alignés</strong> → suite arithmétique</li>
+          <li>La <strong>pente</strong> de la droite formée par le nuage = la raison r</li>
+        </ul>
+      </div>
+      <div class="example teal">
+        <span class="ex-label">Réciproque</span>
+        Si la suite est arithmétique, alors sa représentation graphique est forcément un nuage de points alignés — et inversement.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="reflex">
+    <span class="rtitle">🧠 Le <span class="accent">réflexe</span></span>
+    <span class="rline">u<sub>n+1</sub> − u<sub>n</sub> constant ? → <b>arithmétique</b> (raison r)</span>
+    <span class="rline">Points alignés sur le graphique ? → <b>arithmétique</b>, pente = r</span>
+  </div>
+
+</div>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+</body>
+</html>

@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM — Suites numériques et arithmétiques</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #E4EAEF;
+    --ink: #16232F;
+    --ink-soft: rgba(22,35,47,0.65);
+    --ink-faint: rgba(22,35,47,0.4);
+    --amber: #F2A93B;
+    --amber-deep: #C6810F;
+    --teal: #2E7D6B;
+    --red: #B3432B;
+    --card-bg: #EEF2F5;
+    --line: rgba(22,35,47,0.14);
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(rgba(22,35,47,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,47,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding: 26px 18px 60px;
+  }
+
+  .sheet{
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  h1 .accent{ color: var(--amber-deep); }
+
+  /* progress */
+  .progress-wrap{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .progress-track{
+    flex:1;
+    height: 8px;
+    background: rgba(22,35,47,0.1);
+    border-radius: 5px;
+    overflow:hidden;
+  }
+
+  .progress-fill{
+    height:100%;
+    background: var(--amber-deep);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .progress-label{
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  /* question card */
+  .qcard{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--ink);
+    border-radius: 12px;
+    padding: 20px 22px 22px;
+    margin-bottom: 18px;
+    display:none;
+  }
+
+  .qcard.active{ display:block; }
+
+  .qnum{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .qtext{
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0 0 16px;
+  }
+
+  .qtext code{
+    font-family: var(--font-mono);
+    background: rgba(242,169,59,0.18);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-weight: 600;
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+  }
+
+  .option{
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: 9px;
+    padding: 11px 14px;
+    font-size: 0.92rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+
+  .option .letter{
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    flex-shrink:0;
+  }
+
+  .option:hover:not(.disabled){
+    border-color: var(--amber-deep);
+    background: rgba(242,169,59,0.12);
+  }
+
+  .option.disabled{ cursor: default; }
+
+  .option.correct{
+    border-color: var(--teal);
+    background: rgba(46,125,107,0.16);
+    font-weight: 600;
+  }
+
+  .option.correct .letter{ color: var(--teal); }
+
+  .option.wrong{
+    border-color: var(--red);
+    background: rgba(179,67,43,0.14);
+  }
+
+  .option.wrong .letter{ color: var(--red); }
+
+  .feedback{
+    margin-top: 14px;
+    padding: 10px 13px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    display:none;
+  }
+
+  .feedback.show{ display:block; }
+
+  .feedback.ok{
+    background: rgba(46,125,107,0.12);
+    border: 1px dashed var(--teal);
+  }
+
+  .feedback.ko{
+    background: rgba(179,67,43,0.1);
+    border: 1px dashed var(--red);
+  }
+
+  .feedback .flabel{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display:block;
+    margin-bottom: 4px;
+  }
+
+  .feedback.ok .flabel{ color: var(--teal); }
+  .feedback.ko .flabel{ color: var(--red); }
+
+  .nav-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-top: 16px;
+  }
+
+  .btn{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.88rem;
+    letter-spacing: 0.3px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn.show{ opacity: 1; pointer-events: auto; }
+
+  .btn:hover{ background: var(--amber-deep); }
+
+  /* result card */
+  .result{
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 28px 26px;
+    text-align: center;
+    display:none;
+  }
+
+  .result.active{ display:block; }
+
+  .result .rtitle{
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  .result .score{
+    font-family: var(--font-mono);
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--amber);
+    margin: 6px 0 14px;
+  }
+
+  .result .rmsg{
+    font-size: 0.9rem;
+    color: rgba(228,234,239,0.75);
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  .result .btn{
+    opacity: 1;
+    pointer-events: auto;
+    background: var(--amber);
+    color: var(--ink);
+  }
+
+  .result .btn:hover{ background: var(--amber-deep); color: var(--paper); }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    font-family: var(--font-body);
+  }
+
+/* ---- Navbar retour accueil ---- */
+.site-navbar{
+  position: sticky; top: 0; z-index: 999;
+  background: #16232F; color:#E4EAEF;
+  padding: 0.65rem 1.2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  display:flex; align-items:center;
+}
+.site-navbar a{
+  color:#E4EAEF; text-decoration:none; font-weight:600;
+  display:inline-flex; align-items:center; gap:0.4rem;
+  transition: color .15s ease;
+}
+.site-navbar a:hover{ color:#F2A93B; }
+
+</style>
+</head>
+<body>
+<div class="site-navbar"><a href="../index.html">&#8592; Retour à l'accueil</a></div>
+
+<div class="sheet">
+
+  <header>
+    <div>
+      <p class="eyebrow">QCM · Chapitre 2</p>
+      <h1>Suites numériques <span class="accent">&amp; arithmétiques</span></h1>
+    </div>
+  </header>
+
+  <div class="progress-wrap">
+    <span class="progress-label" id="progressLabel">Question 1/10</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div id="quizArea"></div>
+
+  <div class="result" id="resultCard">
+    <p class="rtitle">Résultat</p>
+    <p class="score" id="scoreText">0/10</p>
+    <p class="rmsg" id="scoreMsg"></p>
+    <button class="btn" id="restartBtn">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+<script>
+  const questions = [
+    {
+      text: "Que représente <code>u<sub>n</sub></code> dans une suite numérique ?",
+      options: [
+        "Le rang du terme",
+        "Le terme de rang n",
+        "Le nombre de termes de la suite",
+        "La raison de la suite"
+      ],
+      correct: 1,
+      explain: "u<sub>n</sub> désigne le terme de rang n : à chaque entier n, on associe un nombre réel u<sub>n</sub>."
+    },
+    {
+      text: "Si <code>u<sub>7</sub> = 12</code>, comment note-t-on le terme suivant ?",
+      options: [
+        "u<sub>7</sub> + 1",
+        "u<sub>8</sub>",
+        "u<sub>6</sub>",
+        "u<sub>7</sub> × 1"
+      ],
+      correct: 1,
+      explain: "Le terme suivant celui de rang n est le terme de rang n+1, donc ici u<sub>8</sub> (à ne pas confondre avec u<sub>7</sub> + 1, qui vaudrait 13)."
+    },
+    {
+      text: "Sur la représentation graphique d'une suite, on relie les points entre eux ?",
+      options: [
+        "Oui, comme pour une fonction",
+        "Non, on obtient un nuage de points",
+        "Seulement si la suite est arithmétique",
+        "Seulement si elle est croissante"
+      ],
+      correct: 1,
+      explain: "On ne relie jamais les points : une suite n'est définie que pour des entiers, on obtient donc un nuage de points isolés, pas une courbe."
+    },
+    {
+      text: "Une suite <code>(u<sub>n</sub>)</code> est décroissante si, pour tout n :",
+      options: [
+        "u<sub>n+1</sub> ≥ u<sub>n</sub>",
+        "u<sub>n+1</sub> ≤ u<sub>n</sub>",
+        "u<sub>n+1</sub> = u<sub>n</sub>",
+        "u<sub>n+1</sub> &gt; u<sub>n</sub> + 1"
+      ],
+      correct: 1,
+      explain: "Par définition, une suite est décroissante quand chaque terme est inférieur ou égal au précédent : u<sub>n+1</sub> ≤ u<sub>n</sub> pour tout n."
+    },
+    {
+      text: "Pour étudier le sens de variation d'une suite, on étudie le signe de :",
+      options: [
+        "u<sub>n</sub> × u<sub>n+1</sub>",
+        "u<sub>n+1</sub> − u<sub>n</sub>",
+        "u<sub>0</sub> + n",
+        "u<sub>n</sub> ÷ n"
+      ],
+      correct: 1,
+      explain: "La méthode consiste à calculer le signe de u<sub>n+1</sub> − u<sub>n</sub> : positif → croissante, négatif → décroissante."
+    },
+    {
+      text: "Une suite arithmétique de raison r vérifie la relation de récurrence :",
+      options: [
+        "u<sub>n+1</sub> = u<sub>n</sub> × r",
+        "u<sub>n+1</sub> = u<sub>n</sub> + r",
+        "u<sub>n+1</sub> = r − u<sub>n</sub>",
+        "u<sub>n+1</sub> = u<sub>n</sub> + n"
+      ],
+      correct: 1,
+      explain: "Une suite arithmétique s'obtient en ajoutant toujours le même nombre r au terme précédent : u<sub>n+1</sub> = u<sub>n</sub> + r."
+    },
+    {
+      text: "Une suite arithmétique a pour premier terme <code>u<sub>0</sub> = 5</code> et pour raison <code>r = 3</code>. Que vaut <code>u<sub>4</sub></code> ?",
+      options: [
+        "8",
+        "12",
+        "17",
+        "15"
+      ],
+      correct: 2,
+      explain: "Avec la formule u<sub>n</sub> = u<sub>0</sub> + n × r : u<sub>4</sub> = 5 + 4 × 3 = 5 + 12 = 17."
+    },
+    {
+      text: "Une suite arithmétique a pour raison <code>r = −2</code>. Comment varie-t-elle ?",
+      options: [
+        "Elle est strictement croissante",
+        "Elle est strictement décroissante",
+        "Elle est constante",
+        "On ne peut pas savoir"
+      ],
+      correct: 1,
+      explain: "D'après le théorème du cours, si r &lt; 0 alors la suite arithmétique est strictement décroissante."
+    },
+    {
+      text: "Sur un graphique, les points représentant une suite sont alignés. Que peut-on en conclure ?",
+      options: [
+        "La suite est géométrique",
+        "La suite est arithmétique",
+        "La suite est constante",
+        "On ne peut rien conclure"
+      ],
+      correct: 1,
+      explain: "Si le nuage de points est aligné, la suite est arithmétique, et la pente de la droite qui passe par les points de la suite correspond à la raison r."
+    },
+    {
+      text: "On sait que <code>u<sub>2</sub> = 9</code> et <code>u<sub>3</sub> = 6</code> pour une suite arithmétique. Quelle est sa raison r ?",
+      options: [
+        "3",
+        "−3",
+        "15",
+        "1,5"
+      ],
+      correct: 1,
+      explain: "La raison vaut r = u<sub>n+1</sub> − u<sub>n</sub>, donc ici r = u<sub>3</sub> − u<sub>2</sub> = 6 − 9 = −3."
+    }
+  ];
+
+  let current = 0;
+  let score = 0;
+  const letters = ["A","B","C","D"];
+
+  const quizArea = document.getElementById("quizArea");
+  const progressFill = document.getElementById("progressFill");
+  const progressLabel = document.getElementById("progressLabel");
+  const resultCard = document.getElementById("resultCard");
+  const scoreText = document.getElementById("scoreText");
+  const scoreMsg = document.getElementById("scoreMsg");
+  const restartBtn = document.getElementById("restartBtn");
+
+  function buildQuestion(index){
+    const q = questions[index];
+    const card = document.createElement("div");
+    card.className = "qcard active";
+    card.id = "q" + index;
+
+    let optionsHTML = "";
+    q.options.forEach((opt, i) => {
+      optionsHTML += `<button class="option" data-index="${i}">
+        <span class="letter">${letters[i]}</span><span>${opt}</span>
+      </button>`;
+    });
+
+    card.innerHTML = `
+      <p class="qnum">Question ${index + 1} / ${questions.length}</p>
+      <p class="qtext">${q.text}</p>
+      <div class="options">${optionsHTML}</div>
+      <div class="feedback" id="feedback${index}"></div>
+      <div class="nav-row"><button class="btn" id="next${index}">${index === questions.length - 1 ? "Voir le résultat" : "Question suivante"}</button></div>
+    `;
+
+    quizArea.appendChild(card);
+
+    const optionButtons = card.querySelectorAll(".option");
+    optionButtons.forEach(btn => {
+      btn.addEventListener("click", () => handleAnswer(index, parseInt(btn.dataset.index), optionButtons, card));
+    });
+
+    document.getElementById("next" + index).addEventListener("click", () => {
+      card.remove();
+      current++;
+      updateProgress();
+      if(current < questions.length){
+        buildQuestion(current);
+      } else {
+        showResult();
+      }
+    });
+  }
+
+  function handleAnswer(index, chosen, optionButtons, card){
+    const q = questions[index];
+    optionButtons.forEach(b => b.classList.add("disabled"));
+    optionButtons[q.correct].classList.add("correct");
+
+    const fb = document.getElementById("feedback" + index);
+    if(chosen === q.correct){
+      score++;
+      fb.className = "feedback ok show";
+      fb.innerHTML = `<span class="flabel">Bien joué</span>${q.explain}`;
+    } else {
+      optionButtons[chosen].classList.add("wrong");
+      fb.className = "feedback ko show";
+      fb.innerHTML = `<span class="flabel">Pas tout à fait</span>${q.explain}`;
+    }
+
+    document.getElementById("next" + index).classList.add("show");
+  }
+
+  function updateProgress(){
+    const shown = Math.min(current + 1, questions.length);
+    progressLabel.textContent = current < questions.length ? `Question ${current + 1}/${questions.length}` : `Terminé`;
+    progressFill.style.width = (current / questions.length * 100) + "%";
+  }
+
+  function showResult(){
+    progressFill.style.width = "100%";
+    progressLabel.textContent = "Terminé";
+    resultCard.classList.add("active");
+    scoreText.textContent = score + "/" + questions.length;
+    let msg = "";
+    if(score === questions.length) msg = "Sans faute ! Les notions du chapitre sont bien en place.";
+    else if(score >= questions.length * 0.7) msg = "Très correct, encore quelques points à revoir.";
+    else if(score >= questions.length * 0.4) msg = "Pas mal, mais il faut retravailler certaines notions du cours.";
+    else msg = "Il vaut mieux revoir la fiche mémo avant de continuer.";
+    scoreMsg.textContent = msg;
+  }
+
+  restartBtn.addEventListener("click", () => {
+    current = 0;
+    score = 0;
+    resultCard.classList.remove("active");
+    quizArea.innerHTML = "";
+    updateProgress();
+    buildQuestion(0);
+  });
+
+  buildQuestion(0);
+</script>
+
+</body>
+</html>

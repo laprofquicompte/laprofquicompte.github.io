@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM — Fonctions affines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #E4EAEF;
+    --ink: #16232F;
+    --ink-soft: rgba(22,35,47,0.65);
+    --ink-faint: rgba(22,35,47,0.4);
+    --amber: #F2A93B;
+    --amber-deep: #C6810F;
+    --teal: #2E7D6B;
+    --red: #B3492E;
+    --card-bg: #EEF2F5;
+    --line: rgba(22,35,47,0.14);
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(rgba(22,35,47,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,47,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding: 26px 18px 60px;
+  }
+
+  .sheet{
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.05;
+  }
+
+  h1 .accent{ color: var(--amber-deep); }
+
+  .header-note{
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    max-width: 220px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  /* ---------- progress / score bar ---------- */
+  .status-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 14px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin-bottom: 22px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+
+  .status-bar .score{
+    font-weight: 600;
+    color: var(--amber);
+  }
+
+  /* ---------- question cards ---------- */
+  .question{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px 20px;
+    margin-bottom: 18px;
+    border-left: 4px solid var(--ink);
+    transition: border-color 0.2s ease;
+  }
+
+  .question.correct{ border-left-color: var(--teal); }
+  .question.incorrect{ border-left-color: var(--red); }
+
+  .q-head{
+    display:flex;
+    align-items:baseline;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .q-num{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: var(--amber-deep);
+    white-space: nowrap;
+  }
+
+  .q-text{
+    font-size: 0.95rem;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  .q-text code{
+    font-family: var(--font-mono);
+    background: rgba(242,169,59,0.18);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-weight: 600;
+  }
+
+  .options{
+    display: grid;
+    gap: 8px;
+  }
+
+  .option{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 0.86rem;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .option:hover{ border-color: var(--amber-deep); }
+
+  .option input{
+    accent-color: var(--amber-deep);
+    flex-shrink: 0;
+  }
+
+  .option code{
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+
+  .option.selected{
+    background: rgba(242,169,59,0.14);
+    border-color: var(--amber-deep);
+  }
+
+  .option.is-correct{
+    background: rgba(46,125,107,0.14);
+    border-color: var(--teal);
+  }
+
+  .option.is-wrong{
+    background: rgba(179,73,46,0.12);
+    border-color: var(--red);
+  }
+
+  .explanation{
+    display:none;
+    margin-top: 12px;
+    background: rgba(22,35,47,0.05);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.83rem;
+    line-height: 1.5;
+  }
+
+  .explanation .etitle{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-soft);
+    display:block;
+    margin-bottom: 5px;
+  }
+
+  .question.checked .explanation{ display:block; }
+
+  /* ---------- buttons ---------- */
+  .actions{
+    display:flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+
+  button.btn{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.9rem;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 26px;
+    cursor: pointer;
+    transition: transform 0.1s ease, opacity 0.15s ease;
+  }
+
+  button.btn:active{ transform: scale(0.97); }
+
+  .btn-primary{
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .btn-secondary{
+    background: transparent;
+    color: var(--ink);
+    border: 1.5px solid var(--ink);
+  }
+
+  .result-banner{
+    display:none;
+    text-align:center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    background: var(--ink);
+    color: var(--amber);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+
+  .result-banner.show{ display:block; }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    font-family: var(--font-body);
+  }
+
+/* ---- Navbar retour accueil ---- */
+.site-navbar{
+  position: sticky; top: 0; z-index: 999;
+  background: #16232F; color:#E4EAEF;
+  padding: 0.65rem 1.2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  display:flex; align-items:center;
+}
+.site-navbar a{
+  color:#E4EAEF; text-decoration:none; font-weight:600;
+  display:inline-flex; align-items:center; gap:0.4rem;
+  transition: color .15s ease;
+}
+.site-navbar a:hover{ color:#F2A93B; }
+
+</style>
+</head>
+<body>
+<div class="site-navbar"><a href="../index.html">&#8592; Retour à l'accueil</a></div>
+
+<div class="sheet">
+
+  <header>
+    <div>
+      <p class="eyebrow">QCM · Sans calculatrice</p>
+      <h1>Fonctions <span class="accent">affines</span></h1>
+    </div>
+    <p class="header-note">10 questions — cours et applications directes.</p>
+  </header>
+
+  <div class="status-bar">
+    <span id="progressText">0 / 10 répondues</span>
+    <span class="score" id="scoreText" style="display:none;"></span>
+  </div>
+
+  <div class="result-banner" id="resultBanner"></div>
+
+  <form id="qcmForm">
+
+    <div class="question" data-answer="b">
+      <div class="q-head"><span class="q-num">Q1</span></div>
+      <p class="q-text">Une fonction affine <code>f</code> définie sur ℝ s'écrit sous la forme :</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="q1" value="a"><span><code>f(x) = a/x + b</code></span></label>
+        <label class="option"><input type="radio" name="q1" value="b"><span><code>f(x) = ax + b</code></span></label>
+        <label class="option"><input type="radio" name="q1" value="c"><span><code>f(x) = ax²+ b</code></span></label>
+        <label class="option"><input type="radio" name="q1" value="d"><span><code>f(x) = a + bx²</code></span></label>
+      </div>
+      <div class="explanation"><span class="etitle">Correction</span>Une fonction affine est définie par <code>f(x) = ax + b</code>, où <code>a</code> et <code>b</code> sont deux nombres réels.</div>
+    </div>
+
+    <div class="question" data-answer="c">
+      <div class="q-head"><span class="q-num">Q2</span></div>
+      <p class="q-text">Soit <code>f(x) = 3x - 4</code>. Que vaut <code>f(2)</code> ?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="q2" value="a"><span><code>-1</code></span></label>
+        <label class="option"><input type="radio" name="q2" value="b"><span><code>1</code></span></label>
+        <label class="option"><input type="radio" name="q2" value="c"><span><code>2</code></span></label>
+        <label class="option"><input type="radio" name="q2" value="d"><span><code>10</code></span></label>
+      </div>
+      <div class="explanation"><span class="etitle">Correction</span><code>f(2) = 3×2 - 4 = 6 - 4 = 2</code>.</div>
+    </div>
+
+    <div class="question" data-answer="b">
+      <div class="q-head"><span class="q-num">Q3</span></div>
+      <p class="q-text">Dans <code>f(x) = -5x + 7</code>, le coefficient directeur est :</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="q3" value="a"><span><code>7</code></span></label>
+        <label class="option"><input type="radio" name="q3" value="b"><span><code>-5</code></span></label>
+        <label class="option"><input type="radio" name="q3" value="c"><span><code>5</code></span></label>
+        <label class="option"><input type="radio" name="q3" value="d"><span><code>-7</code></span></label>
+      </div>
+      <div class="explanation"><span class="etitle">Correction</span>Le coefficient directeur est le nombre <code>a</code> devant <code>x</code>, ici <code>-5</code>. <code>7</code> est l'ordonnée à l'origine.</div>
+    </div>
+
+    <div class="question" data-answer="a">
+      <div class="q-head"><span class="q-num">Q4</span></div>
+      <p class="q-text">Soit <code>g(x) = 6x</code>. Quel type de fonction est <code>g</code> ?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="q4" value="a"><span>Fonction linéaire</span></label>
+        <label class="option"><input type="radio" name="q4" value="b"><span>Fonction constante</span></label>
+        <label class="option"><input type="radio" name="q4" value="c"><span>Fonction ni affine, ni linéaire</span></label>
+        <label class="option"><input type="radio" name="q4" value="d"><span>Fonction carrée</span></label>
+      </div>
+      <div class="explanation"><span class="etitle">Correction</span><code>g(x) = 6x</code> est de la forme <code>ax + b</code> avec <code>b = 0</code> : c'est une fonction linéaire (cas particulier de fonction affine).</div>
+    </div>
+
+    <div class="question" data-answer="d">
+      <div class="q-head"><span class="q-num">Q5</span></div>
+      <p class="q-text">Soit <code>h(x) = 9</code>. Quel type de fonction est <code>h</code> ?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="q5" value="a"><span>Fonction linéaire</span></label>
+        <label class="option"><input type="radio" name="q5" value="b"><span>Fonction affine avec <code>a ≠ 0</code></span></label>
+        <label class="option"><input type="radio" name="q5" value="c"><span>Fonction non affine</span></label>
+        <label class="option"><input type="radio" name="q5" value="d"><span>Fonction constante</span></label>
+      </div>
+      <div class="explanation"><span class="etitle">Correction</span><code>h(x) = 9</code> correspond à <code>a = 0</code> et <code>b = 9</code> : c'est une fonction constante.</div>
+    </div>
+
+    <div class="question" data-answer="a">
+      <div class="q-head"><span class="q-num">Q6</span></div>
+      <p class="q-text">Soit <code>f(x) = 4x - 1</code>. Comme <code>a = 4 &gt; 0</code>, la fonction <code>f</code> est :</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="q6" value="a"><span>Croissante</span></label>
+        <label class="option"><input type="radio" name="q6" value="b"><span>Décroissante</span></label>
+        <label class="option"><input type="radio" name="q6" value="c"><span>Constante</span></label>
+        <label class="option"><input type="radio" name="q6" value="d"><span>On ne peut pas savoir</span></label>
+      </div>
+      <div class="explanation"><span class="etitle">Correction</span>Si <code>a &gt; 0</code>, la fonction affine est croissante. Ici <code>a = 4 &gt; 0</code>.</div>
+    </div>
+
+    <div class="question" data-answer="b">
+      <div class="q-head"><span class="q-num">Q7</span></div>
+      <p class="q-text">Soit <code>g(x) = -2x + 3</code>. La fonction <code>g</code> est :</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="q7" value="a"><span>Croissante</span></label>
+        <label class="option"><input type="radio" name="q7" value="b"><span>Décroissante</span></label>
+        <label class="option"><input type="radio" name="q7" value="c"><span>Constante</span></label>
+        <label class="option"><input type="radio" name="q7" value="d"><span>Ni croissante ni décroissante</span></label>
+      </div>
+      <div class="explanation"><span class="etitle">Correction</span>Ici <code>a = -2 &lt; 0</code>, donc <code>g</code> est décroissante.</div>
+    </div>
+
+    <div class="question" data-answer="c">
+      <div class="q-head"><span class="q-num">Q8</span></div>
+      <p class="q-text">La représentation graphique d'une fonction affine dans un repère est toujours :</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="q8" value="a"><span>Une courbe</span></label>
+        <label class="option"><input type="radio" name="q8" value="b"><span>Un nuage de points isolés</span></label>
+        <label class="option"><input type="radio" name="q8" value="c"><span>Une droite non parallèle à l'axe des ordonnées</span></label>
+        <label class="option"><input type="radio" name="q8" value="d"><span>Une droite parallèle à l'axe des abscisses</span></label>
+      </div>
+      <div class="explanation"><span class="etitle">Correction</span>La représentation graphique d'une fonction affine est une droite non parallèle à l'axe des ordonnées.</div>
+    </div>
+
+    <div class="question" data-answer="b">
+      <div class="q-head"><span class="q-num">Q9</span></div>
+      <p class="q-text">Une droite passe par les points <code>A(1 ; 3)</code> et <code>B(3 ; 7)</code>. Son coefficient directeur est :</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="q9" value="a"><span><code>1</code></span></label>
+        <label class="option"><input type="radio" name="q9" value="b"><span><code>2</code></span></label>
+        <label class="option"><input type="radio" name="q9" value="c"><span><code>4</code></span></label>
+        <label class="option"><input type="radio" name="q9" value="d"><span><code>10</code></span></label>
+      </div>
+      <div class="explanation"><span class="etitle">Correction</span><code>a = (f(m) - f(n)) / (m - n) = (7 - 3) / (3 - 1) = 4/2 = 2</code>.</div>
+    </div>
+
+    <div class="question" data-answer="d">
+      <div class="q-head"><span class="q-num">Q10</span></div>
+      <p class="q-text">Sur un graphique, une droite coupe l'axe des ordonnées au point <code>(0 ; 5)</code>. Que peut-on en déduire ?</p>
+      <div class="options">
+        <label class="option"><input type="radio" name="q10" value="a"><span>Le coefficient directeur vaut 5</span></label>
+        <label class="option"><input type="radio" name="q10" value="b"><span>La fonction est décroissante</span></label>
+        <label class="option"><input type="radio" name="q10" value="c"><span>La fonction est linéaire</span></label>
+        <label class="option"><input type="radio" name="q10" value="d"><span>L'ordonnée à l'origine vaut 5</span></label>
+      </div>
+      <div class="explanation"><span class="etitle">Correction</span>Le point où la droite coupe l'axe des ordonnées donne directement l'ordonnée à l'origine <code>b</code>. Ici <code>b = 5</code>.</div>
+    </div>
+
+  </form>
+
+  <div class="actions">
+    <button type="button" class="btn btn-primary" id="checkBtn">Vérifier mes réponses</button>
+    <button type="button" class="btn btn-secondary" id="resetBtn">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+<script>
+  const questions = document.querySelectorAll('.question');
+  const progressText = document.getElementById('progressText');
+  const scoreText = document.getElementById('scoreText');
+  const resultBanner = document.getElementById('resultBanner');
+  const checkBtn = document.getElementById('checkBtn');
+  const resetBtn = document.getElementById('resetBtn');
+
+  function updateProgress(){
+    let answered = 0;
+    questions.forEach(q => {
+      const name = q.querySelector('input').name;
+      if(document.querySelector(`input[name="${name}"]:checked`)) answered++;
+    });
+    progressText.textContent = `${answered} / ${questions.length} répondues`;
+  }
+
+  document.getElementById('qcmForm').addEventListener('change', (e) => {
+    const option = e.target.closest('.option');
+    const optionsGroup = e.target.closest('.options');
+    optionsGroup.querySelectorAll('.option').forEach(o => o.classList.remove('selected'));
+    option.classList.add('selected');
+    updateProgress();
+  });
+
+  checkBtn.addEventListener('click', () => {
+    let score = 0;
+    let allAnswered = true;
+
+    questions.forEach(q => {
+      const name = q.querySelector('input').name;
+      const correctValue = q.dataset.answer;
+      const selected = document.querySelector(`input[name="${name}"]:checked`);
+
+      q.querySelectorAll('.option').forEach(opt => {
+        opt.classList.remove('is-correct', 'is-wrong');
+        const val = opt.querySelector('input').value;
+        if(val === correctValue) opt.classList.add('is-correct');
+      });
+
+      q.classList.add('checked');
+
+      if(!selected){
+        allAnswered = false;
+        q.classList.remove('correct', 'incorrect');
+        return;
+      }
+
+      if(selected.value === correctValue){
+        score++;
+        q.classList.add('correct');
+        q.classList.remove('incorrect');
+      } else {
+        q.classList.add('incorrect');
+        q.classList.remove('correct');
+        selected.closest('.option').classList.add('is-wrong');
+      }
+    });
+
+    scoreText.style.display = 'inline';
+    scoreText.textContent = `Score : ${score} / ${questions.length}`;
+
+    resultBanner.classList.add('show');
+    let message = '';
+    if(score === questions.length) message = '🎉 Score parfait, bravo !';
+    else if(score >= 8) message = '👍 Très bon score !';
+    else if(score >= 5) message = '📘 Pas mal, quelques révisions à prévoir.';
+    else message = '🔁 Il faut revoir la fiche mémo avant de continuer.';
+    resultBanner.textContent = `${message} (${score}/${questions.length}${!allAnswered ? ' — questions non répondues comptées comme fausses' : ''})`;
+  });
+
+  resetBtn.addEventListener('click', () => {
+    document.getElementById('qcmForm').reset();
+    questions.forEach(q => {
+      q.classList.remove('correct', 'incorrect', 'checked');
+      q.querySelectorAll('.option').forEach(o => o.classList.remove('selected', 'is-correct', 'is-wrong'));
+    });
+    scoreText.style.display = 'none';
+    resultBanner.classList.remove('show');
+    updateProgress();
+  });
+</script>
+
+</body>
+</html>

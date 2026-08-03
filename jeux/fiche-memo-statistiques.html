@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche mémo — Statistique à deux variables</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #E4EAEF;
+    --ink: #16232F;
+    --ink-soft: rgba(22,35,47,0.65);
+    --ink-faint: rgba(22,35,47,0.4);
+    --amber: #F2A93B;
+    --amber-deep: #C6810F;
+    --card-bg: #EEF2F5;
+    --line: rgba(22,35,47,0.14);
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(rgba(22,35,47,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,47,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding: 26px 18px 50px;
+  }
+
+  .sheet{
+    max-width: 980px;
+    margin: 0 auto;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.05;
+    letter-spacing: 0.2px;
+  }
+
+  h1 .accent{ color: var(--amber-deep); }
+
+  .header-note{
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    max-width: 260px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  /* ---------- base notion strip ---------- */
+  .basics{
+    display:flex;
+    align-items:center;
+    gap: 18px;
+    flex-wrap: wrap;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+  }
+
+  .basics .label{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+
+  .basics p{
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+
+  .basics code{
+    font-family: var(--font-mono);
+    background: rgba(242,169,59,0.18);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ---------- wide ajustement card ---------- */
+  .adjust-card{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px 20px;
+    margin-bottom: 20px;
+    border-top: 4px solid var(--ink);
+  }
+
+  .adjust-card .card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 14px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+
+  .adjust-card .card-head h2{
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .adjust-row{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items:start;
+  }
+
+  @media (max-width: 720px){
+    .adjust-row{ grid-template-columns: 1fr; }
+  }
+
+  .def{
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0 0 12px;
+  }
+
+  .def strong{ color: var(--ink); }
+
+  .formula-box{
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .formula-box .tag{
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .r2-scale{
+    margin-top: 12px;
+    font-size: 0.82rem;
+  }
+
+  .r2-scale .vtitle{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+
+  .vrow{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    padding: 3px 0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+  }
+
+  .vrow .arrow{
+    display:inline-block;
+    min-width: 90px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: var(--ink);
+  }
+
+  .example{
+    background: rgba(242,169,59,0.14);
+    border: 1px dashed var(--amber-deep);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.83rem;
+    line-height: 1.45;
+  }
+
+  .example .ex-label{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--amber-deep);
+    display:block;
+    margin-bottom: 4px;
+  }
+
+  /* ---------- method steps ---------- */
+  .method-title{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+  }
+
+  .steps{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: step;
+    font-size: 0.84rem;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  .steps li{
+    counter-increment: step;
+    position: relative;
+    padding-left: 28px;
+    margin-bottom: 8px;
+  }
+
+  .steps li::before{
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .steps.amber li::before{ background: var(--amber-deep); }
+
+  .steps code{
+    font-family: var(--font-mono);
+    background: rgba(242,169,59,0.18);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* ---------- two-column comparison (interpoler / extrapoler) ---------- */
+  .compare{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 18px;
+  }
+
+  @media (max-width: 720px){
+    .compare{ grid-template-columns: 1fr; }
+  }
+
+  .card{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px 20px;
+    position: relative;
+  }
+
+  .card.interp{ border-top: 4px solid var(--ink); }
+  .card.extrap{ border-top: 4px solid var(--amber-deep); }
+
+  .card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .card-head h2{
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .card.extrap .card-head h2{ color: var(--amber-deep); }
+
+  .mini-graph{ flex-shrink:0; }
+
+  /* ---------- reflex strip ---------- */
+  .reflex{
+    display:grid;
+    grid-template-columns: auto 1fr 1fr;
+    align-items:center;
+    gap: 14px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 720px){
+    .reflex{ grid-template-columns: 1fr; text-align:left; }
+  }
+
+  .reflex .rtitle{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+  .reflex .rtitle .accent{ color: var(--amber); }
+
+  .reflex .rline{
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+  .reflex .rline b{ color: var(--amber); }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    font-family: var(--font-body);
+  }
+
+/* ---- Navbar retour accueil ---- */
+.site-navbar{
+  position: sticky; top: 0; z-index: 999;
+  background: #16232F; color:#E4EAEF;
+  padding: 0.65rem 1.2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  display:flex; align-items:center;
+}
+.site-navbar a{
+  color:#E4EAEF; text-decoration:none; font-weight:600;
+  display:inline-flex; align-items:center; gap:0.4rem;
+  transition: color .15s ease;
+}
+.site-navbar a:hover{ color:#F2A93B; }
+
+</style>
+</head>
+<body>
+<div class="site-navbar"><a href="../index.html">&#8592; Retour à l'accueil</a></div>
+
+<div class="sheet">
+
+  <header>
+    <div>
+      <p class="eyebrow">Fiche mémo · Première Bac Pro</p>
+      <h1>Statistique <span class="accent">à deux variables</span></h1>
+    </div>
+    <p class="header-note">À relire juste avant un QCM ou un jeu — pas un cours complet, juste l'essentiel.</p>
+  </header>
+
+  <div class="basics">
+    <span class="label">C'est quoi ?</span>
+    <p>On étudie <strong>deux caractères</strong> sur une même population (ex : année et salaire). Chaque individu donne un point <code>(x ; y)</code>. L'ensemble des points forme un <strong>nuage de points</strong>.</p>
+  </div>
+
+  <div class="adjust-card">
+    <div class="card-head">
+      <h2>L'ajustement affine</h2>
+      <svg class="mini-graph" width="90" height="52" viewBox="0 0 90 52">
+        <line x1="8" y1="46" x2="82" y2="46" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+        <line x1="8" y1="46" x2="8" y2="6" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+        <line x1="10" y1="40" x2="78" y2="10" stroke="#C6810F" stroke-width="1.6"/>
+        <circle cx="12" cy="38" r="2.6" fill="#16232F"/>
+        <circle cx="28" cy="32" r="2.6" fill="#16232F"/>
+        <circle cx="44" cy="24" r="2.6" fill="#16232F"/>
+        <circle cx="60" cy="18" r="2.6" fill="#16232F"/>
+        <circle cx="76" cy="12" r="2.6" fill="#16232F"/>
+      </svg>
+    </div>
+    <p class="def">Quand le nuage de points a une forme <strong>allongée</strong>, on cherche la droite qui passe <strong>au plus près</strong> de tous les points : c'est la <strong>droite d'ajustement affine</strong> (méthode des moindres carrés, coefficients donnés par la calculatrice).</p>
+
+    <div class="adjust-row">
+      <div>
+        <div class="formula-box"><span>y = a × x + b</span><span class="tag">équation de la droite</span></div>
+        <div class="example">
+          <span class="ex-label">Exemple</span>
+          Salaire d'Antoine : <code>y = 53,3x − 106 078</code>. En 2022 (<code>x = 2022</code>) : <code>y ≈ 1 699 €</code>.
+        </div>
+      </div>
+      <div>
+        <div class="r2-scale">
+          <div class="vtitle">Coefficient de détermination R²</div>
+          <div class="vrow"><span class="arrow">R² proche de 1</span> ajustement pertinent ✅</div>
+          <div class="vrow"><span class="arrow">R² proche de 0</span> ajustement peu pertinent ❌</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="adjust-card">
+    <div class="card-head">
+      <h2>Obtenir l'équation et R²</h2>
+    </div>
+    <div class="adjust-row">
+      <div>
+        <div class="method-title">Sur tableur</div>
+        <ol class="steps">
+          <li>Sélectionner les deux colonnes de données, puis <b>insérer</b> un <code>nuage de points (XY)</code>.</li>
+          <li>Clic droit sur un point du graphique → <code>Ajouter une courbe de tendance</code>.</li>
+          <li>Choisir le type <code>linéaire</code>, puis cocher <code>Afficher l'équation</code> et <code>Afficher le coefficient de détermination (R²)</code>.</li>
+        </ol>
+      </div>
+      <div>
+        <div class="method-title">Sur Numworks</div>
+        <ol class="steps amber">
+          <li>Ouvrir l'application <code>Régression</code>.</li>
+          <li>Saisir les couples <code>(x ; y)</code> dans le tableau de valeurs.</li>
+          <li>Onglet <code>Graphique</code> pour visualiser le nuage de points.</li>
+          <li>Onglet <code>Régression</code> → choisir <code>Affine</code> → lire <code>a</code>, <code>b</code> et <code>r²</code>.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare">
+
+    <div class="card interp">
+      <div class="card-head">
+        <h2>Interpoler</h2>
+        <svg class="mini-graph" width="70" height="46" viewBox="0 0 70 46">
+          <line x1="6" y1="40" x2="64" y2="40" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+          <line x1="6" y1="40" x2="6" y2="6" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+          <line x1="10" y1="34" x2="58" y2="12" stroke="#16232F" stroke-width="1.4" opacity="0.5"/>
+          <circle cx="10" cy="34" r="3" fill="#16232F"/>
+          <circle cx="58" cy="12" r="3" fill="#16232F"/>
+          <circle cx="34" cy="23" r="3.4" fill="#C6810F"/>
+        </svg>
+      </div>
+      <p class="def">On estime les coordonnées d'un <strong>nouveau point situé entre deux points connus</strong> de la droite (à l'intérieur de l'intervalle des données).</p>
+      <div class="example">
+        <span class="ex-label">Exemple</span>
+        Retrouver le salaire de <b>2020</b> à partir de la droite, alors qu'on connaît la période 2019 à 2023 : ce point est <em>à l'intérieur</em> de l'intervalle connu → <code>y = 53,3×2020 − 106 078 ≈ 1 588 €</code>.
+      </div>
+    </div>
+
+    <div class="card extrap">
+      <div class="card-head">
+        <h2>Extrapoler</h2>
+        <svg class="mini-graph" width="70" height="46" viewBox="0 0 70 46">
+          <line x1="6" y1="40" x2="64" y2="40" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+          <line x1="6" y1="40" x2="6" y2="6" stroke="#16232F" stroke-width="1" opacity="0.25"/>
+          <line x1="10" y1="34" x2="42" y2="20" stroke="#16232F" stroke-width="1.4" opacity="0.5"/>
+          <line x1="42" y1="20" x2="62" y2="11" stroke="#C6810F" stroke-width="1.4" stroke-dasharray="2 3"/>
+          <circle cx="10" cy="34" r="3" fill="#16232F"/>
+          <circle cx="42" cy="20" r="3" fill="#16232F"/>
+          <circle cx="62" cy="11" r="3.4" fill="#C6810F"/>
+        </svg>
+      </div>
+      <p class="def">On déduit les coordonnées d'un <strong>nouveau point situé hors de l'intervalle connu</strong>, dans le prolongement de la droite d'ajustement.</p>
+      <div class="example">
+        <span class="ex-label">Exemple</span>
+        Estimer en quelle année le salaire dépassera <b>2 000 €</b> : ce point est <em>au-delà</em> des données connues (2019–2023) → environ <code>2027,7</code>, donc en <b>2028</b>.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="reflex">
+    <span class="rtitle">🧠 Le <span class="accent">réflexe</span></span>
+    <span class="rline">R² <b>proche de 1</b> ? → ajustement <b>pertinent</b></span>
+    <span class="rline">R² <b>proche de 0</b> ? → ajustement <b>peu pertinent</b></span>
+  </div>
+
+</div>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+</body>
+</html>
