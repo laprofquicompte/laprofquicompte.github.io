@@ -122,21 +122,22 @@
 
   /* Chapter grid (level 1) */
   .chapter-grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill, minmax(210px, 1fr));
-    gap:1rem;
+    display:flex;
+    flex-direction:column;
+    gap:0.7rem;
   }
   .chapter-card{
     background:var(--card);
     border:1px solid var(--paper-dark);
     border-left:4px solid var(--ink);
     border-radius:var(--radius);
-    padding:1.15rem 1.2rem;
+    padding:1rem 1.2rem;
     cursor:pointer;
     transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
     display:flex;
-    flex-direction:column;
-    gap:0.35rem;
+    align-items:center;
+    justify-content:space-between;
+    gap:0.8rem;
   }
   .chapter-card:hover{
     transform:translateY(-3px);
@@ -331,16 +332,16 @@
         <h2>Automatismes</h2>
         <span class="count">1 activité</span>
       </div>
+      <div class="chapter-card" data-target="premiere-fonctions-affines">
+        <h2>Révisions sur les fonctions affines</h2>
+        <span class="count">1 activité</span>
+      </div>
       <div class="chapter-card" data-target="premiere-stats">
         <h2>Statistiques à deux variables</h2>
         <span class="count">1 activité</span>
       </div>
       <div class="chapter-card" data-target="premiere-suites">
         <h2>Suites numériques et arithmétiques</h2>
-        <span class="count">1 activité</span>
-      </div>
-      <div class="chapter-card" data-target="premiere-fonctions-affines">
-        <h2>Révisions sur les fonctions affines</h2>
         <span class="count">1 activité</span>
       </div>
     </div>
@@ -457,8 +458,8 @@
       <div class="grid">
         <a class="card" href="jeux/securite-laboratoire.html">
           <span class="badge jeu">Jeu</span>
-          <h3>Jeu des paires — sécurité labo</h3>
-          <p>Électricité, chimie, acoustique, optique.</p>
+          <h3>Jeu des trios — sécurité labo</h3>
+          <p>Associe risque, conséquence et prévention. Électricité, chimie, acoustique, optique.</p>
           <div class="meta"><span><span class="status-dot"></span>Disponible</span><span>—</span></div>
         </a>
       </div>
