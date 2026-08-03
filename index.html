@@ -17,6 +17,7 @@
     --amber-dark: #C9860F;
     --red: #D64541;
     --teal: #2E8B87;
+    --green: #3F9142;
     --card: #F4F7F9;
     --radius: 6px;
   }
@@ -158,6 +159,25 @@
     color:var(--graphite);
   }
 
+  .chapter-card.disabled{
+    opacity:0.55;
+    filter:grayscale(0.3);
+    cursor:default;
+    border-left-color:var(--graphite);
+  }
+  .chapter-card.disabled:hover{
+    transform:none;
+    box-shadow:none;
+    border-left-color:var(--graphite);
+  }
+  .chapter-soon{
+    display:block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.7rem;
+    color:var(--graphite);
+    margin-top:0.2rem;
+  }
+
   /* Chapter detail (level 2) */
   .chapter-detail{ display:none; }
   .chapter-detail.active{ display:block; }
@@ -230,6 +250,7 @@
   .badge.jeu{ background:var(--amber-dark); }
   .badge.qcm{ background:var(--red); }
   .badge.video{ background:var(--teal); }
+  .badge.memo{ background:var(--graphite); }
 
   .card h3{
     font-family:'Inter', sans-serif;
@@ -263,6 +284,7 @@
     margin-right:0.3rem;
   }
   .status-dot.soon{ background: var(--amber); }
+  .status-dot.available{ background: var(--green); }
 
   footer{
     text-align:center;
@@ -307,18 +329,65 @@
         <h2>Automatismes</h2>
         <span class="count">1 activité</span>
       </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Révisions proportionnalité</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card" data-target="cap-fonction-affine">
+        <h2>Fonction affine</h2>
+        <span class="count">1 activité</span>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Systèmes d'équations à deux inconnues</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Pythagore</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Thalès</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Trigonométrie</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
     </div>
 
     <div class="chapter-detail" id="detail-cap-automatismes">
       <button class="back-btn">← Retour aux chapitres</button>
       <p class="detail-title">Automatismes</p>
       <div class="grid">
-        <div class="card disabled">
+        <a class="card" href="jeux/qcm-automatismes-cap-2a.html">
           <span class="badge qcm">QCM</span>
           <h3>QCM d'automatismes</h3>
-          <p>Entraînement rapide, correction immédiate.</p>
-          <div class="meta"><span><span class="status-dot soon"></span>Bientôt</span><span>—</span></div>
-        </div>
+          <p>Entraînement classé par thème, avec suivi du score sur chaque QCM.</p>
+          <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
+        </a>
+      </div>
+    </div>
+
+    <div class="chapter-detail" id="detail-cap-fonction-affine">
+      <button class="back-btn">← Retour aux chapitres</button>
+      <p class="detail-title">Fonction affine</p>
+      <div class="grid">
+        <a class="card" href="jeux/premiere-fonctions-affines.html">
+          <span class="badge jeu">Jeu</span>
+          <h3>Trouve le trio — fonctions affines</h3>
+          <p>Associe expression, tableau de valeurs et représentation graphique.</p>
+          <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
+        </a>
       </div>
     </div>
 
@@ -344,6 +413,48 @@
         <h2>Suites numériques et arithmétiques</h2>
         <span class="count">1 activité</span>
       </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Calculs commerciaux et financiers</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Probabilité</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Suites - sommes</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Probas conditionnelles</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Résolution graphique d'équations et d'inéquations - Fonction polynôme de degré 2</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Nombre et fonction dérivée</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Géométrie dans l'espace</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
     </div>
 
     <div class="chapter-detail" id="detail-premiere-automatismes">
@@ -363,12 +474,12 @@
       <button class="back-btn">← Retour aux chapitres</button>
       <p class="detail-title">Statistiques à deux variables</p>
       <div class="grid">
-        <div class="card disabled">
+        <a class="card" href="jeux/qcm-revision-statistiques.html">
           <span class="badge qcm">QCM</span>
-          <h3>À venir</h3>
-          <p>Contenu en préparation.</p>
-          <div class="meta"><span><span class="status-dot soon"></span>Bientôt</span><span>—</span></div>
-        </div>
+          <h3>QCM de révision — Statistiques</h3>
+          <p>Ajustement affine, coefficient de détermination R², corrélation et extrapolation.</p>
+          <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
+        </a>
       </div>
     </div>
 
@@ -380,7 +491,7 @@
           <span class="badge jeu">Jeu</span>
           <h3>Suites arithmétiques</h3>
           <p>Entraîne-toi sur les suites arithmétiques.</p>
-          <div class="meta"><span><span class="status-dot"></span>Disponible</span><span>—</span></div>
+          <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
         </a>
       </div>
     </div>
@@ -393,7 +504,7 @@
           <span class="badge jeu">Jeu</span>
           <h3>Trouve le trio — fonctions affines</h3>
           <p>Associe expression, tableau de valeurs et représentation graphique.</p>
-          <div class="meta"><span><span class="status-dot"></span>Disponible</span><span>—</span></div>
+          <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
         </a>
       </div>
     </div>
@@ -411,6 +522,48 @@
       <div class="chapter-card" data-target="terminale-suites">
         <h2>Suites numériques et géométriques</h2>
         <span class="count">1 activité</span>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Probabilités</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Calculs financiers</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Statistique à deux variables</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Fonctions polynôme de degré 2</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Fonctions polynôme de degré 3</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Fonctions exponentielles de base q</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
+      </div>
+      <div class="chapter-card disabled">
+        <div>
+          <h2>Fonction logarithme décimal</h2>
+          <span class="chapter-soon">À venir</span>
+        </div>
       </div>
     </div>
 
@@ -435,7 +588,19 @@
           <span class="badge jeu">Jeu</span>
           <h3>Suites arithmétiques et géométriques</h3>
           <p>Entraîne-toi sur les deux types de suites.</p>
-          <div class="meta"><span><span class="status-dot"></span>Disponible</span><span>—</span></div>
+          <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
+        </a>
+        <a class="card" href="jeux/qcm-suites-geometriques.html">
+          <span class="badge qcm">QCM</span>
+          <h3>QCM — Suites géométriques</h3>
+          <p>10 questions pour t'entraîner avant l'interro.</p>
+          <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
+        </a>
+        <a class="card" href="jeux/fiche-memo-suites-geometriques.html">
+          <span class="badge memo">Mémo</span>
+          <h3>Fiche mémo — Suites géométriques</h3>
+          <p>L'essentiel à relire juste avant un QCM ou un jeu.</p>
+          <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
         </a>
       </div>
     </div>
@@ -460,7 +625,7 @@
           <span class="badge jeu">Jeu</span>
           <h3>Jeu des trios — sécurité labo</h3>
           <p>Associe risque, conséquence et prévention. Électricité, chimie, acoustique, optique.</p>
-          <div class="meta"><span><span class="status-dot"></span>Disponible</span><span>—</span></div>
+          <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
         </a>
       </div>
     </div>
@@ -482,8 +647,8 @@
     });
   });
 
-  // Chapter cards -> open detail view
-  document.querySelectorAll('.chapter-card').forEach(card=>{
+  // Chapter cards -> open detail view (disabled/empty chapters are not clickable)
+  document.querySelectorAll('.chapter-card:not(.disabled)').forEach(card=>{
     card.addEventListener('click', ()=>{
       const panel = card.closest('.panel');
       panel.querySelector('.chapter-grid').style.display = 'none';
