@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche mémo — Probabilités</title>
+<meta name="description" content="Fiche mémo sur les probabilités : vocabulaire (expérience aléatoire, univers, évènement), calcul d'une probabilité, équiprobabilité, évènement contraire, intersection, réunion et probabilités conditionnelles. L'essentiel à relire avant un exercice ou une évaluation.">
+<meta property="og:title" content="Fiche mémo — Probabilités — La Prof qui Compte">
+<meta property="og:description" content="L'essentiel du chapitre sur les probabilités, à relire juste avant un exercice ou une évaluation.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/fiche-memo-probabilites.html">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fiche mémo — Probabilités — La Prof qui Compte">
+<meta name="twitter:description" content="L'essentiel du chapitre sur les probabilités, à relire juste avant un exercice ou une évaluation.">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/fiche-memo-probabilites.html">
+<style>
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+</style>
+
+<style>
+  :root{
+    --paper: #E4EAEF;
+    --ink: #16232F;
+    --ink-soft: rgba(22,35,47,0.65);
+    --ink-faint: rgba(22,35,47,0.4);
+    --amber: #F2A93B;
+    --amber-deep: #C6810F;
+    --teal: #2E7D6B;
+    --card-bg: #EEF2F5;
+    --line: rgba(22,35,47,0.14);
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(rgba(22,35,47,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,47,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding: 26px 18px 50px;
+  }
+
+  .sheet{
+    max-width: 1040px;
+    margin: 0 auto;
+  }
+
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.05;
+    letter-spacing: 0.2px;
+  }
+
+  h1 .accent{ color: var(--amber-deep); }
+
+  .header-note{
+    font-family: var(--font-body);
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    max-width: 260px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  .basics{
+    display:flex;
+    align-items:center;
+    gap: 18px;
+    flex-wrap: wrap;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 22px;
+  }
+
+  .basics .label{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+
+  .basics p{
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+  }
+
+  .basics code{
+    font-family: var(--font-mono);
+    background: rgba(242,169,59,0.18);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 18px;
+  }
+
+  @media (max-width: 780px){
+    .grid{ grid-template-columns: 1fr; }
+  }
+
+  .card{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px 20px;
+    position: relative;
+  }
+
+  .card.c1{ border-top: 4px solid var(--ink); }
+  .card.c2{ border-top: 4px solid var(--teal); }
+  .card.c3{ border-top: 4px solid var(--amber-deep); }
+  .card.c4{ border-top: 4px solid var(--ink); }
+  .card.c5{ border-top: 4px solid var(--teal); }
+  .card.c6{ border-top: 4px solid var(--amber-deep); }
+
+  .card-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .card-head h2{
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .card.c2 .card-head h2, .card.c5 .card-head h2{ color: var(--teal); }
+  .card.c3 .card-head h2, .card.c6 .card-head h2{ color: var(--amber-deep); }
+
+  .def{
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.45;
+    margin: 0 0 12px;
+  }
+
+  .def strong{ color: var(--ink); }
+
+  .formula-box{
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap: wrap;
+  }
+
+  .formula-box .tag{
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .method{
+    background: rgba(22,35,47,0.05);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.83rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+
+  .method .mtitle{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-soft);
+    display:block;
+    margin-bottom: 5px;
+  }
+
+  .method ul{
+    margin: 4px 0 0;
+    padding-left: 18px;
+  }
+
+  .method li{ margin-bottom: 3px; }
+
+  .example{
+    background: rgba(242,169,59,0.14);
+    border: 1px dashed var(--amber-deep);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.83rem;
+    line-height: 1.45;
+  }
+
+  .example.teal{
+    background: rgba(46,125,107,0.12);
+    border: 1px dashed var(--teal);
+  }
+
+  .example .ex-label{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--amber-deep);
+    display:block;
+    margin-bottom: 4px;
+  }
+
+  .example.teal .ex-label{ color: var(--teal); }
+
+  .pitfall{
+    display:flex;
+    align-items:flex-start;
+    gap: 8px;
+    background: rgba(198,129,15,0.1);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin-top: 10px;
+  }
+
+  .pitfall .icon{ flex-shrink:0; }
+
+  .mini-table{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6px 0 12px;
+    font-size: 0.78rem;
+  }
+
+  .mini-table th, .mini-table td{
+    border: 1px solid var(--line);
+    padding: 4px 6px;
+    text-align: center;
+  }
+
+  .mini-table th{
+    background: rgba(22,35,47,0.06);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.74rem;
+  }
+
+  .reflex{
+    display:grid;
+    grid-template-columns: auto 1fr;
+    align-items:center;
+    gap: 14px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-bottom: 10px;
+  }
+
+  @media (max-width: 780px){
+    .reflex{ grid-template-columns: 1fr; text-align:left; }
+  }
+
+  .reflex .rtitle{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.95rem;
+    white-space: nowrap;
+  }
+  .reflex .rtitle .accent{ color: var(--amber); }
+
+  .reflex .rline{
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+  }
+  .reflex .rline b{ color: var(--amber); }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    font-family: var(--font-body);
+  }
+
+.site-navbar{
+  position: sticky; top: 0; z-index: 999;
+  background: #16232F; color:#E4EAEF;
+  padding: 0.65rem 1.2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  display:flex; align-items:center;
+}
+.site-navbar a{
+  color:#E4EAEF; text-decoration:none; font-weight:600;
+  display:inline-flex; align-items:center; gap:0.4rem;
+  transition: color .15s ease;
+}
+.site-navbar a:hover{ color:#F2A93B; }
+
+</style>
+</head>
+<body>
+<div class="site-navbar"><a href="../index.html">&#8592; Retour à l'accueil</a></div>
+
+<div class="sheet">
+
+  <header>
+    <div>
+      <p class="eyebrow">Fiche mémo · Chapitre</p>
+      <h1>Probabilités</h1>
+    </div>
+    <p class="header-note">À relire juste avant un exercice ou une évaluation — pas le cours complet, juste l'essentiel.</p>
+  </header>
+
+  <div class="basics">
+    <span class="label">Une probabilité, c'est quoi ?</span>
+    <p>Un nombre compris entre <code>0</code> et <code>1</code> qui exprime « la chance » qu'a un évènement de se produire. Dire que <code>P(A) = 0,8</code> signifie que A a 8 chances sur 10 (80 %) de se produire.</p>
+  </div>
+
+  <div class="grid">
+
+    <div class="card c1">
+      <div class="card-head">
+        <h2>Vocabulaire de base</h2>
+      </div>
+      <p class="def">Une expérience est dite <strong>aléatoire</strong> lorsqu'elle a plusieurs résultats possibles, appelés <strong>issues</strong>, et qu'on ne peut pas prévoir lequel va se produire.</p>
+      <div class="formula-box"><span>Ω = ensemble de toutes les issues</span><span class="tag">univers</span></div>
+      <p class="def">Un <strong>évènement</strong> A est un sous-ensemble de l'univers Ω (on note <code>A ⊂ Ω</code>). Un évènement qui ne contient qu'une seule issue est un <strong>évènement élémentaire</strong>.</p>
+      <div class="example">
+        <span class="ex-label">Exemple</span>
+        On lance un dé à 6 faces : <code>Ω = {1 ; 2 ; 3 ; 4 ; 5 ; 6}</code>. « Obtenir 4 » est un évènement élémentaire.
+      </div>
+    </div>
+
+    <div class="card c2">
+      <div class="card-head">
+        <h2>Calculer une probabilité</h2>
+      </div>
+      <p class="def">La probabilité d'un évènement A, notée <code>P(A)</code>, est la <strong>somme des probabilités des issues</strong> qui réalisent A.</p>
+      <div class="example teal">
+        <span class="ex-label">Exemple</span>
+        Jeu de cartes truqué : <code>P(As) = 0,10</code> ; <code>P(Figure) = 0,50</code> ; <code>P(Autre) = 0,40</code>.<br>
+        A : « obtenir une carte qui n'est pas une figure » → <code>P(A) = P(As) + P(Autre) = 0,10 + 0,40 = 0,50</code>.
+      </div>
+      <div class="pitfall">
+        <span class="icon">⚠️</span>
+        <span>La somme des probabilités de toutes les issues d'une expérience vaut toujours <code>1</code>.</span>
+      </div>
+    </div>
+
+    <div class="card c3">
+      <div class="card-head">
+        <h2>Équiprobabilité</h2>
+      </div>
+      <p class="def">Quand toutes les issues ont la <strong>même probabilité</strong> p (une expérience à n issues), on a <code>p = 1/n</code>.</p>
+      <div class="formula-box"><span>P(A) = issues favorables / issues total</span><span class="tag">équiprobabilité</span></div>
+      <div class="example">
+        <span class="ex-label">Exemple</span>
+        Jeu de 52 cartes, A : « obtenir une figure » (4 valets + 4 dames + 4 rois = 12 cartes) → <code>P(A) = 12/52</code>.
+      </div>
+    </div>
+
+    <div class="card c4">
+      <div class="card-head">
+        <h2>Évènement contraire</h2>
+      </div>
+      <p class="def">L'évènement contraire de A, noté <code>Ā</code>, est l'ensemble des issues qui <strong>n'appartiennent pas</strong> à A.</p>
+      <div class="formula-box"><span>P(Ā) = 1 − P(A)</span><span class="tag">contraire</span></div>
+      <div class="example teal">
+        <span class="ex-label">Exemple</span>
+        La probabilité que Mme Boudier gagne au foot contre Alexis est <code>P(G) = 0,01</code>. Donc <code>P(Ḡ) = 1 − 0,01 = 0,99</code> — sans surprise.
+      </div>
+    </div>
+
+    <div class="card c5">
+      <div class="card-head">
+        <h2>Intersection &amp; réunion</h2>
+      </div>
+      <p class="def"><code>A ∩ B</code> (« A inter B ») : les issues qui réalisent A <strong>et</strong> B. <code>A ∪ B</code> (« A union B ») : les issues qui réalisent A <strong>ou</strong> B (au moins l'un des deux).</p>
+      <div class="formula-box"><span>P(A∪B) = P(A) + P(B) − P(A∩B)</span></div>
+      <div class="method">
+        <span class="mtitle">Cas particulier</span>
+        Si A et B sont <strong>incompatibles</strong> (<code>A ∩ B = ∅</code>), alors <code>P(A∪B) = P(A) + P(B)</code>.
+      </div>
+      <div class="example">
+        <span class="ex-label">Exemple</span>
+        Dans une classe : 30 % font du foot (A), 40 % de l'athlétisme (B), 10 % les deux.<br>
+        <code>P(A∪B) = 0,30 + 0,40 − 0,10 = 0,60</code>.
+      </div>
+    </div>
+
+    <div class="card c6">
+      <div class="card-head">
+        <h2>Probabilités conditionnelles</h2>
+      </div>
+      <p class="def">La probabilité de B <strong>sachant que</strong> A est réalisé se note <code>P<sub>A</sub>(B)</code>. Le « si … alors » se traduit par « sachant que ».</p>
+      <div class="formula-box"><span>P<sub>A</sub>(B) = P(A ∩ B) / P(A)</span><span class="tag">P(A) ≠ 0</span></div>
+      <table class="mini-table">
+        <tr><th></th><th>Interne</th><th>Externe</th><th>Demi-pens.</th><th>Total</th></tr>
+        <tr><th>Fille</th><td>2</td><td>3</td><td>11</td><td>16</td></tr>
+        <tr><th>Garçon</th><td>1</td><td>2</td><td>15</td><td>18</td></tr>
+        <tr><th>Total</th><td>3</td><td>5</td><td>26</td><td>34</td></tr>
+      </table>
+      <div class="example teal">
+        <span class="ex-label">Exemple</span>
+        A : « fille », B : « demi-pensionnaire ». <code>P<sub>A</sub>(B) = 11/16</code> : parmi les filles, la fréquence des demi-pensionnaires.
+      </div>
+    </div>
+
+  </div>
+
+  <div class="reflex">
+    <span class="rtitle">🧠 Le <span class="accent">réflexe</span></span>
+    <span class="rline">« Sachant que » dans l'énoncé ? → <b>probabilité conditionnelle</b>, on restreint l'univers</span>
+  </div>
+
+</div>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+</body>
+</html>
