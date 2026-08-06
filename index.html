@@ -14,8 +14,17 @@
 <meta name="twitter:title" content="La Prof qui Compte — Les maths autrement">
 <meta name="twitter:description" content="Jeux, QCM et fiches mémo de maths pour réviser à son rythme : CAP, Première et Terminale bac pro.">
 <link rel="canonical" href="https://laprofquicompte.github.io/">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'Oswald';src:url('fonts/Oswald-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('fonts/Inter-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('fonts/Inter-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('fonts/Inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('fonts/Inter-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+</style>
 <style>
   :root{
     --paper: #E4EAEF;
@@ -50,6 +59,14 @@
 
   a{color:inherit; text-decoration:none;}
   button{font-family:inherit;}
+
+  .tab:focus-visible,
+  .chapter-card:focus-visible,
+  .back-btn:focus-visible,
+  .card:focus-visible{
+    outline: 2px solid var(--amber);
+    outline-offset: 2px;
+  }
 
   /* ---------- Header ---------- */
   header{
@@ -320,54 +337,54 @@
   </div>
 </header>
 
-<nav class="tabs">
-  <div class="tabs-scroll">
-    <div class="tab active" data-panel="cap">CAP 2A</div>
-    <div class="tab" data-panel="premiere">Première Pro</div>
-    <div class="tab" data-panel="terminale">Terminale Pro</div>
-    <div class="tab" data-panel="bonus">Bonus</div>
+<nav class="tabs" aria-label="Choisir une classe">
+  <div class="tabs-scroll" role="tablist">
+    <div class="tab active" role="tab" id="tab-cap" aria-controls="panel-cap" aria-selected="true" tabindex="0" data-panel="cap">CAP 2A</div>
+    <div class="tab" role="tab" id="tab-premiere" aria-controls="panel-premiere" aria-selected="false" tabindex="-1" data-panel="premiere">Première Pro</div>
+    <div class="tab" role="tab" id="tab-terminale" aria-controls="panel-terminale" aria-selected="false" tabindex="-1" data-panel="terminale">Terminale Pro</div>
+    <div class="tab" role="tab" id="tab-bonus" aria-controls="panel-bonus" aria-selected="false" tabindex="-1" data-panel="bonus">Bonus</div>
   </div>
 </nav>
 
 <main>
 
   <!-- ================= CAP 2A ================= -->
-  <section class="panel active" id="panel-cap">
+  <section class="panel active" id="panel-cap" role="tabpanel" aria-labelledby="tab-cap">
 
     <div class="chapter-grid">
-      <div class="chapter-card" data-target="cap-automatismes">
+      <div class="chapter-card" data-target="cap-automatismes" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
         <h2>Automatismes</h2>
         <span class="count">1 activité</span>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Révisions proportionnalité</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card" data-target="cap-fonction-affine">
+      <div class="chapter-card" data-target="cap-fonction-affine" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
         <h2>Fonction affine</h2>
         <span class="count">1 activité</span>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Systèmes d'équations à deux inconnues</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Pythagore</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Thalès</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Trigonométrie</h2>
           <span class="chapter-soon">À venir</span>
@@ -404,62 +421,62 @@
   </section>
 
   <!-- ================= Première Pro ================= -->
-  <section class="panel" id="panel-premiere">
+  <section class="panel" id="panel-premiere" role="tabpanel" aria-labelledby="tab-premiere">
 
     <div class="chapter-grid">
-      <div class="chapter-card" data-target="premiere-automatismes">
+      <div class="chapter-card" data-target="premiere-automatismes" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
         <h2>Automatismes</h2>
         <span class="count">1 activité</span>
       </div>
-      <div class="chapter-card" data-target="premiere-fonctions-affines">
+      <div class="chapter-card" data-target="premiere-fonctions-affines" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
         <h2>Révisions sur les fonctions affines</h2>
         <span class="count">1 activité</span>
       </div>
-      <div class="chapter-card" data-target="premiere-stats">
+      <div class="chapter-card" data-target="premiere-stats" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
         <h2>Statistiques à deux variables</h2>
         <span class="count">1 activité</span>
       </div>
-      <div class="chapter-card" data-target="premiere-suites">
+      <div class="chapter-card" data-target="premiere-suites" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
         <h2>Suites numériques et arithmétiques</h2>
         <span class="count">1 activité</span>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Calculs commerciaux et financiers</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Probabilité</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Suites - sommes</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Probas conditionnelles</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Résolution graphique d'équations et d'inéquations - Fonction polynôme de degré 2</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Nombre et fonction dérivée</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Géométrie dans l'espace</h2>
           <span class="chapter-soon">À venir</span>
@@ -552,54 +569,54 @@
   </section>
 
   <!-- ================= Terminale Pro ================= -->
-  <section class="panel" id="panel-terminale">
+  <section class="panel" id="panel-terminale" role="tabpanel" aria-labelledby="tab-terminale">
 
     <div class="chapter-grid">
-      <div class="chapter-card" data-target="terminale-automatismes">
+      <div class="chapter-card" data-target="terminale-automatismes" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
         <h2>Automatismes</h2>
         <span class="count">1 activité</span>
       </div>
-      <div class="chapter-card" data-target="terminale-suites">
+      <div class="chapter-card" data-target="terminale-suites" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
         <h2>Suites numériques et géométriques</h2>
         <span class="count">1 activité</span>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Probabilités</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Calculs financiers</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Statistique à deux variables</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Fonctions polynôme de degré 2</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Fonctions polynôme de degré 3</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Fonctions exponentielles de base q</h2>
           <span class="chapter-soon">À venir</span>
         </div>
       </div>
-      <div class="chapter-card disabled">
+      <div class="chapter-card disabled" aria-disabled="true">
         <div>
           <h2>Fonction logarithme décimal</h2>
           <span class="chapter-soon">À venir</span>
@@ -648,10 +665,10 @@
   </section>
 
   <!-- ================= Bonus ================= -->
-  <section class="panel" id="panel-bonus">
+  <section class="panel" id="panel-bonus" role="tabpanel" aria-labelledby="tab-bonus">
 
     <div class="chapter-grid">
-      <div class="chapter-card" data-target="bonus-securite">
+      <div class="chapter-card" data-target="bonus-securite" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
         <h2>Sécurité en physique-chimie</h2>
         <span class="count">1 activité</span>
       </div>
@@ -678,22 +695,40 @@
 
 <script>
   // Class-level tabs
+  function activateTab(tab){
+    document.querySelectorAll('.tab').forEach(t=>{
+      t.classList.remove('active');
+      t.setAttribute('aria-selected','false');
+      t.tabIndex=-1;
+    });
+    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    tab.setAttribute('aria-selected','true');
+    tab.tabIndex=0;
+    tab.focus();
+    document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+  }
   document.querySelectorAll('.tab').forEach(tab=>{
-    tab.addEventListener('click', ()=>{
-      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-      document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-      tab.classList.add('active');
-      document.getElementById('panel-' + tab.dataset.panel).classList.add('active');
+    tab.addEventListener('click', ()=>activateTab(tab));
+    tab.addEventListener('keydown', e=>{
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); activateTab(tab); }
     });
   });
 
   // Chapter cards -> open detail view (disabled/empty chapters are not clickable)
+  function openChapter(card){
+    const panel = card.closest('.panel');
+    panel.querySelector('.chapter-grid').style.display = 'none';
+    panel.querySelectorAll('.chapter-detail').forEach(d=>d.classList.remove('active'));
+    const detail = document.getElementById('detail-' + card.dataset.target);
+    detail.classList.add('active');
+    const backBtn = detail.querySelector('.back-btn');
+    if(backBtn) backBtn.focus();
+  }
   document.querySelectorAll('.chapter-card:not(.disabled)').forEach(card=>{
-    card.addEventListener('click', ()=>{
-      const panel = card.closest('.panel');
-      panel.querySelector('.chapter-grid').style.display = 'none';
-      panel.querySelectorAll('.chapter-detail').forEach(d=>d.classList.remove('active'));
-      document.getElementById('detail-' + card.dataset.target).classList.add('active');
+    card.addEventListener('click', ()=>openChapter(card));
+    card.addEventListener('keydown', e=>{
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openChapter(card); }
     });
   });
 
@@ -702,7 +737,10 @@
     btn.addEventListener('click', ()=>{
       const panel = btn.closest('.panel');
       panel.querySelectorAll('.chapter-detail').forEach(d=>d.classList.remove('active'));
-      panel.querySelector('.chapter-grid').style.display = 'grid';
+      const grid = panel.querySelector('.chapter-grid');
+      grid.style.display = 'grid';
+      const firstCard = grid.querySelector('.chapter-card:not(.disabled)');
+      if(firstCard) firstCard.focus();
     });
   });
 </script>
