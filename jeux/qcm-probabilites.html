@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM — Probabilités</title>
+<meta name="description" content="QCM de 10 questions pour vérifier les notions du chapitre sur les probabilités : vocabulaire, équiprobabilité, évènement contraire, intersection, réunion, tableau croisé et probabilités conditionnelles.">
+<meta property="og:title" content="QCM — Probabilités — La Prof qui Compte">
+<meta property="og:description" content="QCM de 10 questions pour vérifier les notions du chapitre sur les probabilités.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/qcm-probabilites.html">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="QCM — Probabilités — La Prof qui Compte">
+<meta name="twitter:description" content="QCM de 10 questions pour vérifier les notions du chapitre sur les probabilités.">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/qcm-probabilites.html">
+<style>
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+</style>
+
+<style>
+  :root{
+    --paper: #E4EAEF;
+    --ink: #16232F;
+    --ink-soft: rgba(22,35,47,0.65);
+    --ink-faint: rgba(22,35,47,0.4);
+    --amber: #F2A93B;
+    --amber-deep: #C6810F;
+    --teal: #2E7D6B;
+    --red: #B3432B;
+    --card-bg: #EEF2F5;
+    --line: rgba(22,35,47,0.14);
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(rgba(22,35,47,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,47,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding: 26px 18px 60px;
+  }
+
+  .sheet{
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  h1 .accent{ color: var(--amber-deep); }
+
+  .progress-wrap{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .progress-track{
+    flex:1;
+    height: 8px;
+    background: rgba(22,35,47,0.1);
+    border-radius: 5px;
+    overflow:hidden;
+  }
+
+  .progress-fill{
+    height:100%;
+    background: var(--amber-deep);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .progress-label{
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  .qcard{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--ink);
+    border-radius: 12px;
+    padding: 20px 22px 22px;
+    margin-bottom: 18px;
+    display:none;
+  }
+
+  .qcard.active{ display:block; }
+
+  .qnum{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .qtext{
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0 0 16px;
+  }
+
+  .qtext code{
+    font-family: var(--font-mono);
+    background: rgba(242,169,59,0.18);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-weight: 600;
+  }
+
+  .qtable{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 4px 0 16px;
+    font-size: 0.85rem;
+    background: var(--paper);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .qtable th, .qtable td{
+    border: 1px solid var(--line);
+    padding: 6px 8px;
+    text-align: center;
+    font-weight: 400;
+  }
+
+  .qtable th{
+    background: rgba(22,35,47,0.07);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+  }
+
+  .option{
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: 9px;
+    padding: 11px 14px;
+    font-size: 0.92rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+
+  .option .letter{
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    flex-shrink:0;
+  }
+
+  .option code{
+    font-family: var(--font-mono);
+    font-weight: 600;
+  }
+
+  .option:hover:not(.disabled){
+    border-color: var(--amber-deep);
+    background: rgba(242,169,59,0.12);
+  }
+
+  .option.disabled{ cursor: default; }
+
+  .option.correct{
+    border-color: var(--teal);
+    background: rgba(46,125,107,0.16);
+    font-weight: 600;
+  }
+
+  .option.correct .letter{ color: var(--teal); }
+
+  .option.wrong{
+    border-color: var(--red);
+    background: rgba(179,67,43,0.14);
+  }
+
+  .option.wrong .letter{ color: var(--red); }
+
+  .feedback{
+    margin-top: 14px;
+    padding: 10px 13px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    display:none;
+  }
+
+  .feedback.show{ display:block; }
+
+  .feedback.ok{
+    background: rgba(46,125,107,0.12);
+    border: 1px dashed var(--teal);
+  }
+
+  .feedback.ko{
+    background: rgba(179,67,43,0.1);
+    border: 1px dashed var(--red);
+  }
+
+  .feedback .flabel{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display:block;
+    margin-bottom: 4px;
+  }
+
+  .feedback.ok .flabel{ color: var(--teal); }
+  .feedback.ko .flabel{ color: var(--red); }
+
+  .nav-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-top: 16px;
+  }
+
+  .btn{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.88rem;
+    letter-spacing: 0.3px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn.show{ opacity: 1; pointer-events: auto; }
+
+  .btn:hover{ background: var(--amber-deep); }
+
+  .result{
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 28px 26px;
+    text-align: center;
+    display:none;
+  }
+
+  .result.active{ display:block; }
+
+  .result .rtitle{
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  .result .score{
+    font-family: var(--font-mono);
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--amber);
+    margin: 6px 0 14px;
+  }
+
+  .result .rmsg{
+    font-size: 0.9rem;
+    color: rgba(228,234,239,0.75);
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  .result .btn{
+    opacity: 1;
+    pointer-events: auto;
+    background: var(--amber);
+    color: var(--ink);
+  }
+
+  .result .btn:hover{ background: var(--amber-deep); color: var(--paper); }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    font-family: var(--font-body);
+  }
+
+.site-navbar{
+  position: sticky; top: 0; z-index: 999;
+  background: #16232F; color:#E4EAEF;
+  padding: 0.65rem 1.2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  display:flex; align-items:center;
+}
+.site-navbar a{
+  color:#E4EAEF; text-decoration:none; font-weight:600;
+  display:inline-flex; align-items:center; gap:0.4rem;
+  transition: color .15s ease;
+}
+.site-navbar a:hover{ color:#F2A93B; }
+
+</style>
+</head>
+<body>
+<div class="site-navbar"><a href="../index.html">&#8592; Retour à l'accueil</a></div>
+
+<div class="sheet">
+
+  <header>
+    <div>
+      <p class="eyebrow">QCM · Probabilités</p>
+      <h1>Probabilités <span class="accent">— entraînement</span></h1>
+    </div>
+  </header>
+
+  <div class="progress-wrap">
+    <span class="progress-label" id="progressLabel">Question 1/10</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div id="quizArea"></div>
+
+  <div class="result" id="resultCard">
+    <p class="rtitle">Résultat</p>
+    <p class="score" id="scoreText">0/10</p>
+    <p class="rmsg" id="scoreMsg"></p>
+    <button class="btn" id="restartBtn">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+<script>
+  const questions = [
+    {
+      text: "Dans un jeu de 32 cartes, on tire une carte au hasard. L'évènement « obtenir le valet de cœur » est :",
+      options: [
+        "Un évènement élémentaire",
+        "Un évènement certain",
+        "Un évènement impossible",
+        "L'univers de l'expérience"
+      ],
+      correct: 0,
+      explain: "Cet évènement ne contient qu'une seule issue (le valet de cœur) : c'est un évènement élémentaire."
+    },
+    {
+      text: "Une roue de loterie truquée donne les probabilités suivantes selon la couleur obtenue : <code>P(rouge) = 0,20</code> ; <code>P(bleu) = 0,45</code> ; <code>P(vert) = 0,35</code>. Quelle est la probabilité d'obtenir rouge ou vert ?",
+      options: [
+        "0,20",
+        "0,35",
+        "0,45",
+        "0,55"
+      ],
+      correct: 3,
+      explain: "P(rouge ou vert) est la somme des probabilités des issues qui réalisent cet évènement : 0,20 + 0,35 = 0,55."
+    },
+    {
+      text: "On lance un dé équilibré à 6 faces. Quelle est la probabilité d'obtenir un nombre pair ?",
+      options: [
+        "1/6",
+        "2/6",
+        "3/6",
+        "6/6"
+      ],
+      correct: 2,
+      explain: "Les nombres pairs sont 2, 4 et 6, soit 3 issues favorables sur 6 : P = 3/6."
+    },
+    {
+      text: "Une urne contient 20 boules indiscernables au toucher, dont 8 rouges. On tire une boule au hasard. Quelle est la probabilité de tirer une boule rouge ?",
+      options: [
+        "8/20",
+        "12/20",
+        "20/8",
+        "1/8"
+      ],
+      correct: 0,
+      explain: "En équiprobabilité : P = nombre d'issues favorables / nombre d'issues total = 8/20."
+    },
+    {
+      text: "La probabilité qu'un train arrive à l'heure est <code>P(A) = 0,65</code>. Quelle est la probabilité qu'il soit en retard ?",
+      options: [
+        "0,65",
+        "0,35",
+        "1,65",
+        "On ne peut pas savoir"
+      ],
+      correct: 1,
+      explain: "L'évènement contraire vérifie P(Ā) = 1 − P(A) = 1 − 0,65 = 0,35."
+    },
+    {
+      text: "Soit <code>A = {2 ; 4 ; 6 ; 8}</code> et <code>B = {1 ; 2 ; 3 ; 4}</code>. Que vaut <code>A ∩ B</code> ?",
+      options: [
+        "{2 ; 4}",
+        "{1 ; 2 ; 3 ; 4 ; 6 ; 8}",
+        "∅",
+        "{6 ; 8}"
+      ],
+      correct: 0,
+      explain: "L'intersection contient les issues communes aux deux évènements : 2 et 4 apparaissent dans A et dans B."
+    },
+    {
+      text: "Dans une classe, 25 % des élèves jouent du piano, 40 % jouent de la guitare et 15 % jouent des deux instruments. Quelle est la probabilité qu'un élève joue du piano ou de la guitare ?",
+      options: [
+        "0,65",
+        "0,15",
+        "0,50",
+        "0,80"
+      ],
+      correct: 2,
+      explain: "P(A∪B) = P(A) + P(B) − P(A∩B) = 0,25 + 0,40 − 0,15 = 0,50."
+    },
+    {
+      text: "Deux évènements A et B sont incompatibles, avec <code>P(A) = 0,40</code> et <code>P(B) = 0,25</code>. Que vaut <code>P(A ∪ B)</code> ?",
+      options: [
+        "0,10",
+        "0,15",
+        "0,65",
+        "On ne peut pas savoir sans connaître P(A ∩ B)"
+      ],
+      correct: 2,
+      explain: "A et B étant incompatibles, A ∩ B = ∅, donc P(A∪B) = P(A) + P(B) = 0,40 + 0,25 = 0,65."
+    },
+    {
+      text: "Voici les résultats d'un examen dans une classe de 40 élèves :" +
+        "<table class='qtable'>" +
+        "<tr><th></th><th>Filles</th><th>Garçons</th><th>Total</th></tr>" +
+        "<tr><th>Réussite</th><td>18</td><td>14</td><td>32</td></tr>" +
+        "<tr><th>Échec</th><td>2</td><td>6</td><td>8</td></tr>" +
+        "<tr><th>Total</th><td>20</td><td>20</td><td>40</td></tr>" +
+        "</table>" +
+        "On choisit un élève au hasard parmi les 40. Quelle est la probabilité qu'il s'agisse d'un garçon ayant réussi ?",
+      options: [
+        "14/40",
+        "14/20",
+        "18/40",
+        "32/40"
+      ],
+      correct: 0,
+      explain: "14 garçons ont réussi, sur les 40 élèves de la classe entière : P = 14/40."
+    },
+    {
+      text: "En reprenant le même tableau que la question précédente : sachant qu'on choisit un garçon au hasard, quelle est la probabilité qu'il ait réussi ?",
+      options: [
+        "14/40",
+        "14/20",
+        "18/20",
+        "20/40"
+      ],
+      correct: 1,
+      explain: "« Sachant qu'on choisit un garçon » signifie qu'on se restreint à la colonne « Garçons » (20 élèves), parmi lesquels 14 ont réussi : P = 14/20. C'est une probabilité conditionnelle."
+    }
+  ];
+
+  let current = 0;
+  let score = 0;
+  const letters = ["A","B","C","D"];
+
+  const quizArea = document.getElementById("quizArea");
+  const progressFill = document.getElementById("progressFill");
+  const progressLabel = document.getElementById("progressLabel");
+  const resultCard = document.getElementById("resultCard");
+  const scoreText = document.getElementById("scoreText");
+  const scoreMsg = document.getElementById("scoreMsg");
+  const restartBtn = document.getElementById("restartBtn");
+
+  function buildQuestion(index){
+    const q = questions[index];
+    const card = document.createElement("div");
+    card.className = "qcard active";
+    card.id = "q" + index;
+
+    let optionsHTML = "";
+    q.options.forEach((opt, i) => {
+      optionsHTML += `<button class="option" data-index="${i}">
+        <span class="letter">${letters[i]}</span><span>${opt}</span>
+      </button>`;
+    });
+
+    card.innerHTML = `
+      <p class="qnum">Question ${index + 1} / ${questions.length}</p>
+      <p class="qtext">${q.text}</p>
+      <div class="options">${optionsHTML}</div>
+      <div class="feedback" id="feedback${index}"></div>
+      <div class="nav-row"><button class="btn" id="next${index}">${index === questions.length - 1 ? "Voir le résultat" : "Question suivante"}</button></div>
+    `;
+
+    quizArea.appendChild(card);
+
+    const optionButtons = card.querySelectorAll(".option");
+    optionButtons.forEach(btn => {
+      btn.addEventListener("click", () => handleAnswer(index, parseInt(btn.dataset.index), optionButtons, card));
+    });
+
+    document.getElementById("next" + index).addEventListener("click", () => {
+      card.remove();
+      current++;
+      updateProgress();
+      if(current < questions.length){
+        buildQuestion(current);
+      } else {
+        showResult();
+      }
+    });
+  }
+
+  function handleAnswer(index, chosen, optionButtons, card){
+    const q = questions[index];
+    optionButtons.forEach(b => b.classList.add("disabled"));
+    optionButtons[q.correct].classList.add("correct");
+
+    const fb = document.getElementById("feedback" + index);
+    if(chosen === q.correct){
+      score++;
+      fb.className = "feedback ok show";
+      fb.innerHTML = `<span class="flabel">Bien joué</span>${q.explain}`;
+    } else {
+      optionButtons[chosen].classList.add("wrong");
+      fb.className = "feedback ko show";
+      fb.innerHTML = `<span class="flabel">Pas tout à fait</span>${q.explain}`;
+    }
+
+    document.getElementById("next" + index).classList.add("show");
+  }
+
+  function updateProgress(){
+    const shown = Math.min(current + 1, questions.length);
+    progressLabel.textContent = current < questions.length ? `Question ${current + 1}/${questions.length}` : `Terminé`;
+    progressFill.style.width = (current / questions.length * 100) + "%";
+  }
+
+  function showResult(){
+    progressFill.style.width = "100%";
+    progressLabel.textContent = "Terminé";
+    resultCard.classList.add("active");
+    scoreText.textContent = score + "/" + questions.length;
+    let msg = "";
+    if(score === questions.length) msg = "Sans faute ! Les notions du chapitre sont bien en place.";
+    else if(score >= questions.length * 0.7) msg = "Très correct, encore quelques points à revoir.";
+    else if(score >= questions.length * 0.4) msg = "Pas mal, mais il faut retravailler certaines notions du cours.";
+    else msg = "Il vaut mieux revoir le cours avant de continuer.";
+    scoreMsg.textContent = msg;
+  }
+
+  restartBtn.addEventListener("click", () => {
+    current = 0;
+    score = 0;
+    resultCard.classList.remove("active");
+    quizArea.innerHTML = "";
+    updateProgress();
+    buildQuestion(0);
+  });
+
+  buildQuestion(0);
+</script>
+
+</body>
+</html>
