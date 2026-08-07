@@ -3,6 +3,7 @@
 
   <url>
     <loc>https://laprofquicompte.github.io/</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -10,6 +11,7 @@
   <!-- CAP 2A -->
   <url>
     <loc>https://laprofquicompte.github.io/jeux/qcm-automatismes-cap-2a.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -17,41 +19,61 @@
   <!-- Première Pro -->
   <url>
     <loc>https://laprofquicompte.github.io/jeux/premiere-fonctions-affines.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://laprofquicompte.github.io/jeux/qcm-fonctions-affines.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://laprofquicompte.github.io/jeux/fiche-memo-fonctions-affines.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://laprofquicompte.github.io/jeux/qcm-revision-statistiques.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://laprofquicompte.github.io/jeux/fiche-memo-statistiques.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://laprofquicompte.github.io/jeux/premiere-suites-arithmetiques.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://laprofquicompte.github.io/jeux/qcm-suites-arithmetiques.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://laprofquicompte.github.io/jeux/fiche-memo-suites-arithmetiques.html</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://laprofquicompte.github.io/jeux/qcm-probabilites.html</loc>
+    <lastmod>2026-08-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://laprofquicompte.github.io/jeux/fiche-memo-probabilites.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -59,16 +81,19 @@
   <!-- Terminale Pro -->
   <url>
     <loc>https://laprofquicompte.github.io/jeux/terminale-suites.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://laprofquicompte.github.io/jeux/qcm-suites-geometriques.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://laprofquicompte.github.io/jeux/fiche-memo-suites-geometriques.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -76,6 +101,7 @@
   <!-- Bonus -->
   <url>
     <loc>https://laprofquicompte.github.io/jeux/securite-laboratoire.html</loc>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
