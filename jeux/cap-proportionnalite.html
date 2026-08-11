@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chasse au coefficient</title>
+<meta name="description" content="Chasse au coefficient : quiz arcade chronométré sur la proportionnalité pour reconnaître un tableau proportionnel, calculer un coefficient et trouver une quatrième proportionnelle en t'amusant.">
+<meta property="og:title" content="Chasse au coefficient — La Prof qui Compte">
+<meta property="og:description" content="Chasse au coefficient : quiz arcade chronométré sur la proportionnalité pour reconnaître un tableau proportionnel, calculer un coefficient et trouver une quatrième proportionnelle en t'amusant.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/cap-proportionnalite.html">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chasse au coefficient — La Prof qui Compte">
+<meta name="twitter:description" content="Chasse au coefficient : quiz arcade chronométré sur la proportionnalité pour reconnaître un tableau proportionnel, calculer un coefficient et trouver une quatrième proportionnelle en t'amusant.">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/cap-proportionnalite.html">
+<style>
+  @font-face{font-family:'Oswald';src:url('../fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Oswald';src:url('../fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Inter';src:url('../fonts/Inter-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Inter';src:url('../fonts/Inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Inter';src:url('../fonts/Inter-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+  @font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+  @font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+
+  :root{
+    --paper:#E4EAEF;
+    --ink:#16232F;
+    --amber-deep:#C6810F;
+    --teal:#2E7D6B;
+    --red:#B3432B;
+    --white:#FFFFFF;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(rgba(22,35,47,0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,47,0.06) 1px, transparent 1px);
+    background-size:24px 24px;
+    color:var(--ink);
+    font-family:'Oswald', Arial, sans-serif;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:72px 16px 16px;
+  }
+
+  /* ---- Navbar retour accueil ---- */
+  .site-navbar{
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: #16232F; color:#E4EAEF;
+    padding: 0.65rem 1.2rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    display:flex; align-items:center;
+  }
+  .site-navbar a{
+    color:#E4EAEF; text-decoration:none; font-weight:600;
+    display:inline-flex; align-items:center; gap:0.4rem;
+    transition: color .15s ease;
+  }
+  .site-navbar a:hover{ color:#F2A93B; }
+
+  .app{
+    width:100%;
+    max-width:640px;
+  }
+
+  /* ---------- écran d'accueil ---------- */
+  .screen{
+    background:var(--white);
+    border:3px solid var(--ink);
+    border-radius:18px;
+    padding:32px 28px;
+    box-shadow:8px 8px 0 var(--ink);
+    text-align:center;
+  }
+
+  .title{
+    font-size:2.4rem;
+    font-weight:800;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin:0 0 6px;
+    color:var(--ink);
+  }
+  .title span{color:var(--amber-deep);}
+
+  .subtitle{
+    font-family:'Inter', Arial, sans-serif;
+    font-size:1rem;
+    color:#3d4f5f;
+    margin-bottom:24px;
+    line-height:1.5;
+  }
+
+  .rules{
+    text-align:left;
+    background:var(--paper);
+    border-radius:12px;
+    padding:16px 20px;
+    margin:0 0 24px;
+    font-family:'Inter', Arial, sans-serif;
+    font-size:0.95rem;
+    line-height:1.7;
+  }
+  .rules b{color:var(--teal);}
+
+  .btn{
+    font-family:'Oswald',Arial,sans-serif;
+    font-weight:800;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    font-size:1.15rem;
+    border:3px solid var(--ink);
+    border-radius:12px;
+    padding:14px 28px;
+    cursor:pointer;
+    background:var(--amber-deep);
+    color:var(--white);
+    box-shadow:4px 4px 0 var(--ink);
+    transition:transform .08s ease;
+  }
+  .btn:hover{transform:translate(-2px,-2px); box-shadow:6px 6px 0 var(--ink);}
+  .btn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink);}
+
+  .btn.teal{background:var(--teal);}
+  .btn.small{font-size:0.9rem; padding:10px 18px;}
+
+  /* ---------- écran de jeu ---------- */
+  #gameScreen{display:none;}
+
+  .hud{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:'IBM Plex Mono','Courier New',monospace;
+    font-weight:700;
+    margin-bottom:10px;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .hud .chip{
+    background:var(--ink);
+    color:var(--white);
+    border-radius:8px;
+    padding:6px 12px;
+    font-size:0.95rem;
+  }
+  .hud .chip.combo{background:var(--red);}
+  .hud .chip.score{background:var(--teal);}
+
+  .bar-track{
+    width:100%;
+    height:10px;
+    background:var(--paper);
+    border:2px solid var(--ink);
+    border-radius:6px;
+    overflow:hidden;
+    margin-bottom:6px;
+  }
+  .bar-fill{
+    height:100%;
+    background:var(--teal);
+    width:100%;
+    transition:width .2s linear;
+  }
+
+  .qtimer-track{
+    width:100%;
+    height:8px;
+    background:var(--paper);
+    border:2px solid var(--ink);
+    border-radius:6px;
+    overflow:hidden;
+    margin-bottom:20px;
+  }
+  .qtimer-fill{
+    height:100%;
+    background:var(--amber-deep);
+    width:100%;
+    transition:width .1s linear;
+  }
+
+  .tag{
+    display:inline-block;
+    font-family:'Inter', Arial, sans-serif;
+    font-size:0.78rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    background:var(--paper);
+    border:2px solid var(--ink);
+    border-radius:20px;
+    padding:3px 12px;
+    margin-bottom:14px;
+  }
+
+  .question{
+    font-size:1.25rem;
+    font-weight:700;
+    margin:0 0 16px;
+    line-height:1.4;
+  }
+
+  table.qtable{
+    border-collapse:collapse;
+    margin:0 auto 18px;
+    font-family:'IBM Plex Mono','Courier New',monospace;
+  }
+  table.qtable td{
+    border:2px solid var(--ink);
+    padding:10px 16px;
+    font-size:1.15rem;
+    font-weight:700;
+    min-width:50px;
+    text-align:center;
+  }
+  table.qtable td.label{
+    background:var(--paper);
+    font-family:'Inter', Arial, sans-serif;
+    font-size:0.85rem;
+    text-align:left;
+  }
+
+  .options{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:6px;
+  }
+  .options.wide{grid-template-columns:1fr;}
+
+  .opt-btn{
+    font-family:'Inter', Arial, sans-serif;
+    font-weight:700;
+    font-size:1.05rem;
+    border:3px solid var(--ink);
+    border-radius:10px;
+    padding:14px 10px;
+    background:var(--white);
+    cursor:pointer;
+    transition:transform .06s ease, background .15s ease;
+  }
+  .opt-btn:hover{background:var(--paper); transform:translateY(-2px);}
+  .opt-btn.correct{background:var(--teal); color:var(--white); border-color:var(--teal);}
+  .opt-btn.wrong{background:var(--red); color:var(--white); border-color:var(--red);}
+  .opt-btn:disabled{cursor:default;}
+
+  .feedback{
+    min-height:26px;
+    font-family:'Inter', Arial, sans-serif;
+    font-size:0.92rem;
+    font-weight:600;
+    margin-top:14px;
+    color:var(--ink);
+  }
+
+  #app-wrapper{position:relative;}
+  .shake{animation:shake .3s;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0);}
+    20%{transform:translateX(-6px);}
+    40%{transform:translateX(6px);}
+    60%{transform:translateX(-4px);}
+    80%{transform:translateX(4px);}
+  }
+
+  /* ---------- écran de fin ---------- */
+  #endScreen{display:none;}
+  .big-score{
+    font-family:'IBM Plex Mono','Courier New',monospace;
+    font-size:3rem;
+    font-weight:800;
+    color:var(--amber-deep);
+    margin:6px 0 4px;
+  }
+  .stats{
+    display:flex;
+    justify-content:center;
+    gap:22px;
+    margin:20px 0 26px;
+    flex-wrap:wrap;
+  }
+  .stat{
+    font-family:'Inter', Arial, sans-serif;
+  }
+  .stat .num{
+    font-family:'IBM Plex Mono','Courier New',monospace;
+    font-size:1.6rem;
+    font-weight:800;
+    color:var(--ink);
+  }
+  .stat .lbl{font-size:0.8rem; color:#5a6b7a; text-transform:uppercase;}
+
+  .adaptive-msg{
+    font-family:'Inter', Arial, sans-serif;
+    font-size:1.05rem;
+    font-weight:700;
+    color:var(--teal);
+    margin-bottom:22px;
+  }
+
+  footer.credit{
+    text-align:center;
+    font-family:'Inter', Arial, sans-serif;
+    font-size:0.75rem;
+    color:#5a6b7a;
+    margin-top:14px;
+  }
+</style>
+</head>
+<body>
+<div class="site-navbar"><a href="../index.html">&#8592; Retour à l'accueil</a></div>
+
+<div class="app" id="app-wrapper">
+
+  <!-- ÉCRAN D'ACCUEIL -->
+  <div class="screen" id="startScreen">
+    <h1 class="title">Chasse au <span>coefficient</span></h1>
+    <p class="subtitle">Quiz arcade chronométré — 10 minutes pour enchaîner un maximum de bonnes réponses !</p>
+    <div class="rules">
+      <b>Le but :</b> réponds vite et bien pour faire grimper ton combo.<br>
+      <b>3 types de question :</b> tableau proportionnel ou non, calcul du coefficient, nombre manquant (4<sup>e</sup> proportionnelle).<br>
+      <b>Attention :</b> chaque question a 30 secondes avant de passer à la suivante !
+    </div>
+    <button class="btn" id="startBtn">Lancer la chasse</button>
+  </div>
+
+  <!-- ÉCRAN DE JEU -->
+  <div class="screen" id="gameScreen">
+    <div class="hud">
+      <span class="chip" id="timeChip">⏱ 10:00</span>
+      <span class="chip combo" id="comboChip">🔥 Combo x0</span>
+      <span class="chip score" id="scoreChip">★ 0 pts</span>
+    </div>
+    <div class="bar-track"><div class="bar-fill" id="globalBar"></div></div>
+    <div class="qtimer-track"><div class="qtimer-fill" id="qBar"></div></div>
+
+    <span class="tag" id="qTag">Type</span>
+    <div class="question" id="qPrompt">Question</div>
+    <div id="qContent"></div>
+    <div class="options" id="qOptions"></div>
+    <div class="feedback" id="qFeedback"></div>
+  </div>
+
+  <!-- ÉCRAN DE FIN -->
+  <div class="screen" id="endScreen">
+    <h1 class="title">Chasse <span>terminée</span> !</h1>
+    <div class="big-score" id="finalScore">0</div>
+    <div class="adaptive-msg" id="adaptiveMsg"></div>
+    <div class="stats">
+      <div class="stat"><div class="num" id="statCorrect">0</div><div class="lbl">Bonnes rép.</div></div>
+      <div class="stat"><div class="num" id="statTotal">0</div><div class="lbl">Questions</div></div>
+      <div class="stat"><div class="num" id="statAcc">0%</div><div class="lbl">Précision</div></div>
+      <div class="stat"><div class="num" id="statCombo">0</div><div class="lbl">Meilleur combo</div></div>
+    </div>
+    <button class="btn teal" id="replayBtn">Rejouer</button>
+  </div>
+
+  <footer class="credit">Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes) — La Prof qui Compte</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  const GAME_DURATION = 600; // 10 minutes en secondes
+  const QUESTION_TIME = 30;  // secondes par question
+
+  const startScreen = document.getElementById('startScreen');
+  const gameScreen = document.getElementById('gameScreen');
+  const endScreen = document.getElementById('endScreen');
+  const startBtn = document.getElementById('startBtn');
+  const replayBtn = document.getElementById('replayBtn');
+
+  const timeChip = document.getElementById('timeChip');
+  const comboChip = document.getElementById('comboChip');
+  const scoreChip = document.getElementById('scoreChip');
+  const globalBar = document.getElementById('globalBar');
+  const qBar = document.getElementById('qBar');
+  const qTag = document.getElementById('qTag');
+  const qPrompt = document.getElementById('qPrompt');
+  const qContent = document.getElementById('qContent');
+  const qOptions = document.getElementById('qOptions');
+  const qFeedback = document.getElementById('qFeedback');
+  const appWrapper = document.getElementById('app-wrapper');
+
+  let score = 0, combo = 0, bestCombo = 0, correctCount = 0, totalCount = 0;
+  let globalTimeLeft = GAME_DURATION;
+  let qTimeLeft = QUESTION_TIME;
+  let globalInterval = null, qInterval = null;
+  let currentQuestion = null;
+  let answered = false;
+
+  // ---------- utilitaires ----------
+  function rand(min, max){ return Math.floor(Math.random()*(max-min+1))+min; }
+  function pick(arr){ return arr[rand(0, arr.length-1)]; }
+  function shuffle(arr){
+    for(let i=arr.length-1;i>0;i--){
+      const j = rand(0,i);
+      [arr[i],arr[j]] = [arr[j],arr[i]];
+    }
+    return arr;
+  }
+  function fmt(n){
+    // formatte proprement : entier sans virgule, sinon 1 décimale max
+    const r = Math.round(n*100)/100;
+    return (Number.isInteger(r)) ? String(r) : String(r).replace('.', ',');
+  }
+  function isClean1Decimal(x){
+    // vrai si x s'arrondit à 1 décimale SANS perte d'exactitude
+    return Math.abs(x*10 - Math.round(x*10)) < 1e-6;
+  }
+  function formatTime(s){
+    const m = Math.floor(s/60);
+    const sec = s%60;
+    return m + ':' + (sec<10 ? '0'+sec : sec);
+  }
+
+  // coefficients "sympas" pour rester dans les bases CAP
+  const NICE_COEFFS = [0.5, 1.5, 2, 2.5, 3, 4, 5, 0.25, 10];
+
+  // ---------- génération des 3 types de questions ----------
+
+  function genRecognitionQuestion(){
+    const k = pick(NICE_COEFFS);
+    const isProportional = Math.random() < 0.5;
+
+    // on ne garde que les valeurs de a compatibles avec k (produit exact à 1 décimale)
+    const validAPool = [2,3,4,5,6,7,8,9,10,12].filter(a => isClean1Decimal(a*k));
+
+    // 3 valeurs de a_i distinctes parmi celles compatibles avec k
+    let aVals = [];
+    let guard = 0;
+    while(aVals.length < 3 && guard < 200){
+      guard++;
+      const v = pick(validAPool);
+      if(!aVals.includes(v)) aVals.push(v);
+    }
+    aVals.sort((x,y)=>x-y);
+
+    let bVals = aVals.map(a => Math.round(a*k*10)/10);
+
+    if(!isProportional){
+      // on casse une valeur au hasard
+      const idx = rand(0,2);
+      let delta = pick([1,2,-1,-2,0.5,-0.5]);
+      bVals[idx] = Math.round((bVals[idx] + delta)*10)/10;
+      if(bVals[idx] === Math.round(aVals[idx]*k*10)/10){
+        bVals[idx] += 1; // au cas où le delta n'a rien changé
+      }
+    }
+
+    const tableHTML = `
+      <table class="qtable">
+        <tr><td class="label">a<sub>i</sub></td>${aVals.map(v=>`<td>${fmt(v)}</td>`).join('')}</tr>
+        <tr><td class="label">b<sub>i</sub></td>${bVals.map(v=>`<td>${fmt(v)}</td>`).join('')}</tr>
+      </table>`;
+
+    return {
+      tag: 'Reconnaître',
+      prompt: 'Ce tableau est-il un tableau de proportionnalité ?',
+      contentHTML: tableHTML,
+      wide: true,
+      options: shuffle([
+        {label:'Oui, proportionnel', correct: isProportional},
+        {label:'Non, pas proportionnel', correct: !isProportional},
+      ]),
+      explanation: isProportional
+        ? `Tous les quotients b/a valent ${fmt(k)} : c'est bien proportionnel.`
+        : `Les quotients b/a ne sont pas tous égaux : ce n'est pas proportionnel.`
+    };
+  }
+
+  function genCoefficientQuestion(){
+    const k = pick(NICE_COEFFS);
+    // on ne garde que les valeurs de a compatibles avec k (produit exact à 1 décimale)
+    const validAPool = [2,3,4,5,6,8,10].filter(a => isClean1Decimal(a*k));
+    const a = pick(validAPool);
+    const b = Math.round(a*k*10)/10;
+
+    const correct = k;
+    const distractors = new Set();
+    distractors.add(Math.round((1/k)*10)/10); // erreur classique : inverser
+    distractors.add(Math.round((k*2)*10)/10);
+    distractors.add(Math.round((k+1)*10)/10);
+    distractors.add(Math.round((a/b)*100)/100);
+
+    let opts = [correct];
+    for(const d of distractors){
+      if(opts.length>=4) break;
+      if(d>0 && !opts.includes(d)) opts.push(d);
+    }
+    while(opts.length<4){
+      const d = Math.round((correct + pick([-1,1,-2,2]))*10)/10;
+      if(d>0 && !opts.includes(d)) opts.push(d);
+    }
+
+    return {
+      tag: 'Coefficient',
+      prompt: `${fmt(a)} correspond à ${fmt(b)}. Quel est le coefficient de proportionnalité (b ÷ a) ?`,
+      contentHTML: '',
+      wide: false,
+      options: shuffle(opts.map(v => ({label: fmt(v), correct: v===correct}))),
+      explanation: `k = ${fmt(b)} ÷ ${fmt(a)} = ${fmt(correct)}`
+    };
+  }
+
+  function genFourthProportionalQuestion(){
+    const A_POOL = [2,3,4,5,6];
+    const B_POOL = [2,3,4,5,6,8,10];
+    const C_POOL = [2,3,4,5,6,8,9,10,12];
+
+    let a,b,c,xRaw;
+    let guard = 0;
+    do{
+      a = pick(A_POOL);
+      b = pick(B_POOL);
+      c = pick(C_POOL);
+      xRaw = (b*c)/a;
+      guard++;
+    } while(!isClean1Decimal(xRaw) && guard < 200);
+
+    const x = Math.round(xRaw*10)/10;
+
+    const correct = x;
+    let opts = [correct];
+    const wrongTries = [
+      Math.round(((a*c)/b)*10)/10,
+      Math.round((b*c*a)*10)/10 > 999 ? correct+1 : Math.round((a+c)*10)/10,
+      Math.round((correct+ (correct>=2? -2:2))*10)/10,
+      Math.round((correct*2)*10)/10
+    ];
+    for(const w of wrongTries){
+      if(opts.length>=4) break;
+      if(w>0 && !opts.includes(w)) opts.push(w);
+    }
+    while(opts.length<4){
+      const w = Math.round((correct + pick([1,-1,3,-3,0.5]))*10)/10;
+      if(w>0 && !opts.includes(w)) opts.push(w);
+    }
+
+    const tableHTML = `
+      <table class="qtable">
+        <tr><td>${fmt(a)}</td><td>${fmt(c)}</td></tr>
+        <tr><td>${fmt(b)}</td><td>x</td></tr>
+      </table>`;
+
+    return {
+      tag: '4e proportionnelle',
+      prompt: `${fmt(a)} correspond à ${fmt(b)} comme ${fmt(c)} correspond à x. Trouve x.`,
+      contentHTML: tableHTML,
+      wide: false,
+      options: shuffle(opts.map(v => ({label: fmt(v), correct: v===correct}))),
+      explanation: `x = (${fmt(b)} × ${fmt(c)}) ÷ ${fmt(a)} = ${fmt(correct)}`
+    };
+  }
+
+  function generateQuestion(){
+    const r = Math.random();
+    if(r < 0.4) return genRecognitionQuestion();
+    if(r < 0.7) return genCoefficientQuestion();
+    return genFourthProportionalQuestion();
+  }
+
+  // ---------- affichage ----------
+  function renderQuestion(){
+    answered = false;
+    qTimeLeft = QUESTION_TIME;
+    currentQuestion = generateQuestion();
+
+    qTag.textContent = currentQuestion.tag;
+    qPrompt.textContent = currentQuestion.prompt;
+    qContent.innerHTML = currentQuestion.contentHTML;
+    qFeedback.textContent = '';
+
+    qOptions.className = 'options' + (currentQuestion.wide ? ' wide' : '');
+    qOptions.innerHTML = '';
+    currentQuestion.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = opt.label;
+      btn.addEventListener('click', () => handleAnswer(opt.correct, btn));
+      qOptions.appendChild(btn);
+    });
+
+    updateHUD();
+  }
+
+  function handleAnswer(isCorrect, btnEl){
+    if(answered) return;
+    answered = true;
+    totalCount++;
+
+    const allBtns = qOptions.querySelectorAll('.opt-btn');
+    allBtns.forEach(b => b.disabled = true);
+
+    if(isCorrect){
+      btnEl.classList.add('correct');
+      combo++;
+      bestCombo = Math.max(bestCombo, combo);
+      const bonus = Math.min(combo, 10) * 2;
+      score += 10 + bonus;
+      correctCount++;
+      qFeedback.textContent = '✔ Bien joué ! ' + currentQuestion.explanation;
+      qFeedback.style.color = 'var(--teal)';
+    } else {
+      btnEl.classList.add('wrong');
+      allBtns.forEach(b => {
+        if(currentQuestion.options.find(o => o.label === b.textContent && o.correct)){
+          b.classList.add('correct');
+        }
+      });
+      combo = 0;
+      qFeedback.textContent = '✘ ' + currentQuestion.explanation;
+      qFeedback.style.color = 'var(--red)';
+      appWrapper.classList.add('shake');
+      setTimeout(()=>appWrapper.classList.remove('shake'), 300);
+    }
+
+    updateHUD();
+
+    setTimeout(() => {
+      if(globalTimeLeft > 0) renderQuestion();
+    }, 1200);
+  }
+
+  function timeOut(){
+    if(answered) return;
+    answered = true;
+    totalCount++;
+    combo = 0;
+    const allBtns = qOptions.querySelectorAll('.opt-btn');
+    allBtns.forEach(b => {
+      b.disabled = true;
+      if(currentQuestion.options.find(o => o.label === b.textContent && o.correct)){
+        b.classList.add('correct');
+      }
+    });
+    qFeedback.textContent = '⏰ Trop lent ! ' + currentQuestion.explanation;
+    qFeedback.style.color = 'var(--red)';
+    updateHUD();
+    setTimeout(() => {
+      if(globalTimeLeft > 0) renderQuestion();
+    }, 1200);
+  }
+
+  function updateHUD(){
+    timeChip.textContent = '⏱ ' + formatTime(globalTimeLeft);
+    comboChip.textContent = '🔥 Combo x' + combo;
+    scoreChip.textContent = '★ ' + score + ' pts';
+    globalBar.style.width = (globalTimeLeft / GAME_DURATION * 100) + '%';
+  }
+
+  // ---------- boucles de temps ----------
+  function startTimers(){
+    globalInterval = setInterval(() => {
+      globalTimeLeft--;
+      if(globalTimeLeft <= 0){
+        globalTimeLeft = 0;
+        endGame();
+        return;
+      }
+      updateHUD();
+    }, 1000);
+
+    qInterval = setInterval(() => {
+      if(answered) return;
+      qTimeLeft -= 0.1;
+      if(qTimeLeft <= 0){
+        qBar.style.width = '0%';
+        timeOut();
+      } else {
+        qBar.style.width = (qTimeLeft / QUESTION_TIME * 100) + '%';
+      }
+    }, 100);
+  }
+
+  function stopTimers(){
+    clearInterval(globalInterval);
+    clearInterval(qInterval);
+  }
+
+  // ---------- écrans ----------
+  function endGame(){
+    stopTimers();
+    gameScreen.style.display = 'none';
+    endScreen.style.display = 'block';
+
+    document.getElementById('finalScore').textContent = score;
+    document.getElementById('statCorrect').textContent = correctCount;
+    document.getElementById('statTotal').textContent = totalCount;
+    const acc = totalCount > 0 ? Math.round((correctCount/totalCount)*100) : 0;
+    document.getElementById('statAcc').textContent = acc + '%';
+    document.getElementById('statCombo').textContent = bestCombo;
+
+    const msg = document.getElementById('adaptiveMsg');
+    if(acc >= 90){
+      msg.textContent = "Chasseur de coefficients légendaire ! 🏆";
+    } else if(acc >= 70){
+      msg.textContent = "Sacrée chasse, bien joué ! 👏";
+    } else if(acc >= 50){
+      msg.textContent = "Pas mal, encore un peu de pratique pour viser plus haut.";
+    } else {
+      msg.textContent = "La chasse continue : retente ta chance !";
+    }
+  }
+
+  function resetGame(){
+    score = 0; combo = 0; bestCombo = 0; correctCount = 0; totalCount = 0;
+    globalTimeLeft = GAME_DURATION;
+    qTimeLeft = QUESTION_TIME;
+    answered = false;
+  }
+
+  startBtn.addEventListener('click', () => {
+    startScreen.style.display = 'none';
+    gameScreen.style.display = 'block';
+    renderQuestion();
+    startTimers();
+  });
+
+  replayBtn.addEventListener('click', () => {
+    resetGame();
+    endScreen.style.display = 'none';
+    gameScreen.style.display = 'block';
+    renderQuestion();
+    startTimers();
+  });
+
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM — Proportionnalité</title>
+<meta name="description" content="QCM de 10 questions sur la proportionnalité : reconnaître un tableau de proportionnalité, calculer un coefficient, trouver une quatrième proportionnelle et faire le lien avec la fonction linéaire.">
+<meta property="og:title" content="QCM — Proportionnalité — La Prof qui Compte">
+<meta property="og:description" content="QCM de 10 questions sur la proportionnalité : reconnaître un tableau de proportionnalité, calculer un coefficient, trouver une quatrième proportionnelle et faire le lien avec la fonction linéaire.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/qcm-proportionnalite.html">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="QCM — Proportionnalité — La Prof qui Compte">
+<meta name="twitter:description" content="QCM de 10 questions sur la proportionnalité : reconnaître un tableau de proportionnalité, calculer un coefficient, trouver une quatrième proportionnelle et faire le lien avec la fonction linéaire.">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/qcm-proportionnalite.html">
+<style>
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+</style>
+
+<style>
+  :root{
+    --paper: #E4EAEF;
+    --ink: #16232F;
+    --ink-soft: rgba(22,35,47,0.65);
+    --ink-faint: rgba(22,35,47,0.4);
+    --amber: #F2A93B;
+    --amber-deep: #C6810F;
+    --teal: #2E7D6B;
+    --red: #B3432B;
+    --card-bg: #EEF2F5;
+    --line: rgba(22,35,47,0.14);
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(rgba(22,35,47,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,47,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    color: var(--ink);
+    font-family: var(--font-body);
+    padding: 26px 18px 60px;
+  }
+
+  .sheet{
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 18px;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 4vw, 2.1rem);
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  h1 .accent{ color: var(--amber-deep); }
+
+  /* progress */
+  .progress-wrap{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+
+  .progress-track{
+    flex:1;
+    height: 8px;
+    background: rgba(22,35,47,0.1);
+    border-radius: 5px;
+    overflow:hidden;
+  }
+
+  .progress-fill{
+    height:100%;
+    background: var(--amber-deep);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  .progress-label{
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    white-space: nowrap;
+  }
+
+  /* question card */
+  .qcard{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-top: 4px solid var(--ink);
+    border-radius: 12px;
+    padding: 20px 22px 22px;
+    margin-bottom: 18px;
+    display:none;
+  }
+
+  .qcard.active{ display:block; }
+
+  .qnum{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+
+  .qtext{
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 0 0 16px;
+  }
+
+  .qtext code{
+    font-family: var(--font-mono);
+    background: rgba(242,169,59,0.18);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-weight: 600;
+  }
+
+  .qtable{
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 16px;
+    font-family: var(--font-mono);
+    font-size: 0.92rem;
+  }
+
+  .qtable th, .qtable td{
+    border: 1px solid var(--line);
+    padding: 7px 10px;
+    text-align: center;
+  }
+
+  .qtable th{
+    background: rgba(22,35,47,0.06);
+    color: var(--ink-soft);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+  }
+
+  .qtable td.unknown{
+    color: var(--amber-deep);
+    font-weight: 700;
+  }
+
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+  }
+
+  .option{
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: 9px;
+    padding: 11px 14px;
+    font-size: 0.92rem;
+    font-family: var(--font-body);
+    cursor: pointer;
+    text-align: left;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+
+  .option .letter{
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+    flex-shrink:0;
+  }
+
+  .option:hover:not(.disabled){
+    border-color: var(--amber-deep);
+    background: rgba(242,169,59,0.12);
+  }
+
+  .option.disabled{ cursor: default; }
+
+  .option.correct{
+    border-color: var(--teal);
+    background: rgba(46,125,107,0.16);
+    font-weight: 600;
+  }
+
+  .option.correct .letter{ color: var(--teal); }
+
+  .option.wrong{
+    border-color: var(--red);
+    background: rgba(179,67,43,0.14);
+  }
+
+  .option.wrong .letter{ color: var(--red); }
+
+  .feedback{
+    margin-top: 14px;
+    padding: 10px 13px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    display:none;
+  }
+
+  .feedback.show{ display:block; }
+
+  .feedback.ok{
+    background: rgba(46,125,107,0.12);
+    border: 1px dashed var(--teal);
+  }
+
+  .feedback.ko{
+    background: rgba(179,67,43,0.1);
+    border: 1px dashed var(--red);
+  }
+
+  .feedback .flabel{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display:block;
+    margin-bottom: 4px;
+  }
+
+  .feedback.ok .flabel{ color: var(--teal); }
+  .feedback.ko .flabel{ color: var(--red); }
+
+  .nav-row{
+    display:flex;
+    justify-content:flex-end;
+    margin-top: 16px;
+  }
+
+  .btn{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.88rem;
+    letter-spacing: 0.3px;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn.show{ opacity: 1; pointer-events: auto; }
+
+  .btn:hover{ background: var(--amber-deep); }
+
+  /* result card */
+  .result{
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 28px 26px;
+    text-align: center;
+    display:none;
+  }
+
+  .result.active{ display:block; }
+
+  .result .rtitle{
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 8px;
+  }
+
+  .result .score{
+    font-family: var(--font-mono);
+    font-size: 2.4rem;
+    font-weight: 600;
+    color: var(--amber);
+    margin: 6px 0 14px;
+  }
+
+  .result .rmsg{
+    font-size: 0.9rem;
+    color: rgba(228,234,239,0.75);
+    margin-bottom: 18px;
+    line-height: 1.5;
+  }
+
+  .result .btn{
+    opacity: 1;
+    pointer-events: auto;
+    background: var(--amber);
+    color: var(--ink);
+  }
+
+  .result .btn:hover{ background: var(--amber-deep); color: var(--paper); }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+    font-family: var(--font-body);
+  }
+
+/* ---- Navbar retour accueil ---- */
+.site-navbar{
+  position: sticky; top: 0; z-index: 999;
+  background: #16232F; color:#E4EAEF;
+  padding: 0.65rem 1.2rem;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.78rem;
+  display:flex; align-items:center;
+}
+.site-navbar a{
+  color:#E4EAEF; text-decoration:none; font-weight:600;
+  display:inline-flex; align-items:center; gap:0.4rem;
+  transition: color .15s ease;
+}
+.site-navbar a:hover{ color:#F2A93B; }
+
+</style>
+</head>
+<body>
+<div class="site-navbar"><a href="../index.html">&#8592; Retour à l'accueil</a></div>
+
+<div class="sheet">
+
+  <header>
+    <div>
+      <p class="eyebrow">QCM · Révisions</p>
+      <h1>Proportionnalité <span class="accent">&amp; fonctions linéaires</span></h1>
+    </div>
+  </header>
+
+  <div class="progress-wrap">
+    <span class="progress-label" id="progressLabel">Question 1/10</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+  </div>
+
+  <div id="quizArea"></div>
+
+  <div class="result" id="resultCard">
+    <p class="rtitle">Résultat</p>
+    <p class="score" id="scoreText">0/10</p>
+    <p class="rmsg" id="scoreMsg"></p>
+    <button class="btn" id="restartBtn">Recommencer</button>
+  </div>
+
+</div>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+<script>
+  const questions = [
+    {
+      text: "Deux suites de nombres sont proportionnelles lorsque...",
+      options: [
+        "on passe de l'une à l'autre en multipliant toujours par le même nombre",
+        "leur somme reste constante",
+        "leur différence reste constante",
+        "on passe de l'une à l'autre en ajoutant toujours le même nombre"
+      ],
+      correct: 0,
+      explain: "Deux suites sont proportionnelles s'il existe un nombre k tel que, pour chaque i : b<sub>i</sub> = k × a<sub>i</sub>. On multiplie donc toujours par le même nombre."
+    },
+    {
+      text: "À quoi sert le coefficient de proportionnalité <code>k</code> dans un tableau de proportionnalité ?",
+      options: [
+        "Il sert uniquement à vérifier que les nombres sont positifs",
+        "Il permet de passer directement d'une valeur de la première suite à la valeur correspondante de la seconde, par multiplication",
+        "Il est toujours égal à 1",
+        "Il correspond à la différence entre deux valeurs"
+      ],
+      correct: 1,
+      explain: "Le coefficient k, commun à tous les quotients, permet de passer directement d'une valeur de la première suite à la valeur correspondante de la seconde par une multiplication."
+    },
+    {
+      text: "On donne le tableau ci-dessous. Quel est le coefficient de proportionnalité ?",
+      table: `<table class="qtable">
+        <tr><th>a<sub>i</sub></th><td>4</td><td>9</td><td>15</td></tr>
+        <tr><th>b<sub>i</sub></th><td>12</td><td>27</td><td>45</td></tr>
+      </table>`,
+      options: [
+        "2",
+        "5",
+        "3",
+        "4"
+      ],
+      correct: 2,
+      explain: "On calcule le quotient b<sub>i</sub> / a<sub>i</sub> pour chaque colonne : 12/4 = 27/9 = 45/15 = 3. Le coefficient vaut donc 3."
+    },
+    {
+      text: "On donne le tableau ci-dessous. Est-ce un tableau de proportionnalité ?",
+      table: `<table class="qtable">
+        <tr><th>a<sub>i</sub></th><td>2</td><td>6</td><td>9</td></tr>
+        <tr><th>b<sub>i</sub></th><td>8</td><td>24</td><td>30</td></tr>
+      </table>`,
+      options: [
+        "Oui, car tous les quotients valent 4",
+        "Oui, car les nombres sont tous entiers",
+        "Non, car les colonnes ne sont pas rangées dans l'ordre",
+        "Non, car le quotient 30/9 est différent des autres"
+      ],
+      correct: 3,
+      explain: "8/2 = 4 et 24/6 = 4, mais 30/9 ≈ 3,33 : ce quotient est différent des autres, donc le tableau n'est pas un tableau de proportionnalité."
+    },
+    {
+      text: "Dans un tableau de proportionnalité, si l'on connaît trois valeurs sur quatre, la valeur manquante s'appelle...",
+      options: [
+        "la quatrième proportionnelle",
+        "le coefficient directeur",
+        "la médiane",
+        "le produit en croix"
+      ],
+      correct: 0,
+      explain: "La valeur inconnue d'un tableau de proportionnalité, lorsque les trois autres sont connues, s'appelle la quatrième proportionnelle."
+    },
+    {
+      text: "On donne le tableau de proportionnalité ci-dessous. Que vaut x (produit en croix) ?",
+      table: `<table class="qtable">
+        <tr><th>a<sub>i</sub></th><td>5</td><td>12</td></tr>
+        <tr><th>b<sub>i</sub></th><td>35</td><td class="unknown">x</td></tr>
+      </table>`,
+      options: [
+        "70",
+        "84",
+        "80",
+        "90"
+      ],
+      correct: 1,
+      explain: "Les produits en croix sont égaux : 5 × x = 35 × 12, donc x = (35 × 12) / 5 = 420 / 5 = 84."
+    },
+    {
+      text: "Une fonction linéaire est une fonction définie par une expression de la forme...",
+      options: [
+        "f(x) = ax + b avec b ≠ 0",
+        "f(x) = a/x",
+        "f(x) = ax où a est un nombre fixé",
+        "f(x) = x²"
+      ],
+      correct: 2,
+      explain: "Une fonction linéaire est définie par f(x) = ax, où a est un nombre fixé appelé coefficient de la fonction linéaire."
+    },
+    {
+      text: "Dans un repère, la représentation graphique d'une fonction linéaire est toujours...",
+      options: [
+        "une parabole",
+        "une droite qui ne passe jamais par l'origine",
+        "une droite parallèle à l'axe des ordonnées",
+        "une droite qui passe par l'origine du repère"
+      ],
+      correct: 3,
+      explain: "La représentation graphique d'une fonction linéaire est une droite qui passe toujours par l'origine du repère, le point O(0 ; 0)."
+    },
+    {
+      text: "Soit f une fonction et x un nombre. Comment appelle-t-on le nombre f(x) ?",
+      options: [
+        "l'image de x par f",
+        "l'antécédent de x par f",
+        "le coefficient de f",
+        "la raison de f"
+      ],
+      correct: 0,
+      explain: "Le nombre f(x) est appelé image de x par f."
+    },
+    {
+      text: "La fonction linéaire f est définie par f(x) = 4x. Quel est l'antécédent de 20 par f ?",
+      options: [
+        "80",
+        "5",
+        "16",
+        "24"
+      ],
+      correct: 1,
+      explain: "On cherche x tel que f(x) = 20, c'est-à-dire 4x = 20, donc x = 5. On dit que 5 est un antécédent de 20 par f."
+    }
+  ];
+
+  let current = 0;
+  let score = 0;
+  const letters = ["A","B","C","D"];
+
+  const quizArea = document.getElementById("quizArea");
+  const progressFill = document.getElementById("progressFill");
+  const progressLabel = document.getElementById("progressLabel");
+  const resultCard = document.getElementById("resultCard");
+  const scoreText = document.getElementById("scoreText");
+  const scoreMsg = document.getElementById("scoreMsg");
+  const restartBtn = document.getElementById("restartBtn");
+
+  function buildQuestion(index){
+    const q = questions[index];
+    const card = document.createElement("div");
+    card.className = "qcard active";
+    card.id = "q" + index;
+
+    let optionsHTML = "";
+    q.options.forEach((opt, i) => {
+      optionsHTML += `<button class="option" data-index="${i}">
+        <span class="letter">${letters[i]}</span><span>${opt}</span>
+      </button>`;
+    });
+
+    card.innerHTML = `
+      <p class="qnum">Question ${index + 1} / ${questions.length}</p>
+      <p class="qtext">${q.text}</p>
+      ${q.table ? q.table : ""}
+      <div class="options">${optionsHTML}</div>
+      <div class="feedback" id="feedback${index}"></div>
+      <div class="nav-row"><button class="btn" id="next${index}">${index === questions.length - 1 ? "Voir le résultat" : "Question suivante"}</button></div>
+    `;
+
+    quizArea.appendChild(card);
+
+    const optionButtons = card.querySelectorAll(".option");
+    optionButtons.forEach(btn => {
+      btn.addEventListener("click", () => handleAnswer(index, parseInt(btn.dataset.index), optionButtons, card));
+    });
+
+    document.getElementById("next" + index).addEventListener("click", () => {
+      card.remove();
+      current++;
+      updateProgress();
+      if(current < questions.length){
+        buildQuestion(current);
+      } else {
+        showResult();
+      }
+    });
+  }
+
+  function handleAnswer(index, chosen, optionButtons, card){
+    const q = questions[index];
+    optionButtons.forEach(b => b.classList.add("disabled"));
+    optionButtons[q.correct].classList.add("correct");
+
+    const fb = document.getElementById("feedback" + index);
+    if(chosen === q.correct){
+      score++;
+      fb.className = "feedback ok show";
+      fb.innerHTML = `<span class="flabel">Bien joué</span>${q.explain}`;
+    } else {
+      optionButtons[chosen].classList.add("wrong");
+      fb.className = "feedback ko show";
+      fb.innerHTML = `<span class="flabel">Pas tout à fait</span>${q.explain}`;
+    }
+
+    document.getElementById("next" + index).classList.add("show");
+  }
+
+  function updateProgress(){
+    const shown = Math.min(current + 1, questions.length);
+    progressLabel.textContent = current < questions.length ? `Question ${current + 1}/${questions.length}` : `Terminé`;
+    progressFill.style.width = (current / questions.length * 100) + "%";
+  }
+
+  function showResult(){
+    progressFill.style.width = "100%";
+    progressLabel.textContent = "Terminé";
+    resultCard.classList.add("active");
+    scoreText.textContent = score + "/" + questions.length;
+    let msg = "";
+    if(score === questions.length) msg = "Sans faute ! Les notions du chapitre sont bien en place.";
+    else if(score >= questions.length * 0.7) msg = "Très correct, encore quelques points à revoir.";
+    else if(score >= questions.length * 0.4) msg = "Pas mal, mais il faut retravailler certaines notions du cours.";
+    else msg = "Il vaut mieux revoir la fiche mémo avant de continuer.";
+    scoreMsg.textContent = msg;
+  }
+
+  restartBtn.addEventListener("click", () => {
+    current = 0;
+    score = 0;
+    resultCard.classList.remove("active");
+    quizArea.innerHTML = "";
+    updateProgress();
+    buildQuestion(0);
+  });
+
+  buildQuestion(0);
+</script>
+
+</body>
+</html>
