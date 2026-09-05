@@ -342,7 +342,7 @@
     <div class="tab active" role="tab" id="tab-cap" aria-controls="panel-cap" aria-selected="true" tabindex="0" data-panel="cap">CAP 2A</div>
     <div class="tab" role="tab" id="tab-premiere" aria-controls="panel-premiere" aria-selected="false" tabindex="-1" data-panel="premiere">Première Pro</div>
     <div class="tab" role="tab" id="tab-terminale" aria-controls="panel-terminale" aria-selected="false" tabindex="-1" data-panel="terminale">Terminale Pro</div>
-    <div class="tab" role="tab" id="tab-bonus" aria-controls="panel-bonus" aria-selected="false" tabindex="-1" data-panel="bonus">Bonus</div>
+    <div class="tab" role="tab" id="tab-sciences" aria-controls="panel-sciences" aria-selected="false" tabindex="-1" data-panel="sciences">Sciences</div>
   </div>
 </nav>
 
@@ -698,17 +698,21 @@
 
   </section>
 
-  <!-- ================= Bonus ================= -->
-  <section class="panel" id="panel-bonus" role="tabpanel" aria-labelledby="tab-bonus">
+  <!-- ================= Sciences ================= -->
+  <section class="panel" id="panel-sciences" role="tabpanel" aria-labelledby="tab-sciences">
 
     <div class="chapter-grid">
-      <div class="chapter-card" data-target="bonus-securite" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
+      <div class="chapter-card" data-target="sciences-securite" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
         <h2>Sécurité en physique-chimie</h2>
         <span class="count">1 activité</span>
       </div>
+      <div class="chapter-card" data-target="sciences-2cap" role="button" tabindex="0" aria-label="Ouvrir le dossier">
+        <h2>2CAP</h2>
+        <span class="count">1 dossier</span>
+      </div>
     </div>
 
-    <div class="chapter-detail" id="detail-bonus-securite">
+    <div class="chapter-detail" id="detail-sciences-securite">
       <button class="back-btn">← Retour aux chapitres</button>
       <p class="detail-title">Sécurité en physique-chimie</p>
       <div class="grid">
@@ -718,6 +722,29 @@
           <p>Associe risque, conséquence et prévention. Électricité, chimie, acoustique, optique.</p>
           <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
         </a>
+      </div>
+    </div>
+
+    <div class="chapter-detail" id="detail-sciences-2cap">
+      <button class="back-btn">← Retour aux chapitres</button>
+      <p class="detail-title">2CAP</p>
+      <div class="chapter-grid sub-grid">
+        <div class="chapter-card sub-card" data-subtarget="sciences-2cap-electricite" role="button" tabindex="0" aria-label="Ouvrir le dossier Électricité">
+          <h2>Électricité</h2>
+          <span class="count">1 activité</span>
+        </div>
+      </div>
+      <div class="chapter-detail sub-detail" id="detail-sciences-2cap-electricite">
+        <button class="back-btn sub-back-btn">← Retour à 2CAP</button>
+        <p class="detail-title">Électricité</p>
+        <div class="grid">
+          <a class="card" href="jeux/jeu-memoire-composants-electriques.html">
+            <span class="badge jeu">Jeu</span>
+            <h3>Jeu de mémoire — Composants électriques</h3>
+            <p>Associe chaque symbole électrique normalisé à son composant réel. 12 paires à retrouver.</p>
+            <div class="meta"><span><span class="status-dot available"></span>Disponible</span><span>—</span></div>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -759,7 +786,7 @@
     const backBtn = detail.querySelector('.back-btn');
     if(backBtn) backBtn.focus();
   }
-  document.querySelectorAll('.chapter-card:not(.disabled)').forEach(card=>{
+  document.querySelectorAll('.chapter-card:not(.disabled):not(.sub-card)').forEach(card=>{
     card.addEventListener('click', ()=>openChapter(card));
     card.addEventListener('keydown', e=>{
       if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openChapter(card); }
@@ -767,7 +794,7 @@
   });
 
   // Back buttons -> return to chapter grid
-  document.querySelectorAll('.back-btn').forEach(btn=>{
+  document.querySelectorAll('.back-btn:not(.sub-back-btn)').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const panel = btn.closest('.panel');
       panel.querySelectorAll('.chapter-detail').forEach(d=>d.classList.remove('active'));
@@ -775,6 +802,37 @@
       grid.style.display = 'grid';
       const firstCard = grid.querySelector('.chapter-card:not(.disabled)');
       if(firstCard) firstCard.focus();
+    });
+  });
+
+  // Sous-dossiers imbriqués (ex : Sciences > 2CAP > Électricité)
+  function openSubFolder(card){
+    const detail = document.getElementById('detail-' + card.dataset.subtarget);
+    const subGrid = card.closest('.chapter-detail').querySelector('.sub-grid');
+    if(subGrid) subGrid.style.display = 'none';
+    if(detail){
+      detail.classList.add('active');
+      const backBtn = detail.querySelector('.sub-back-btn');
+      if(backBtn) backBtn.focus();
+    }
+  }
+  document.querySelectorAll('.sub-card').forEach(card=>{
+    card.addEventListener('click', ()=>openSubFolder(card));
+    card.addEventListener('keydown', e=>{
+      if(e.key==='Enter' || e.key===' '){ e.preventDefault(); openSubFolder(card); }
+    });
+  });
+  document.querySelectorAll('.sub-back-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const detail = btn.closest('.chapter-detail.sub-detail');
+      detail.classList.remove('active');
+      const parentDetail = detail.closest('.chapter-detail:not(.sub-detail)');
+      const subGrid = parentDetail.querySelector('.sub-grid');
+      if(subGrid){
+        subGrid.style.display = 'grid';
+        const firstCard = subGrid.querySelector('.sub-card');
+        if(firstCard) firstCard.focus();
+      }
     });
   });
 </script>
