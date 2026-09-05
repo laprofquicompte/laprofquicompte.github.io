@@ -3,17 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chasse au coefficient</title>
-<meta name="description" content="Chasse au coefficient : quiz arcade chronométré sur la proportionnalité pour reconnaître un tableau proportionnel, calculer un coefficient et trouver une quatrième proportionnelle en t'amusant.">
-<meta property="og:title" content="Chasse au coefficient — La Prof qui Compte">
-<meta property="og:description" content="Chasse au coefficient : quiz arcade chronométré sur la proportionnalité pour reconnaître un tableau proportionnel, calculer un coefficient et trouver une quatrième proportionnelle en t'amusant.">
+<title>Chasse au coefficient — La Prof qui Compte</title>
+<meta name="description" content="Chasse au coefficient : quiz arcade chronométré sur la proportionnalité (CAP). Reconnaître un tableau proportionnel, calculer un coefficient, trouver la quatrième proportionnelle.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/cap-proportionnalite.html">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://laprofquicompte.github.io/jeux/cap-proportionnalite.html">
 <meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Chasse au coefficient — La Prof qui Compte">
+<meta property="og:description" content="Quiz arcade chronométré sur la proportionnalité : tableau proportionnel ou non, coefficient, quatrième proportionnelle.">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/cap-proportionnalite.html">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chasse au coefficient — La Prof qui Compte">
-<meta name="twitter:description" content="Chasse au coefficient : quiz arcade chronométré sur la proportionnalité pour reconnaître un tableau proportionnel, calculer un coefficient et trouver une quatrième proportionnelle en t'amusant.">
-<link rel="canonical" href="https://laprofquicompte.github.io/jeux/cap-proportionnalite.html">
+<meta name="twitter:description" content="Quiz arcade chronométré et gratuit sur la proportionnalité, pour réviser en s'amusant.">
 <style>
   @font-face{font-family:'Oswald';src:url('../fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
   @font-face{font-family:'Oswald';src:url('../fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
@@ -47,24 +48,8 @@
     display:flex;
     align-items:center;
     justify-content:center;
-    padding:72px 16px 16px;
+    padding:16px;
   }
-
-  /* ---- Navbar retour accueil ---- */
-  .site-navbar{
-    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
-    background: #16232F; color:#E4EAEF;
-    padding: 0.65rem 1.2rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.78rem;
-    display:flex; align-items:center;
-  }
-  .site-navbar a{
-    color:#E4EAEF; text-decoration:none; font-weight:600;
-    display:inline-flex; align-items:center; gap:0.4rem;
-    transition: color .15s ease;
-  }
-  .site-navbar a:hover{ color:#F2A93B; }
 
   .app{
     width:100%;
@@ -313,10 +298,38 @@
     color:#5a6b7a;
     margin-top:14px;
   }
+
+  /* ---------- navbar du site ---------- */
+  .site-nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--ink);
+    padding:0.65rem 1.1rem;
+    font-family:'IBM Plex Mono','Courier New',monospace;
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+  }
+  .site-nav a{ text-decoration:none; }
+  .site-nav-home{
+    color:#E4EAEF;
+    display:inline-flex;
+    align-items:center;
+    gap:0.35rem;
+    transition:color .15s ease;
+  }
+  .site-nav-home:hover{ color:var(--amber-deep); }
 </style>
 </head>
 <body>
-<div class="site-navbar"><a href="../index.html">&#8592; Retour à l'accueil</a></div>
+
+<nav class="site-nav">
+  <a class="site-nav-home" href="../index.html">← Accueil</a>
+</nav>
 
 <div class="app" id="app-wrapper">
 
@@ -327,7 +340,7 @@
     <div class="rules">
       <b>Le but :</b> réponds vite et bien pour faire grimper ton combo.<br>
       <b>3 types de question :</b> tableau proportionnel ou non, calcul du coefficient, nombre manquant (4<sup>e</sup> proportionnelle).<br>
-      <b>Attention :</b> chaque question a 30 secondes avant de passer à la suivante !
+      <b>Attention :</b> chaque question a 2 minutes avant de passer à la suivante — largement de quoi réfléchir posément.
     </div>
     <button class="btn" id="startBtn">Lancer la chasse</button>
   </div>
@@ -371,7 +384,7 @@
   "use strict";
 
   const GAME_DURATION = 600; // 10 minutes en secondes
-  const QUESTION_TIME = 30;  // secondes par question
+  const QUESTION_TIME = 120;  // secondes par question
 
   const startScreen = document.getElementById('startScreen');
   const gameScreen = document.getElementById('gameScreen');

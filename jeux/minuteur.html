@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minuteur — La Prof qui Compte</title>
+<meta name="description" content="Minuteur en ligne gratuit pour rythmer un exercice, une évaluation ou un jeu en classe : durée personnalisable, alerte sonore et visuelle à la fin du temps.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/minuteur.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Minuteur — La Prof qui Compte">
+<meta property="og:description" content="Minuteur en ligne gratuit et personnalisable, avec alerte sonore et visuelle à la fin du temps.">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/minuteur.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Minuteur — La Prof qui Compte">
+<meta name="twitter:description" content="Minuteur en ligne gratuit pour rythmer un exercice ou une évaluation.">
+<style>
+  @font-face{font-family:'Oswald';src:url('../fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Oswald';src:url('../fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Inter';src:url('../fonts/Inter-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Inter';src:url('../fonts/Inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Inter';src:url('../fonts/Inter-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+  @font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+  @font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+  :root {
+    --paper: #faf7f2;
+    --ink: #1f2937;
+    --amber: #d97706;
+    --teal: #0d9488;
+    --red: #dc2626;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper);
+    font-family: 'Inter', system-ui, sans-serif;
+    color: var(--ink);
+    transition: background-color 0.3s ease;
+    padding-top: 3.2rem;
+  }
+
+  .site-nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--ink);
+    padding:0.65rem 1.1rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+  }
+  .site-nav a{ text-decoration:none; }
+  .site-nav-home{
+    color:var(--paper);
+    display:inline-flex;
+    align-items:center;
+    gap:0.35rem;
+    transition:color .15s ease;
+  }
+  .site-nav-home:hover{ color:var(--amber); }
+
+  body.finished {
+    animation: blink 1s step-start infinite;
+  }
+
+  @keyframes blink {
+    0%, 50% { background-color: var(--paper); }
+    50.01%, 100% { background-color: var(--red); }
+  }
+
+  .card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px 50px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 480px;
+    width: 90%;
+  }
+
+  #titre-affiche {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--ink);
+    word-break: break-word;
+  }
+
+  #temps {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 5rem;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin: 20px 0;
+    font-variant-numeric: tabular-nums;
+    color: var(--teal);
+    transition: color 0.3s ease;
+  }
+
+  body.finished #temps {
+    color: var(--red);
+  }
+
+  .setup {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: left;
+    color: #6b7280;
+  }
+
+  input[type="text"], input[type="number"] {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 2px solid #e5e7eb;
+    font-size: 1rem;
+    font-family: inherit;
+    width: 100%;
+  }
+
+  input:focus {
+    outline: none;
+    border-color: var(--teal);
+  }
+
+  .duree-inputs {
+    display: flex;
+    gap: 10px;
+  }
+
+  .duree-inputs > div {
+    flex: 1;
+  }
+
+  .boutons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 24px;
+  }
+
+  button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+    font-family: inherit;
+  }
+
+  button:active { transform: scale(0.96); }
+
+  #btn-start {
+    background: var(--teal);
+    color: white;
+  }
+
+  #btn-pause {
+    background: var(--amber);
+    color: white;
+  }
+
+  #btn-reset {
+    background: #e5e7eb;
+    color: var(--ink);
+  }
+
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .hidden { display: none !important; }
+
+  #message-fin {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--red);
+    margin-top: 10px;
+  }
+
+  .presets {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .preset-btn {
+    background: #f3f4f6;
+    color: var(--ink);
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    border-radius: 20px;
+  }
+
+  .preset-btn:hover { background: #e5e7eb; }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="site-nav-home" href="../index.html">← Accueil</a>
+</nav>
+
+<div class="card">
+  <div id="setup-screen">
+    <div class="setup">
+      <div>
+        <label for="titre-input">Titre du minuteur</label>
+        <input type="text" id="titre-input" placeholder="Ex : Exercice 3" value="Minuteur">
+      </div>
+      <div>
+        <label>Durée</label>
+        <div class="duree-inputs">
+          <div>
+            <input type="number" id="minutes-input" min="0" max="180" value="5" placeholder="min">
+          </div>
+          <div>
+            <input type="number" id="secondes-input" min="0" max="59" value="0" placeholder="sec">
+          </div>
+        </div>
+        <div class="presets">
+          <button type="button" class="preset-btn" data-min="1">1 min</button>
+          <button type="button" class="preset-btn" data-min="3">3 min</button>
+          <button type="button" class="preset-btn" data-min="5">5 min</button>
+          <button type="button" class="preset-btn" data-min="10">10 min</button>
+          <button type="button" class="preset-btn" data-min="15">15 min</button>
+        </div>
+      </div>
+    </div>
+    <button id="btn-start" style="width:100%;">Démarrer</button>
+  </div>
+
+  <div id="timer-screen" class="hidden">
+    <div id="titre-affiche"></div>
+    <div id="temps">00:00</div>
+    <div id="message-fin" class="hidden">⏰ Temps écoulé !</div>
+    <div class="boutons">
+      <button id="btn-pause">Pause</button>
+      <button id="btn-reset">Réinitialiser</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const setupScreen = document.getElementById('setup-screen');
+  const timerScreen = document.getElementById('timer-screen');
+  const titreInput = document.getElementById('titre-input');
+  const minutesInput = document.getElementById('minutes-input');
+  const secondesInput = document.getElementById('secondes-input');
+  const titreAffiche = document.getElementById('titre-affiche');
+  const tempsAffiche = document.getElementById('temps');
+  const messageFin = document.getElementById('message-fin');
+  const btnStart = document.getElementById('btn-start');
+  const btnPause = document.getElementById('btn-pause');
+  const btnReset = document.getElementById('btn-reset');
+  const presetBtns = document.querySelectorAll('.preset-btn');
+
+  let totalSecondes = 0;
+  let secondesRestantes = 0;
+  let intervalId = null;
+  let enPause = false;
+
+  presetBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      minutesInput.value = btn.dataset.min;
+      secondesInput.value = 0;
+    });
+  });
+
+  function formatTemps(s) {
+    const m = Math.floor(s / 60).toString().padStart(2, '0');
+    const sec = (s % 60).toString().padStart(2, '0');
+    return `${m}:${sec}`;
+  }
+
+  function updateAffichage() {
+    tempsAffiche.textContent = formatTemps(secondesRestantes);
+    document.title = `${formatTemps(secondesRestantes)} - ${titreInput.value || 'Minuteur'}`;
+  }
+
+  function demarrerMinuteur() {
+    const min = parseInt(minutesInput.value) || 0;
+    const sec = parseInt(secondesInput.value) || 0;
+    totalSecondes = min * 60 + sec;
+
+    if (totalSecondes <= 0) {
+      alert("Merci d'indiquer une durée supérieure à 0.");
+      return;
+    }
+
+    secondesRestantes = totalSecondes;
+    titreAffiche.textContent = titreInput.value || 'Minuteur';
+    setupScreen.classList.add('hidden');
+    timerScreen.classList.remove('hidden');
+    messageFin.classList.add('hidden');
+    document.body.classList.remove('finished');
+    updateAffichage();
+    lancerCompteARebours();
+  }
+
+  function lancerCompteARebours() {
+    enPause = false;
+    btnPause.textContent = 'Pause';
+    clearInterval(intervalId);
+    intervalId = setInterval(() => {
+      secondesRestantes--;
+      updateAffichage();
+      if (secondesRestantes <= 0) {
+        clearInterval(intervalId);
+        finDuMinuteur();
+      }
+    }, 1000);
+  }
+
+  function finDuMinuteur() {
+    tempsAffiche.textContent = "00:00";
+    messageFin.classList.remove('hidden');
+    document.body.classList.add('finished');
+    document.title = "⏰ Temps écoulé !";
+    try {
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      let count = 0;
+      const beep = () => {
+        if (count >= 4) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.frequency.value = 880;
+        gain.gain.value = 0.2;
+        osc.start();
+        setTimeout(() => osc.stop(), 300);
+        count++;
+        setTimeout(beep, 600);
+      };
+      beep();
+    } catch(e) {}
+  }
+
+  function togglePause() {
+    if (enPause) {
+      lancerCompteARebours();
+      btnPause.textContent = 'Pause';
+    } else {
+      clearInterval(intervalId);
+      enPause = true;
+      btnPause.textContent = 'Reprendre';
+    }
+  }
+
+  function reinitialiser() {
+    clearInterval(intervalId);
+    document.body.classList.remove('finished');
+    document.title = 'Minuteur';
+    setupScreen.classList.remove('hidden');
+    timerScreen.classList.add('hidden');
+  }
+
+  btnStart.addEventListener('click', demarrerMinuteur);
+  btnPause.addEventListener('click', togglePause);
+  btnReset.addEventListener('click', reinitialiser);
+
+  titreInput.addEventListener('keydown', e => { if (e.key === 'Enter') demarrerMinuteur(); });
+  secondesInput.addEventListener('keydown', e => { if (e.key === 'Enter') demarrerMinuteur(); });
+  minutesInput.addEventListener('keydown', e => { if (e.key === 'Enter') demarrerMinuteur(); });
+</script>
+
+</body>
+</html>

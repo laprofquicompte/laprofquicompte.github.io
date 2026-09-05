@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Symboles et composants électriques — La Prof qui Compte</title>
+<meta name="description" content="Jeu de mémoire interactif et gratuit pour associer les symboles électriques normalisés (résistance, diode, interrupteur, moteur, générateur...) à leur composant réel. À jouer en classe ou à la maison.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/jeu-memoire-composants-electriques.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Symboles et composants électriques — La Prof qui Compte">
+<meta property="og:description" content="Retrouve les 12 paires symbole ↔ composant réel : résistance, pile, interrupteur, lampe, diode, moteur, fusible, ampèremètre, voltmètre, fil, générateur.">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/jeu-memoire-composants-electriques.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Symboles et composants électriques — La Prof qui Compte">
+<meta name="twitter:description" content="Jeu de mémoire gratuit : associe chaque symbole électrique normalisé à son composant réel.">
+<style>
+  @font-face{font-family:'Oswald';src:url('../fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Oswald';src:url('../fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Inter';src:url('../fonts/Inter-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Inter';src:url('../fonts/Inter-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Inter';src:url('../fonts/Inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+  @font-face{font-family:'Inter';src:url('../fonts/Inter-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+  @font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+  @font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+  :root{
+    --board: #202a52;
+    --board-dark: #12183a;
+    --board-light: #2c3a6e;
+    --chalk: #f2f0fb;
+    --chalk-dim: rgba(242,240,251,0.6);
+    --amber: #f2a744;
+    --sky: #6fa8e0;
+    --teal: #4ecdc4;
+    --green-ok: #7fd68a;
+    --red-no: #e06060;
+    --font-display: 'Oswald', system-ui, sans-serif;
+    --font-ui: 'Inter', system-ui, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  }
+
+  *{box-sizing:border-box;}
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:
+      radial-gradient(ellipse at 20% 0%, rgba(255,255,255,0.05), transparent 60%),
+      radial-gradient(ellipse at top, var(--board) 0%, var(--board-dark) 100%);
+    font-family: var(--font-ui);
+    color: var(--chalk);
+    padding: 28px 16px 60px;
+  }
+
+  header{
+    max-width: 1080px;
+    margin: 0 auto 22px;
+    text-align:center;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    margin: 0 0 8px;
+    font-weight:800;
+    letter-spacing: 0.3px;
+  }
+
+  h1 .accent{ color: var(--teal); }
+
+  .subtitle{
+    font-size: 0.96rem;
+    color: var(--chalk-dim);
+    max-width: 720px;
+    margin: 0 auto;
+    line-height:1.55;
+  }
+  .subtitle strong{ color: var(--chalk); font-weight:600; }
+
+  .stats-bar{
+    max-width: 1080px;
+    margin: 20px auto 14px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:center;
+    gap: 14px;
+  }
+
+  .pill{
+    background: rgba(0,0,0,0.22);
+    border: 1px solid rgba(242,240,251,0.2);
+    border-radius: 999px;
+    padding: 7px 16px;
+    font-size: 0.85rem;
+    color: var(--chalk-dim);
+  }
+  .pill b{ color: var(--chalk); font-family: var(--font-mono); font-weight:700; }
+
+  button.reset-btn{
+    font-family: var(--font-ui);
+    font-weight:600;
+    font-size: 0.85rem;
+    background: var(--board-light);
+    color: var(--chalk);
+    border: 1px solid rgba(242,240,251,0.3);
+    border-radius: 999px;
+    padding: 8px 18px;
+    cursor:pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  button.reset-btn:hover{ background: #3a4a8a; transform: translateY(-1px); }
+  button.reset-btn:focus-visible, .card:focus-visible{
+    outline: 3px solid var(--teal);
+    outline-offset: 3px;
+  }
+
+  .legend{
+    max-width: 1080px;
+    margin: 0 auto 20px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap: 8px 20px;
+    font-size: 0.78rem;
+    color: var(--chalk-dim);
+  }
+  .legend span{ display:inline-flex; align-items:center; gap:6px; }
+  .legend i{ width:11px; height:11px; border-radius:3px; display:inline-block; }
+
+  .board{
+    max-width: 1080px;
+    margin: 0 auto;
+    display:grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 12px;
+  }
+
+  .card{
+    position:relative;
+    cursor:pointer;
+    aspect-ratio: 3 / 4;
+    perspective: 1000px;
+  }
+  .card-inner{
+    position:relative;
+    width:100%; height:100%;
+    transition: transform 0.15s ease;
+  }
+  .card:hover .card-inner{ transform: translateY(-2px); }
+
+  .card-face{
+    position:absolute; inset:0;
+    border-radius: 12px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    padding: 8px;
+    text-align:center;
+    gap: 4px;
+    border: 2px solid rgba(242,240,251,0.15);
+    background: var(--board-dark);
+  }
+
+  .card-front svg{ width:78%; height:60%; color: var(--chalk); }
+  .card-front .eyebrow{
+    font-size: 0.56rem;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--chalk-dim);
+  }
+  .card-front .name{
+    font-size: 0.68rem;
+    font-weight:700;
+    line-height:1.25;
+  }
+
+  .card.type-symbole .card-front{ border-color: rgba(111,168,224,0.65); }
+  .card.type-composant .card-front{ border-color: rgba(242,167,68,0.65); }
+  .card.type-symbole .eyebrow{ color: var(--sky); }
+  .card.type-composant .eyebrow{ color: var(--amber); }
+
+  .card.selected .card-front{
+    box-shadow: 0 0 0 3px var(--teal) inset;
+  }
+
+  .card.matched .card-front{
+    box-shadow: 0 0 0 3px var(--green-ok) inset;
+  }
+  .card.matched{ cursor:default; }
+  .card.matched:hover .card-inner{ transform:none; }
+  .card.matched .card-inner{ opacity:0.45; filter: grayscale(0.7); }
+
+  .card.wrong .card-front{
+    box-shadow: 0 0 0 3px var(--red-no) inset;
+  }
+
+  @keyframes shake{
+    0%,100%{ transform: translateX(0); }
+    25%{ transform: translateX(-6px); }
+    75%{ transform: translateX(6px); }
+  }
+  .card.shake .card-inner{ animation: shake 0.3s ease; }
+
+  @media (max-width: 780px){
+    .board{ grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 420px){
+    .board{ grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .card-inner{ transition: none; }
+    .card.shake .card-inner{ animation: none; }
+  }
+
+  .win-banner{
+    max-width: 1080px;
+    margin: 0 auto 20px;
+    text-align:center;
+    background: rgba(127,214,138,0.12);
+    border: 1px solid var(--green-ok);
+    border-radius: 12px;
+    padding: 14px;
+    font-family: var(--font-display);
+    font-weight:700;
+    font-size: 1.2rem;
+    display:none;
+  }
+  .win-banner.show{ display:block; }
+
+  details.help{
+    max-width: 900px;
+    margin: 34px auto 0;
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(242,240,251,0.15);
+    border-radius: 12px;
+    padding: 14px 18px;
+  }
+  details.help summary{
+    cursor:pointer;
+    font-weight:600;
+    color: var(--teal);
+  }
+  .recap{
+    margin-top: 14px;
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+  }
+  .recap-row{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    background: rgba(0,0,0,0.18);
+    border: 1px solid rgba(242,240,251,0.12);
+    border-radius: 8px;
+    padding: 6px 8px;
+  }
+  .recap-row svg{ width:38px; height:26px; flex-shrink:0; color: var(--chalk); }
+  .recap-row svg.img{ color:inherit; }
+  .recap-row span{ font-size:0.78rem; font-weight:600; }
+
+  footer{
+    max-width: 720px;
+    margin: 30px auto 0;
+    text-align:center;
+    font-size: 0.78rem;
+    color: var(--chalk-dim);
+    letter-spacing: 0.3px;
+  }
+
+  /* ---------- navbar du site ---------- */
+  .site-nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--board-dark);
+    padding:0.65rem 1.1rem;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+  }
+  .site-nav a{ text-decoration:none; }
+  .site-nav-home{
+    color:var(--chalk);
+    display:inline-flex;
+    align-items:center;
+    gap:0.35rem;
+    transition:color .15s ease;
+  }
+  .site-nav-home:hover{ color:var(--amber); }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a class="site-nav-home" href="../index.html">← Accueil</a>
+</nav>
+
+<header>
+  <h1>Symboles &amp; <span class="accent">composants</span> électriques</h1>
+  <p class="subtitle">Clique sur un symbole puis sur le composant qui lui correspond. Retrouve les <strong>12 paires</strong> qui associent le <strong>symbole normalisé</strong> d'un composant à une <strong>image du composant réel</strong> — les paires trouvées se grisent.</p>
+</header>
+
+<div class="win-banner" id="winBanner"></div>
+
+<div class="stats-bar">
+  <span class="pill">Essais : <b id="statAttempts">0</b></span>
+  <span class="pill">Paires trouvées : <b id="statFound">0</b> / 12</span>
+  <button class="reset-btn" id="resetBtn">🔀 Nouvelle partie</button>
+</div>
+
+<div class="legend">
+  <span><i style="background:var(--sky)"></i>Symbole normalisé</span>
+  <span><i style="background:var(--amber)"></i>Composant réel</span>
+</div>
+
+<div class="board" id="board"></div>
+
+<details class="help">
+  <summary>📘 Voir tous les symboles (à consulter après avoir joué)</summary>
+  <div class="recap" id="recap"></div>
+</details>
+
+<script>
+(function(){
+
+  const S = (inner) => `<svg viewBox="0 0 140 90" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round">${inner}</svg>`;
+  const T = (inner) => `<svg viewBox="0 0 140 90">${inner}</svg>`;
+
+  const COMPONENTS = [
+    { id:'resistor', name:'Dipôle résistif',
+      symbol: S(`<line x1="8" y1="45" x2="48" y2="45"/><rect x="48" y="30" width="44" height="30"/><line x1="92" y1="45" x2="132" y2="45"/>`),
+      image: T(`<line x1="8" y1="45" x2="35" y2="45" stroke="#8a5a2b" stroke-width="3"/><line x1="105" y1="45" x2="132" y2="45" stroke="#8a5a2b" stroke-width="3"/><rect x="35" y="28" width="70" height="34" rx="12" fill="#f2c94c" stroke="#8a5a2b" stroke-width="2"/><rect x="50" y="28" width="7" height="34" fill="#7a4a1e"/><rect x="63" y="28" width="7" height="34" fill="#1a1a1a"/><rect x="76" y="28" width="7" height="34" fill="#e0402c"/><rect x="89" y="28" width="7" height="34" fill="#d4af37"/>`) },
+
+    { id:'battery', name:'Pile',
+      symbol: S(`<line x1="8" y1="45" x2="55" y2="45"/><line x1="55" y1="20" x2="55" y2="70"/><line x1="70" y1="30" x2="70" y2="60" stroke-width="9"/><line x1="70" y1="45" x2="132" y2="45"/><text x="55" y="14" font-size="13" fill="currentColor" stroke="none" text-anchor="middle">+</text><text x="70" y="26" font-size="13" fill="currentColor" stroke="none" text-anchor="middle">−</text>`),
+      image: T(`<rect x="52" y="10" width="36" height="70" rx="6" fill="#4caf6b" stroke="#276b3f" stroke-width="2"/><rect x="62" y="2" width="16" height="10" fill="#c7cdd6" stroke="#276b3f" stroke-width="1"/><text x="70" y="34" font-size="15" fill="#fff" text-anchor="middle" font-weight="bold">+</text><text x="70" y="66" font-size="20" fill="#fff" text-anchor="middle" font-weight="bold">−</text>`) },
+
+    { id:'switch-open', name:'Interrupteur ouvert',
+      symbol: S(`<line x1="8" y1="45" x2="42" y2="45"/><circle cx="46" cy="45" r="4" fill="currentColor"/><line x1="50" y1="42" x2="90" y2="20"/><circle cx="94" cy="45" r="4" fill="currentColor"/><line x1="98" y1="45" x2="132" y2="45"/>`),
+      image: T(`<rect x="45" y="8" width="50" height="74" rx="10" fill="#c9d2dc" stroke="#2d3748" stroke-width="3"/><rect x="58" y="12" width="24" height="34" rx="6" fill="#2d3748"/><text x="70" y="68" font-size="13" fill="#1f2933" text-anchor="middle" font-weight="bold">OFF</text>`) },
+
+    { id:'switch-closed', name:'Interrupteur fermé',
+      symbol: S(`<line x1="8" y1="45" x2="42" y2="45"/><circle cx="46" cy="45" r="4" fill="currentColor"/><line x1="50" y1="43" x2="90" y2="43"/><circle cx="94" cy="45" r="4" fill="currentColor"/><line x1="98" y1="45" x2="132" y2="45"/>`),
+      image: T(`<rect x="45" y="8" width="50" height="74" rx="10" fill="#c9d2dc" stroke="#2d3748" stroke-width="3"/><rect x="58" y="44" width="24" height="34" rx="6" fill="#3aa163"/><text x="70" y="26" font-size="13" fill="#1f2933" text-anchor="middle" font-weight="bold">ON</text>`) },
+
+    { id:'lamp', name:'Lampe / Ampoule',
+      symbol: S(`<line x1="8" y1="45" x2="34" y2="45"/><circle cx="70" cy="45" r="26" stroke-width="4"/><line x1="51.6" y1="26.6" x2="88.4" y2="63.4"/><line x1="51.6" y1="63.4" x2="88.4" y2="26.6"/><line x1="106" y1="45" x2="132" y2="45"/>`),
+      image: T(`<circle cx="70" cy="34" r="28" fill="#fdf6b2" stroke="#c9a227" stroke-width="3"/><rect x="58" y="60" width="24" height="20" fill="#cbd5e0" stroke="#4a5568" stroke-width="2"/><path d="M58 28 L70 44 L82 30" stroke="#c9a227" stroke-width="2" fill="none"/>`) },
+
+    { id:'diode', name:'Diode',
+      symbol: S(`<line x1="8" y1="45" x2="46" y2="45"/><polygon points="46,25 46,65 84,45"/><line x1="84" y1="25" x2="84" y2="65"/><line x1="84" y1="45" x2="132" y2="45"/>`),
+      image: T(`<line x1="8" y1="45" x2="40" y2="45" stroke="#333" stroke-width="3"/><line x1="100" y1="45" x2="132" y2="45" stroke="#333" stroke-width="3"/><rect x="40" y="30" width="60" height="30" rx="14" fill="#1a202c" stroke="#000" stroke-width="2"/><rect x="76" y="30" width="7" height="30" fill="#e2e8f0"/>`) },
+
+    { id:'motor', name:'Moteur',
+      symbol: S(`<line x1="8" y1="45" x2="44" y2="45"/><circle cx="70" cy="45" r="26" stroke-width="4"/><text x="70" y="53" font-size="22" fill="currentColor" stroke="none" text-anchor="middle" font-weight="bold">M</text><line x1="96" y1="45" x2="132" y2="45"/>`),
+      image: T(`<rect x="40" y="14" width="60" height="62" rx="12" fill="#63b3ed" stroke="#2b6cb0" stroke-width="3"/><rect x="100" y="38" width="26" height="14" fill="#a0aec0" stroke="#4a5568" stroke-width="2"/>`) },
+
+    { id:'fuse', name:'Fusible',
+      symbol: S(`<line x1="8" y1="45" x2="46" y2="45"/><rect x="46" y="30" width="48" height="30"/><line x1="46" y1="45" x2="94" y2="45"/><line x1="94" y1="45" x2="132" y2="45"/>`),
+      image: T(`<line x1="8" y1="45" x2="40" y2="45" stroke="#4a5568" stroke-width="3"/><line x1="100" y1="45" x2="132" y2="45" stroke="#4a5568" stroke-width="3"/><rect x="40" y="32" width="16" height="26" fill="#a0aec0" stroke="#2d3748" stroke-width="2"/><rect x="84" y="32" width="16" height="26" fill="#a0aec0" stroke="#2d3748" stroke-width="2"/><rect x="56" y="32" width="28" height="26" fill="#e6fffa" stroke="#2d3748" stroke-width="2"/><line x1="56" y1="45" x2="84" y2="45" stroke="#4a5568" stroke-width="1.5"/>`) },
+
+    { id:'ammeter', name:'Ampèremètre',
+      symbol: S(`<line x1="8" y1="45" x2="44" y2="45"/><circle cx="70" cy="45" r="26" stroke-width="4"/><text x="70" y="53" font-size="20" fill="currentColor" stroke="none" text-anchor="middle" font-weight="bold">A</text><line x1="96" y1="45" x2="132" y2="45"/>`),
+      image: T(`<rect x="35" y="5" width="70" height="70" rx="8" fill="#2d3748" stroke="#1a202c" stroke-width="2"/><circle cx="70" cy="38" r="24" fill="#fff" stroke="#1a202c" stroke-width="2"/><line x1="70" y1="38" x2="86" y2="24" stroke="#c05621" stroke-width="3" stroke-linecap="round"/><circle cx="70" cy="38" r="3" fill="#1a202c"/><text x="70" y="66" font-size="13" fill="#c05621" text-anchor="middle" font-weight="bold">A</text>`) },
+
+    { id:'voltmeter', name:'Voltmètre',
+      symbol: S(`<line x1="8" y1="45" x2="44" y2="45"/><circle cx="70" cy="45" r="26" stroke-width="4"/><text x="70" y="53" font-size="20" fill="currentColor" stroke="none" text-anchor="middle" font-weight="bold">V</text><line x1="96" y1="45" x2="132" y2="45"/>`),
+      image: T(`<rect x="35" y="5" width="70" height="70" rx="8" fill="#2d3748" stroke="#1a202c" stroke-width="2"/><circle cx="70" cy="38" r="24" fill="#fff" stroke="#1a202c" stroke-width="2"/><line x1="70" y1="38" x2="86" y2="24" stroke="#2b6cb0" stroke-width="3" stroke-linecap="round"/><circle cx="70" cy="38" r="3" fill="#1a202c"/><text x="70" y="66" font-size="13" fill="#2b6cb0" text-anchor="middle" font-weight="bold">V</text>`) },
+
+    { id:'wire', name:'Fil (conducteur)',
+      symbol: S(`<line x1="8" y1="45" x2="132" y2="45"/><circle cx="8" cy="45" r="5" fill="currentColor"/><circle cx="132" cy="45" r="5" fill="currentColor"/>`),
+      image: T(`<path d="M10 45 C40 15, 100 75, 130 45" stroke="#e53e3e" stroke-width="10" fill="none" stroke-linecap="round"/><line x1="8" y1="45" x2="20" y2="45" stroke="#d4af37" stroke-width="5"/><line x1="120" y1="45" x2="132" y2="45" stroke="#d4af37" stroke-width="5"/>`) },
+
+    { id:'generator', name:'Générateur',
+      symbol: S(`<line x1="8" y1="45" x2="44" y2="45"/><circle cx="70" cy="45" r="26" stroke-width="4"/><text x="70" y="53" font-size="20" fill="currentColor" stroke="none" text-anchor="middle" font-weight="bold">G</text><line x1="96" y1="45" x2="132" y2="45"/>`),
+      image: T(`<rect x="34" y="18" width="72" height="50" rx="10" fill="#ed8936" stroke="#9c4a11" stroke-width="3"/><circle cx="60" cy="43" r="18" fill="#f7fafc" stroke="#9c4a11" stroke-width="2"/><text x="60" y="49" font-size="16" fill="#c05621" text-anchor="middle" font-weight="bold">G</text><rect x="100" y="36" width="20" height="14" fill="#4a5568" stroke="#1a202c" stroke-width="2"/>`) },
+  ];
+
+  const TOTAL_PAIRS = COMPONENTS.length;
+
+  function buildDeck(){
+    let deck = [];
+    COMPONENTS.forEach(c => {
+      deck.push({ pairId: c.id, type: 'symbole', name: c.name, svg: c.symbol });
+      deck.push({ pairId: c.id, type: 'composant', name: c.name, svg: c.image });
+    });
+    for (let i = deck.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [deck[i], deck[j]] = [deck[j], deck[i]];
+    }
+    return deck;
+  }
+
+  const boardEl = document.getElementById('board');
+  const statAttempts = document.getElementById('statAttempts');
+  const statFound = document.getElementById('statFound');
+  const winBanner = document.getElementById('winBanner');
+  const resetBtn = document.getElementById('resetBtn');
+  const recapEl = document.getElementById('recap');
+
+  let cardsData = [];
+  let cardsEls = [];
+  let selected = [];
+  let locked = false;
+  let attempts = 0;
+  let matchedPairs = 0;
+
+  function updateStats(){
+    statAttempts.textContent = attempts;
+    statFound.textContent = matchedPairs;
+  }
+
+  function render(){
+    cardsData = buildDeck();
+    boardEl.innerHTML = '';
+    cardsEls = cardsData.map((data, idx) => {
+      const card = document.createElement('div');
+      card.className = `card type-${data.type}`;
+      card.dataset.idx = idx;
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', `${data.type === 'symbole' ? 'Symbole' : 'Composant'} : ${data.name}`);
+
+      card.innerHTML = `
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <span class="eyebrow">${data.type === 'symbole' ? 'Symbole' : 'Composant'}</span>
+            ${data.svg}
+            ${data.type === 'composant' ? `<span class="name">${data.name}</span>` : ''}
+          </div>
+        </div>`;
+
+      card.addEventListener('click', () => onCardClick(idx));
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          onCardClick(idx);
+        }
+      });
+
+      boardEl.appendChild(card);
+      return card;
+    });
+
+    selected = [];
+    locked = false;
+    attempts = 0;
+    matchedPairs = 0;
+    winBanner.classList.remove('show');
+    updateStats();
+  }
+
+  function onCardClick(idx){
+    if (locked) return;
+    const card = cardsEls[idx];
+    if (card.classList.contains('selected') || card.classList.contains('matched')) return;
+
+    card.classList.add('selected');
+    selected.push(idx);
+
+    if (selected.length === 2){
+      attempts++;
+      updateStats();
+      locked = true;
+      const [i1, i2] = selected;
+      const same = cardsData[i1].pairId === cardsData[i2].pairId && cardsData[i1].type !== cardsData[i2].type;
+
+      if (same){
+        setTimeout(() => {
+          [i1, i2].forEach(i => {
+            cardsEls[i].classList.remove('selected');
+            cardsEls[i].classList.add('matched');
+          });
+          matchedPairs++;
+          selected = [];
+          locked = false;
+          updateStats();
+          if (matchedPairs === TOTAL_PAIRS) showWin();
+        }, 350);
+      } else {
+        [i1, i2].forEach(i => cardsEls[i].classList.add('wrong', 'shake'));
+        setTimeout(() => {
+          [i1, i2].forEach(i => {
+            cardsEls[i].classList.remove('selected', 'wrong', 'shake');
+          });
+          selected = [];
+          locked = false;
+        }, 700);
+      }
+    }
+  }
+
+  function showWin(){
+    winBanner.innerHTML = `🎉 Bravo ! Les ${TOTAL_PAIRS} paires sont trouvées en <strong>${attempts}</strong> essais.`;
+    winBanner.classList.add('show');
+  }
+
+  function renderRecap(){
+    recapEl.innerHTML = COMPONENTS.map(c => `
+      <div class="recap-row">
+        <svg viewBox="0 0 140 90" fill="none" stroke="var(--chalk)" stroke-width="4" stroke-linecap="round">${c.symbol.replace(/<svg[^>]*>|<\/svg>/g,'')}</svg>
+        <svg class="img" viewBox="0 0 140 90">${c.image.replace(/<svg[^>]*>|<\/svg>/g,'')}</svg>
+        <span>${c.name}</span>
+      </div>`).join('');
+  }
+
+  resetBtn.addEventListener('click', render);
+
+  render();
+  renderRecap();
+})();
+</script>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+</body>
+</html>
