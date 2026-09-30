@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dossier verrouillé — Escape Game Statistiques — La Prof qui Compte</title>
+<meta name="description" content="Escape game interactif sur les statistiques à deux variables (Première Bac Pro) : nuage de points, ajustement affine, coefficient de détermination R², interpolation et extrapolation. Résous 6 énigmes pour déverrouiller le dossier.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/escape-game-statistiques.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Dossier verrouillé — Escape Game Statistiques — La Prof qui Compte">
+<meta property="og:description" content="Escape game de statistiques à deux variables : 6 énigmes sur le nuage de points, l'ajustement affine, R², l'interpolation et l'extrapolation.">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/escape-game-statistiques.html">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dossier verrouillé — Escape Game Statistiques — La Prof qui Compte">
+<meta name="twitter:description" content="Escape game gratuit et interactif sur les statistiques à deux variables, pour réviser en s'amusant.">
+<style>
+  :root{
+    --bg: #171a21;
+    --panel: #20242e;
+    --paper: #EDE6D3;
+    --paper-line: #c9bfa2;
+    --ink: #2b2620;
+    --accent: #C1443C;
+    --accent-2: #E8B84B;
+    --ok: #4C9A6A;
+    --text: #ECE8DC;
+    --muted: #8b93a3;
+    --mono: "Courier New", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: radial-gradient(circle at 20% 0%, #1e2230 0%, var(--bg) 55%);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height:100vh;
+    padding: 24px 16px 60px;
+  }
+  .wrap{ max-width: 880px; margin: 0 auto; }
+
+  /* ---- HEADER / LOCK STRIP ---- */
+  header{
+    display:flex; flex-wrap:wrap; gap:16px; align-items:center; justify-content:space-between;
+    margin-bottom: 28px;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand .dot{ width:10px; height:10px; border-radius:50%; background:var(--accent); box-shadow:0 0 8px var(--accent); }
+  .brand h1{ font-family: var(--mono); font-size: 1rem; letter-spacing: 3px; text-transform: uppercase; margin:0; color: var(--muted); }
+
+  .codebar{ display:flex; gap:6px; }
+  .slot{
+    width: 34px; height: 42px;
+    background: #12141a;
+    border: 1px solid #3a4152;
+    border-radius: 4px;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size: 1.1rem; font-weight:bold;
+    color: var(--muted);
+  }
+  .slot.filled{ color: var(--accent-2); border-color: var(--accent-2); box-shadow: 0 0 10px rgba(232,184,75,.35); }
+
+  .timer{ font-family: var(--mono); font-size: .95rem; color: var(--muted); white-space:nowrap; }
+
+  /* ---- CARD (dossier) ---- */
+  .card{
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 3px;
+    padding: 30px 32px 34px;
+    position: relative;
+    box-shadow: 0 18px 40px rgba(0,0,0,.45);
+    transform: rotate(-0.3deg);
+  }
+  .card::before{
+    content:"";
+    position:absolute; inset: 10px;
+    border: 1px dashed var(--paper-line);
+    pointer-events:none;
+  }
+  .stamp{
+    position:absolute; top: 18px; right: 24px;
+    font-family: var(--mono); font-weight:bold; font-size: .68rem;
+    letter-spacing:2px; color: var(--accent);
+    border: 2px solid var(--accent); border-radius: 4px;
+    padding: 3px 8px; transform: rotate(6deg);
+    opacity:.75;
+  }
+  .eyebrow{
+    font-family: var(--mono); font-size: .72rem; letter-spacing: 2px; text-transform: uppercase;
+    color: #7a6f52; margin: 0 0 6px;
+  }
+  h2.title{ margin: 0 0 14px; font-size: 1.5rem; line-height:1.25; }
+  .flavor{
+    font-style: italic; color: #4a4234; border-left: 3px solid var(--accent); padding-left: 12px;
+    margin: 0 0 20px; line-height:1.5;
+  }
+  .question{ font-weight:600; margin: 0 0 16px; line-height:1.4; }
+
+  /* ---- CHOICES ---- */
+  .choices{ display:grid; gap: 10px; }
+  .choices.grid2{ grid-template-columns: 1fr 1fr; }
+  @media (max-width: 620px){ .choices.grid2{ grid-template-columns: 1fr; } }
+
+  .choice{
+    background: #fbf8f0; border: 1px solid var(--paper-line); border-radius: 6px;
+    padding: 12px 14px; cursor:pointer; text-align:left; font-size: .95rem;
+    transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    color: var(--ink); font-family: inherit;
+  }
+  .choice:hover{ border-color: var(--accent); transform: translateY(-2px); }
+  .choice.selected{ border-color: var(--accent); background:#f6ead9; }
+  .choice.correct{ border-color: var(--ok); background:#e2f2e6; }
+  .choice.wrong{ border-color: var(--accent); background:#f6dcd8; }
+
+  .chart-choice{ display:flex; flex-direction:column; align-items:center; gap:8px; padding: 10px; }
+  .chart-choice svg{ background:#fff; border:1px solid var(--paper-line); border-radius:4px; }
+  .chart-label{ font-family: var(--mono); font-size:.8rem; color:#4a4234; }
+
+  /* ---- table ---- */
+  table.data{ border-collapse: collapse; margin: 0 0 20px; font-size:.9rem; }
+  table.data th, table.data td{ border:1px solid var(--paper-line); padding: 6px 10px; text-align:center; }
+  table.data th{ background:#e4dcc4; font-family: var(--mono); font-weight:normal; font-size:.78rem; }
+
+  /* ---- match ---- */
+  .match-row{ display:flex; gap:10px; align-items:center; margin-bottom:10px; flex-wrap:wrap; }
+  .match-term{ font-weight:600; min-width: 190px; }
+  select.match-select{
+    font-family: inherit; font-size:.9rem; padding:7px 9px; border-radius:6px;
+    border:1px solid var(--paper-line); background:#fbf8f0; color:var(--ink); flex:1; min-width:220px;
+  }
+
+  /* ---- numeric input ---- */
+  .numrow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom: 16px; }
+  input[type=text], input[type=number]{
+    font-family: inherit; font-size: 1rem; padding: 9px 12px; border-radius:6px;
+    border: 1px solid var(--paper-line); background:#fbf8f0; color:var(--ink); width: 140px;
+  }
+  .radio-line{ display:flex; gap:18px; margin: 6px 0 16px; flex-wrap:wrap; }
+  .radio-line label{ display:flex; align-items:center; gap:6px; font-size:.92rem; cursor:pointer; }
+
+  /* ---- actions ---- */
+  .actions{ display:flex; gap:12px; align-items:center; margin-top: 22px; flex-wrap:wrap; }
+  button.primary{
+    background: var(--ink); color: var(--paper); border:none; border-radius:6px;
+    padding: 11px 22px; font-size: .95rem; font-weight:600; cursor:pointer;
+    font-family: inherit; letter-spacing:.3px;
+  }
+  button.primary:hover{ background:#000; }
+  button.primary:disabled{ opacity:.4; cursor:not-allowed; }
+
+  .feedback{ font-weight:600; margin-top:4px; }
+  .feedback.ok{ color: var(--ok); }
+  .feedback.bad{ color: var(--accent); }
+
+  .hint{
+    margin-top: 14px; background: #fff7df; border: 1px dashed #cbb56a; border-radius:6px;
+    padding: 10px 14px; font-size: .87rem; color:#6b5a1e; display:none;
+  }
+  .hint.show{ display:block; }
+
+  .explain{
+    margin-top: 20px; background: #e7f2ea; border: 1px solid #a9cdb3; border-radius:6px;
+    padding: 14px 16px; font-size: .92rem; color:#2f4a37; line-height:1.5;
+  }
+
+  /* ---- start / end screens ---- */
+  .center-card{ text-align:center; }
+  .center-card h2{ margin-top:0; }
+  input#teamName{ width: 260px; text-align:center; }
+  .final-code-display{
+    font-family: var(--mono); font-size: 2rem; letter-spacing: 8px; margin: 18px 0;
+    color: var(--ink); font-weight:bold;
+  }
+  .progress{ font-family: var(--mono); font-size:.78rem; color:#7a6f52; margin-bottom: 16px; }
+
+  /* ---- postcard ---- */
+  .postcard{
+    display:flex; flex-wrap:wrap; gap:0; background:#fdfaf1; border:1px solid var(--paper-line);
+    border-radius:4px; overflow:hidden; box-shadow: 0 10px 24px rgba(0,0,0,.35);
+    transform: rotate(0.6deg); margin: 22px auto 8px; max-width: 620px; text-align:left;
+  }
+  .postcard-image{ flex: 1 1 220px; min-width:200px; background:#bfe3ec; }
+  .postcard-image svg{ display:block; width:100%; height:100%; }
+  .postcard-text{
+    flex: 1 1 260px; min-width:240px; padding: 20px 22px; position:relative;
+    border-left: 1px dashed var(--paper-line);
+  }
+  .stamp-mini{
+    position:absolute; top:12px; right:14px; font-family: var(--mono); font-size:.6rem;
+    letter-spacing:1px; color:#7a6f52; border:1px solid #7a6f52; border-radius:3px; padding:2px 6px;
+    transform: rotate(4deg);
+  }
+  .handwriting{
+    font-family: Georgia, "Times New Roman", serif; font-style: italic; color:#2b2620;
+    line-height:1.6; font-size:1.02rem; margin: 18px 0 10px;
+  }
+  .signature{ font-family: Georgia, serif; font-style: italic; text-align:right; color:#4a4234; }
+
+  footer{ text-align:center; color: var(--muted); font-size:.75rem; margin-top: 30px; font-family: var(--mono); line-height:1.8; }
+
+  /* ---------- navbar du site ---------- */
+  .site-nav{
+    position:sticky;
+    top:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    background:var(--panel);
+    padding:0.65rem 1.1rem;
+    font-family: var(--mono);
+    font-size:0.78rem;
+    font-weight:600;
+    letter-spacing:0.02em;
+    border-bottom:1px solid #3a4152;
+  }
+  .site-nav a{
+    color: var(--text);
+    text-decoration:none;
+    display:inline-flex;
+    align-items:center;
+    gap:0.35rem;
+    transition:color .15s ease;
+  }
+  .site-nav a:hover{ color: var(--accent-2); }
+</style>
+</head>
+<body>
+
+<nav class="site-nav">
+  <a href="../index.html">← Accueil</a>
+</nav>
+
+<div class="wrap">
+
+  <header>
+    <div class="brand"><span class="dot"></span><h1>Dossier confidentiel — Affaire Ferrand</h1></div>
+    <div style="display:flex; align-items:center; gap:18px;">
+      <div class="timer" id="timer">00:00</div>
+      <div class="codebar" id="codebar"></div>
+    </div>
+  </header>
+
+  <div id="app"></div>
+
+  <footer>
+    Enquête statistique — reconstituez les 6 caractères pour déverrouiller le dossier.<br>
+    Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).
+  </footer>
+</div>
+
+<script>
+/* ============================= DATA ============================= */
+
+const CODE_CHARS = ["3","8","2","B","9","4"]; // revealed progressively
+
+const scatterSets = {
+  n1: [[5.6,43.7],[11.9,51.3],[24.5,71.5],[33.9,76.7],[37.1,73.2],[47.4,81.3],[59.3,74.5],[67.4,77.5],[77.0,65.3],[84.3,55.7],[96.8,33.5]],
+  n2: [[92.4,38.3],[85.4,47.3],[75.1,22.1],[22.5,16.7],[47.0,47.8],[8.9,25.4],[18.9,65.3],[66.5,44.3],[72.0,79.9],[92.1,68.0],[34.3,33.1]],
+  n3: [[3.7,11.3],[14.5,19.2],[23.2,25.4],[32.4,34.6],[42.7,51.7],[50.4,46.0],[60.4,63.1],[68.1,56.1],[77.6,70.4],[87.3,80.6],[92.1,86.6]],
+  n4: [[24.3,73.9],[24.8,67.3],[17.9,68.2],[17.2,69.5],[25.1,78.0],[75.9,22.7],[79.1,16.0],[72.4,17.8],[76.0,17.7],[78.8,12.8],[73.1,22.9]]
+};
+
+function svgScatter(points, size=150){
+  const pad = 10;
+  const xs = points.map(p=>p[0]), ys = points.map(p=>p[1]);
+  const minX=0, maxX=100, minY=0, maxY=100;
+  const scale = (v,min,max)=> pad + (v-min)/(max-min) * (size-2*pad);
+  let circles = points.map(p=>{
+    const cx = scale(p[0],minX,maxX);
+    const cy = size - scale(p[1],minY,maxY);
+    return `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3.2" fill="#2b2620"/>`;
+  }).join("");
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <line x1="${pad}" y1="${size-pad}" x2="${size-pad}" y2="${size-pad}" stroke="#c9bfa2" stroke-width="1"/>
+    <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${size-pad}" stroke="#c9bfa2" stroke-width="1"/>
+    ${circles}
+  </svg>`;
+}
+
+function postcardSvg(){
+  return `<svg viewBox="0 0 220 220" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#bfe3ec"/>
+        <stop offset="70%" stop-color="#eaf6ee"/>
+      </linearGradient>
+    </defs>
+    <rect width="220" height="220" fill="url(#sky)"/>
+    <circle cx="172" cy="42" r="22" fill="#f2c14e"/>
+    <path d="M0,150 Q40,130 80,150 T160,150 T220,150 V220 H0 Z" fill="#5aa7c4"/>
+    <path d="M0,168 Q40,150 80,168 T160,168 T220,168 V220 H0 Z" fill="#3f8fb0"/>
+    <path d="M0,190 Q60,175 120,190 T220,188 V220 H0 Z" fill="#e9d9a8"/>
+    <g transform="translate(48,150)">
+      <rect x="-3" y="0" width="6" height="42" fill="#7a5230"/>
+      <path d="M0,0 C-24,-10 -34,-30 -30,-40 C-16,-34 -6,-18 0,0 Z" fill="#3f7d4a"/>
+      <path d="M0,0 C22,-14 30,-32 26,-42 C12,-34 4,-18 0,0 Z" fill="#4c9457"/>
+      <path d="M0,0 C-18,-22 -16,-38 -8,-46 C0,-34 2,-16 0,0 Z" fill="#5aab66"/>
+    </g>
+  </svg>`;
+}
+
+/* ============================= STATE ============================= */
+let state = {
+  screen: "start",     // start | puzzle | end
+  puzzleIndex: 0,       // 0..5
+  teamName: "",
+  startTime: null,
+  finishTime: null,
+  revealed: ["","","","","",""],
+  wrongAttempt: {}      // per puzzle id -> bool (hint shown)
+};
+let timerInterval = null;
+
+function fmtTime(sec){
+  const m = Math.floor(sec/60).toString().padStart(2,"0");
+  const s = Math.floor(sec%60).toString().padStart(2,"0");
+  return m+":"+s;
+}
+function startTimer(){
+  state.startTime = Date.now();
+  timerInterval = setInterval(()=>{
+    const el = Math.floor((Date.now()-state.startTime)/1000);
+    document.getElementById("timer").textContent = fmtTime(el);
+  }, 1000);
+}
+function stopTimer(){
+  clearInterval(timerInterval);
+}
+
+function renderCodebar(){
+  const bar = document.getElementById("codebar");
+  bar.innerHTML = state.revealed.map(c=>{
+    const filled = c !== "";
+    return `<div class="slot ${filled?'filled':''}">${filled?c:"?"}</div>`;
+  }).join("");
+}
+
+function revealChar(index){
+  state.revealed[index] = CODE_CHARS[index];
+  renderCodebar();
+}
+
+/* ============================= PUZZLE DEFINITIONS ============================= */
+
+const puzzles = [
+  { id:0, eyebrow:"Pièce à conviction n°1", title:"Le tableau blanc effacé à moitié" },
+  { id:1, eyebrow:"Pièce à conviction n°2", title:"Le post-it embrouillé" },
+  { id:2, eyebrow:"Pièce à conviction n°3", title:"La feuille tachée de café" },
+  { id:3, eyebrow:"Pièce à conviction n°4", title:"Le dossier des trois finalistes" },
+  { id:4, eyebrow:"Pièce à conviction n°5", title:"Le tiroir du bas — première question" },
+  { id:5, eyebrow:"Pièce à conviction n°6", title:"Le tiroir du bas — seconde question" },
+];
+
+/* ============================= RENDER ROOT ============================= */
+function render(){
+  const app = document.getElementById("app");
+  renderCodebar();
+
+  if(state.screen === "start"){
+    app.innerHTML = `
+      <div class="card center-card">
+        <div class="stamp">CONFIDENTIEL</div>
+        <p class="eyebrow">Brigade de statistique judiciaire</p>
+        <h2 class="title">Le dossier du Dr Ferrand</h2>
+        <p style="text-align:left; line-height:1.6;">
+          Le <strong>Dr Lucas Ferrand</strong>, chercheur en statistiques, planchait depuis des mois
+          sur un projet un peu fou : repérer, à l'aide d'ajustements affines, le prochain village
+          côtier promis à un boom touristique — avant que tout le monde ne s'y précipite.
+          <br><br>
+          Il a disparu il y a une semaine, en pleine analyse, sans laisser d'adresse. Son bureau a
+          été retrouvé <strong>sans dessus dessous</strong>, et son disque dur personnel est protégé
+          par un <strong>code à 6 caractères</strong>.
+          <br><br>
+          Ses collègues ont réuni six indices dans son bureau. Chacun, une fois déchiffré,
+          révèlera un caractère du code. À vous de mener l'enquête — sortez vos calculatrices,
+          agents.
+        </p>
+        <p style="margin-top:22px;"><label>Nom de l'équipe (ou de l'élève) :</label><br>
+        <input type="text" id="teamName" placeholder="Ex : Les Sherlock du R²"></p>
+        <div class="actions" style="justify-content:center;">
+          <button class="primary" id="startBtn">Ouvrir le dossier</button>
+        </div>
+      </div>
+    `;
+    document.getElementById("startBtn").addEventListener("click", ()=>{
+      const val = document.getElementById("teamName").value.trim();
+      state.teamName = val || "Équipe anonyme";
+      state.screen = "puzzle";
+      state.puzzleIndex = 0;
+      startTimer();
+      render();
+    });
+    return;
+  }
+
+  if(state.screen === "puzzle"){
+    renderPuzzle(state.puzzleIndex);
+    return;
+  }
+
+  if(state.screen === "end"){
+    stopTimer();
+    const elapsed = Math.floor((state.finishTime - state.startTime)/1000);
+    app.innerHTML = `
+      <div class="card center-card">
+        <div class="stamp" style="border-color: var(--ok); color: var(--ok);">DÉVERROUILLÉ</div>
+        <p class="eyebrow">Affaire classée</p>
+        <h2 class="title">Dossier ouvert avec succès</h2>
+        <p>Code reconstitué :</p>
+        <div class="final-code-display">${CODE_CHARS.join(" ")}</div>
+        <p><strong>${state.teamName}</strong> a percé le mystère en <strong>${fmtTime(elapsed)}</strong>.</p>
+        <p style="color:#5a5240; font-size:.9rem;">Et dans le dossier, tout au fond, une dernière pièce : une carte postale...</p>
+
+        <div class="postcard">
+          <div class="postcard-image">${postcardSvg()}</div>
+          <div class="postcard-text">
+            <div class="stamp-mini">ANSE DORÉE</div>
+            <p class="handwriting">« Si vous lisez ceci, c'est que vous avez remarqué mon absence.
+            Pas d'inquiétude : mes calculs m'ont mené jusqu'à Anse Dorée, et... disons que le terrain
+            confirme entièrement mes prévisions. Je reste encore un peu pour vérifier mes données
+            sur place. »</p>
+            <p class="signature">— L. Ferrand</p>
+          </div>
+        </div>
+      </div>
+    `;
+    return;
+  }
+}
+
+/* ============================= PUZZLE RENDERING ============================= */
+function puzzleShell(p, innerHtml, flavor){
+  return `
+    <div class="progress">Indice ${p.id+1} / 6</div>
+    <div class="card">
+      <div class="stamp">CONFIDENTIEL</div>
+      <p class="eyebrow">${p.eyebrow}</p>
+      <h2 class="title">${p.title}</h2>
+      <p class="flavor">${flavor}</p>
+      ${innerHtml}
+    </div>
+  `;
+}
+
+function showHint(text){
+  return `<div class="hint" id="hintBox">💡 ${text}</div>`;
+}
+
+function markWrong(id){
+  state.wrongAttempt[id] = true;
+  const hb = document.getElementById("hintBox");
+  if(hb) hb.classList.add("show");
+}
+
+/* Reveal code char, lock the puzzle's interactive elements, show explanation + continue button */
+function showSolved(explanationHtml, revealIndex){
+  revealChar(revealIndex);
+  const card = document.querySelector("#app .card");
+  card.querySelectorAll(".choice").forEach(c=>{ c.style.pointerEvents = "none"; });
+  card.querySelectorAll("input, select, button.primary").forEach(el=>{ el.disabled = true; });
+
+  const isLast = state.puzzleIndex === 5;
+  const box = document.createElement("div");
+  box.className = "explain";
+  box.innerHTML = `<p style="margin:0 0 12px;">✅ ${explanationHtml}</p>
+    <div class="actions">
+      <button class="primary" id="nextBtn">${isLast ? "Déverrouiller le dossier final →" : "Énigme suivante →"}</button>
+    </div>`;
+  card.appendChild(box);
+  document.getElementById("nextBtn").addEventListener("click", ()=>{
+    if(!isLast){
+      state.puzzleIndex++;
+      render();
+    } else {
+      state.finishTime = Date.now();
+      state.screen = "end";
+      render();
+    }
+  });
+  box.scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+/* ---------- PUZZLE 0 : nuages de points ---------- */
+function renderPuzzle0(){
+  const p = puzzles[0];
+  const flavor = `Avant de se lancer dans l'étude sérieuse des villages candidats, le Dr Ferrand
+  s'entraînait sur son tableau blanc. Quatre nuages de points griffonnés au marqueur — trois
+  brouillons ratés, et un seul qui lui servait vraiment de modèle.`;
+  const opts = [
+    {key:"n1", label:"Nuage 1"},
+    {key:"n2", label:"Nuage 2"},
+    {key:"n3", label:"Nuage 3"},
+    {key:"n4", label:"Nuage 4"},
+  ];
+  const inner = `
+    <p class="question">Lequel de ces 4 nuages de points permet de réaliser un ajustement affine fiable ?</p>
+    <div class="choices grid2" id="choices0">
+      ${opts.map(o=>`
+        <div class="choice chart-choice" data-key="${o.key}">
+          ${svgScatter(scatterSets[o.key])}
+          <div class="chart-label">${o.label}</div>
+        </div>
+      `).join("")}
+    </div>
+    ${showHint("Cherche le nuage dont les points sont resserrés autour d'une droite imaginaire, sans former de courbe ni de paquets séparés.")}
+    <div class="feedback" id="feedback0"></div>
+  `;
+  document.getElementById("app").innerHTML = puzzleShell(p, inner, flavor);
+
+  document.querySelectorAll("#choices0 .choice").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      document.querySelectorAll("#choices0 .choice").forEach(c=>c.classList.remove("selected"));
+      el.classList.add("selected");
+      const key = el.dataset.key;
+      const fb = document.getElementById("feedback0");
+      if(key === "n3"){
+        el.classList.add("correct");
+        fb.textContent = "Exact !";
+        fb.className = "feedback ok";
+        showSolved("Le nuage 3 est bien allongé et resserré autour d'une droite : c'est le seul candidat pour un ajustement affine fiable. Les autres nuages ont une forme courbe, dispersée ou en amas séparés — un ajustement affine n'aurait aucun sens pour eux.", 0);
+      } else {
+        el.classList.add("wrong");
+        fb.textContent = "Ce nuage ne s'y prête pas. Regarde bien la forme d'ensemble...";
+        fb.className = "feedback bad";
+        markWrong(0);
+        setTimeout(()=>el.classList.remove("wrong","selected"), 700);
+      }
+    });
+  });
+}
+
+/* ---------- PUZZLE 1 : vocabulaire ---------- */
+function renderPuzzle1(){
+  const p = puzzles[1];
+  const flavor = `Un post-it jaune collé de travers sur son écran mélange allègrement tout son vocabulaire.
+  Remettez de l'ordre avant qu'un stagiaire n'efface tout par erreur.`;
+
+  const terms = [
+    {id:"t1", label:"Série chronologique", def:"d1"},
+    {id:"t2", label:"Nuage de points", def:"d2"},
+    {id:"t3", label:"Ajustement affine", def:"d3"},
+    {id:"t4", label:"Coefficient de détermination R²", def:"d4"},
+  ];
+  // définitions volontairement dans le désordre par rapport aux termes ci-dessus
+  const defsShuffled = [
+    {id:"d3", label:"Droite d'équation y = ax + b qui passe « au plus près » d'un nuage de points"},
+    {id:"d1", label:"Série statistique dont la variable x représente le temps"},
+    {id:"d4", label:"Indicateur, compris entre 0 et 1, qui mesure la pertinence d'un ajustement affine"},
+    {id:"d2", label:"Ensemble des points Mᵢ(xᵢ ; yᵢ) représentant une série statistique double"},
+  ];
+
+  const inner = `
+    <p class="question">Associez chaque terme à sa définition :</p>
+    <div id="matchZone">
+      ${terms.map(t=>`
+        <div class="match-row">
+          <div class="match-term">${t.label}</div>
+          <select class="match-select" data-term="${t.id}" data-correct="${t.def}">
+            <option value="">— choisir une définition —</option>
+            ${defsShuffled.map(d=>`<option value="${d.id}">${d.label}</option>`).join("")}
+          </select>
+        </div>
+      `).join("")}
+    </div>
+    ${showHint("Le R² parle de « pertinence », la série chronologique parle de « temps », le nuage de points parle de « points Mᵢ »...")}
+    <div class="actions">
+      <button class="primary" id="checkBtn1">Valider</button>
+    </div>
+    <div class="feedback" id="feedback1"></div>
+  `;
+  document.getElementById("app").innerHTML = puzzleShell(p, inner, flavor);
+
+  document.getElementById("checkBtn1").addEventListener("click", ()=>{
+    const selects = document.querySelectorAll("#matchZone select");
+    let allCorrect = true;
+    selects.forEach(s=>{
+      if(s.value !== s.dataset.correct) allCorrect = false;
+    });
+    const fb = document.getElementById("feedback1");
+    if(allCorrect){
+      fb.textContent = "Parfait !";
+      fb.className = "feedback ok";
+      showSolved("Bravo, vocabulaire retrouvé : une série chronologique dépend du temps, le nuage de points représente les couples (x ; y), l'ajustement affine est la droite qui s'en approche le mieux, et R² mesure la qualité de cet ajustement.", 1);
+    } else {
+      fb.textContent = "Au moins une association est fausse. Relis les définitions.";
+      fb.className = "feedback bad";
+      markWrong(1);
+    }
+  });
+}
+
+/* ---------- PUZZLE 2 : calcul réel (équation) ---------- */
+function renderPuzzle2(){
+  const p = puzzles[2];
+  const flavor = `Une feuille tachée de café traîne sur le bureau : les réservations enregistrées par
+  l'agence de voyages partenaire, pour l'un des villages qu'il avait repérés. Le Dr Ferrand avait dû
+  sortir sa calculatrice pour ça. À vous de faire pareil.`;
+
+  const inner = `
+    <p class="question">L'agence suit son nombre de réservations traitées (y) chaque semaine (x).
+    À l'aide de votre calculatrice ou d'un tableur, réalisez l'ajustement affine de cette série,
+    puis choisissez la bonne équation :</p>
+    <table class="data">
+      <tr><th>Semaine (x)</th><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr>
+      <tr><th>Réservations (y)</th><td>22</td><td>29</td><td>36</td><td>39</td><td>48</td><td>53</td><td>58</td></tr>
+    </table>
+    <div class="choices" id="choices2">
+      <div class="choice" data-key="a">① y = 6x + 10</div>
+      <div class="choice" data-key="b">② y = 6x + 16,7</div>
+      <div class="choice" data-key="c">③ y = 4x + 16,7</div>
+      <div class="choice" data-key="d">④ y = −6x + 16,7</div>
+    </div>
+    ${showHint("La calculatrice (mode statistique à 2 variables, régression linéaire) donne directement a et b. Vérifie le signe de a : la série est-elle croissante ou décroissante ?")}
+    <div class="feedback" id="feedback2"></div>
+  `;
+  document.getElementById("app").innerHTML = puzzleShell(p, inner, flavor);
+
+  document.querySelectorAll("#choices2 .choice").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      document.querySelectorAll("#choices2 .choice").forEach(c=>c.classList.remove("selected"));
+      el.classList.add("selected");
+      const key = el.dataset.key;
+      const fb = document.getElementById("feedback2");
+      if(key === "b"){
+        el.classList.add("correct");
+        fb.textContent = "Exact !";
+        fb.className = "feedback ok";
+        showSolved("L'équation y = 6x + 16,7 (avec R² ≈ 0,99) correspond bien aux données : c'est celle que donne la calculatrice en mode régression linéaire.", 2);
+      } else {
+        el.classList.add("wrong");
+        fb.textContent = "Refaites le calcul à la calculatrice, ce n'est pas la bonne équation.";
+        fb.className = "feedback bad";
+        markWrong(2);
+        setTimeout(()=>el.classList.remove("wrong","selected"), 700);
+      }
+    });
+  });
+}
+
+/* ---------- PUZZLE 3 : dossier des 3 villages finalistes (R²) ---------- */
+function renderPuzzle3(){
+  const p = puzzles[3];
+  const flavor = `Dans un tiroir, un dossier épais consacré à trois villages finalistes : Criquemer,
+  Anse Dorée et Roc-en-Baie. Pour chacun, le Dr Ferrand a croisé le nombre de recherches en ligne
+  et le nombre de réservations, puis réalisé un ajustement affine pour juger de la fiabilité de ses
+  prévisions. Un seul village avait un ajustement assez pertinent pour qu'il décide d'aller y voir
+  de plus près.`;
+
+  const inner = `
+    <p class="question">D'après le coefficient de détermination R² obtenu pour chacun, quel village
+    Ferrand a-t-il sélectionné pour la suite de son enquête ?</p>
+    <div class="choices" id="choices3">
+      <div class="choice" data-key="A">Criquemer — R² = 0,42</div>
+      <div class="choice" data-key="B">Anse Dorée — R² = 0,95</div>
+      <div class="choice" data-key="C">Roc-en-Baie — R² = 0,68</div>
+    </div>
+    ${showHint("R² est compris entre 0 et 1. Plus il est proche de 1, plus l'ajustement est pertinent.")}
+    <div class="feedback" id="feedback3"></div>
+  `;
+  document.getElementById("app").innerHTML = puzzleShell(p, inner, flavor);
+
+  document.querySelectorAll("#choices3 .choice").forEach(el=>{
+    el.addEventListener("click", ()=>{
+      document.querySelectorAll("#choices3 .choice").forEach(c=>c.classList.remove("selected"));
+      el.classList.add("selected");
+      const key = el.dataset.key;
+      const fb = document.getElementById("feedback3");
+      if(key === "B"){
+        el.classList.add("correct");
+        fb.textContent = "Exact !";
+        fb.className = "feedback ok";
+        showSolved("Anse Dorée, avec R² = 0,95, est le seul village dont l'ajustement affine est réellement pertinent (proche de 1). Criquemer (0,42) et Roc-en-Baie (0,68) ont des nuages trop dispersés pour faire des prévisions fiables.", 3);
+      } else {
+        el.classList.add("wrong");
+        fb.textContent = "Ce R² est trop éloigné de 1 pour un ajustement pertinent.";
+        fb.className = "feedback bad";
+        markWrong(3);
+        setTimeout(()=>el.classList.remove("wrong","selected"), 700);
+      }
+    });
+  });
+}
+
+/* ---------- PUZZLE 4 : interpolation ---------- */
+function renderPuzzle4(){
+  const p = puzzles[4];
+  const flavor = `Dans le tiroir du bas : les statistiques de fréquentation du site touristique officiel
+  d'Anse Dorée, qu'il consultait chaque jour depuis sa découverte du village. Encore deux questions
+  avant d'obtenir enfin la clé du disque dur.`;
+
+  const inner = `
+    <p class="question">Le site touristique d'Anse Dorée suit son nombre de visiteurs quotidiens (y)
+    selon le nombre de jours écoulés depuis sa mise en ligne (x) :</p>
+    <table class="data">
+      <tr><th>Jours (x)</th><td>5</td><td>10</td><td>15</td><td>20</td><td>25</td><td>30</td></tr>
+      <tr><th>Visiteurs quotidiens (y)</th><td>102</td><td>118</td><td>135</td><td>150</td><td>168</td><td>181</td></tr>
+    </table>
+    <p>L'ajustement affine donne : <strong>y = 3,2x + 86,3</strong></p>
+    <p class="question">Estimez le nombre de visiteurs quotidiens au bout de <strong>18 jours</strong> (arrondi à l'unité) :</p>
+    <div class="numrow">
+      <input type="number" id="answer4" placeholder="y ≈ ?">
+      <span>visiteurs</span>
+    </div>
+    <p class="question">Cette estimation est-elle une interpolation ou une extrapolation ?</p>
+    <div class="radio-line">
+      <label><input type="radio" name="type4" value="interpolation"> Interpolation</label>
+      <label><input type="radio" name="type4" value="extrapolation"> Extrapolation</label>
+    </div>
+    ${showHint("18 jours est-il compris entre 5 et 30 (l'intervalle des données connues), ou en dehors ?")}
+    <div class="actions">
+      <button class="primary" id="checkBtn4">Valider</button>
+    </div>
+    <div class="feedback" id="feedback4"></div>
+  `;
+  document.getElementById("app").innerHTML = puzzleShell(p, inner, flavor);
+
+  document.getElementById("checkBtn4").addEventListener("click", ()=>{
+    const val = parseFloat(document.getElementById("answer4").value);
+    const typeSel = document.querySelector('input[name="type4"]:checked');
+    const fb = document.getElementById("feedback4");
+    const valOk = !isNaN(val) && Math.abs(val - 144) <= 2;
+    const typeOk = typeSel && typeSel.value === "interpolation";
+    if(valOk && typeOk){
+      fb.textContent = "Exact !";
+      fb.className = "feedback ok";
+      showSolved("y ≈ 144 visiteurs, et 18 jours est bien dans l'intervalle [5 ; 30] des données connues : c'est une interpolation, la plus fiable des deux estimations.", 4);
+    } else {
+      fb.textContent = "Ce n'est pas tout à fait ça — vérifie le calcul et si 18 est dans l'intervalle des données.";
+      fb.className = "feedback bad";
+      markWrong(4);
+    }
+  });
+}
+
+/* ---------- PUZZLE 5 : extrapolation ---------- */
+function renderPuzzle5(){
+  const p = puzzles[5];
+  const flavor = `Toujours les statistiques du site d'Anse Dorée. Une dernière estimation, un peu
+  plus risquée cette fois, avant d'obtenir enfin la clé du disque dur.`;
+
+  const inner = `
+    <p class="question">Toujours avec l'équation <strong>y = 3,2x + 86,3</strong> (x = jours écoulés
+    depuis la mise en ligne, y = visiteurs quotidiens, données connues entre x = 5 et x = 30) :</p>
+    <p class="question">Au bout de combien de jours peut-on estimer que le site atteindra
+    <strong>250 visiteurs par jour</strong> ? (arrondi à l'unité)</p>
+    <div class="numrow">
+      <input type="number" id="answer5" placeholder="x ≈ ?">
+      <span>jours</span>
+    </div>
+    <p class="question">Cette estimation est-elle une interpolation ou une extrapolation ?</p>
+    <div class="radio-line">
+      <label><input type="radio" name="type5" value="interpolation"> Interpolation</label>
+      <label><input type="radio" name="type5" value="extrapolation"> Extrapolation</label>
+    </div>
+    ${showHint("Résous 3,2x + 86,3 = 250. Le x trouvé est-il dans l'intervalle [5 ; 30] connu, ou au-delà ?")}
+    <div class="actions">
+      <button class="primary" id="checkBtn5">Déverrouiller le dossier</button>
+    </div>
+    <div class="feedback" id="feedback5"></div>
+  `;
+  document.getElementById("app").innerHTML = puzzleShell(p, inner, flavor);
+
+  document.getElementById("checkBtn5").addEventListener("click", ()=>{
+    const val = parseFloat(document.getElementById("answer5").value);
+    const typeSel = document.querySelector('input[name="type5"]:checked');
+    const fb = document.getElementById("feedback5");
+    const valOk = !isNaN(val) && Math.abs(val - 51) <= 2;
+    const typeOk = typeSel && typeSel.value === "extrapolation";
+    if(valOk && typeOk){
+      fb.textContent = "Exact !";
+      fb.className = "feedback ok";
+      showSolved("x ≈ 51 jours, une valeur en dehors de l'intervalle [5 ; 30] connu : c'est une extrapolation, une estimation plus risquée qui suppose que la tendance se poursuit au-delà des données observées.", 5);
+    } else {
+      fb.textContent = "Ce n'est pas tout à fait ça — recalcule et vérifie si 51 est dans l'intervalle [5 ; 30].";
+      fb.className = "feedback bad";
+      markWrong(5);
+    }
+  });
+}
+
+const renderers = [renderPuzzle0, renderPuzzle1, renderPuzzle2, renderPuzzle3, renderPuzzle4, renderPuzzle5];
+
+function renderPuzzle(i){
+  renderers[i]();
+}
+
+/* ============================= INIT ============================= */
+render();
+</script>
+</body>
+</html>
