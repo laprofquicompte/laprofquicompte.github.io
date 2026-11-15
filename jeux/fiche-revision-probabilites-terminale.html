@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fiche de révision — Probabilités (Terminale Bac Pro)</title>
+<meta name="description" content="Fiche de révision sur les probabilités en Terminale Bac Pro : rappels de première, probabilités conditionnelles, arbres de probabilités pondérés, formule des probabilités totales et indépendance de deux événements. Tout le chapitre sur une page, avec méthodes et exemples.">
+<meta property="og:title" content="Fiche de révision — Probabilités (Terminale) — La Prof qui Compte">
+<meta property="og:description" content="Tout le chapitre de probabilités de Terminale Bac Pro sur une page : arbres pondérés, probabilités totales, indépendance, avec méthodes et exemples.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/fiche-revision-probabilites-terminale.html">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fiche de révision — Probabilités (Terminale) — La Prof qui Compte">
+<meta name="twitter:description" content="Tout le chapitre de probabilités de Terminale Bac Pro sur une page : arbres pondérés, probabilités totales, indépendance, avec méthodes et exemples.">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/fiche-revision-probabilites-terminale.html">
+<style>
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+</style>
+
+<style>
+  :root{
+    --paper: #E4EAEF;
+    --ink: #16232F;
+    --ink-soft: rgba(22,35,47,0.68);
+    --ink-faint: rgba(22,35,47,0.4);
+    --amber: #F2A93B;
+    --amber-deep: #C6810F;
+    --teal: #2E7D6B;
+    --card-bg: #EEF2F5;
+    --line: rgba(22,35,47,0.14);
+    --font-display: 'Oswald', sans-serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(rgba(22,35,47,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(22,35,47,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    color: var(--ink);
+    font-family: var(--font-body);
+  }
+
+  .sheet{
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 26px 16px 50px;
+  }
+
+  header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    border-bottom: 3px solid var(--ink);
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+  }
+
+  .eyebrow{
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--amber-deep);
+    font-weight: 600;
+    margin: 0 0 6px;
+  }
+
+  h1{
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 4vw, 2.5rem);
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.05;
+  }
+  h1 .accent{ color: var(--amber-deep); }
+
+  .header-note{
+    font-size: 0.86rem;
+    color: var(--ink-soft);
+    max-width: 300px;
+    text-align: right;
+    line-height: 1.4;
+    margin: 0;
+  }
+  @media (max-width: 640px){ .header-note{ text-align:left; } }
+
+  /* Sommaire */
+  .toc{
+    display:flex;
+    flex-wrap:wrap;
+    gap: 8px;
+    margin: 0 0 24px;
+    padding: 0;
+    list-style: none;
+  }
+  .toc a{
+    display:inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: none;
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 5px 11px;
+  }
+  .toc a:hover, .toc a:focus-visible{ background: var(--ink); color: var(--paper); }
+
+  .section-title{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 30px 0 14px;
+  }
+  .section-title::after{
+    content:"";
+    flex:1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+  @media (max-width: 780px){ .grid{ grid-template-columns: minmax(0,1fr); } }
+
+  .card{
+    background: var(--card-bg);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 20px 20px;
+    scroll-margin-top: 60px;
+    min-width: 0;
+  }
+  .card.wide{ margin-bottom: 20px; }
+  .card.c-ink{ border-top: 4px solid var(--ink); }
+  .card.c-teal{ border-top: 4px solid var(--teal); }
+  .card.c-amber{ border-top: 4px solid var(--amber-deep); }
+
+  .card-head{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .num{
+    flex-shrink:0;
+    display:inline-grid;
+    place-items:center;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--ink);
+    color: var(--paper);
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+  .c-teal .num{ background: var(--teal); }
+  .c-amber .num{ background: var(--amber-deep); }
+  .card-head h2{
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.15;
+  }
+  .c-teal .card-head h2{ color: var(--teal); }
+  .c-amber .card-head h2{ color: var(--amber-deep); }
+
+  .def{
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    line-height: 1.5;
+    margin: 0 0 12px;
+  }
+  .def strong{ color: var(--ink); }
+
+  code, .m{
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .def code, .example code, .method code, .pitfall code, li code{
+    background: rgba(242,169,59,0.18);
+    border-radius: 4px;
+    padding: 1px 5px;
+    white-space: nowrap;
+  }
+  .example code{ white-space: normal; }
+  .ov{ text-decoration: overline; text-decoration-thickness: 1.5px; }
+  sub{ font-size: 0.72em; }
+
+  .formula-box{
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap: wrap;
+  }
+  .formula-box code{ color: var(--paper); background:none; padding:0; }
+  .formula-box > span:first-child{ min-width:0; overflow-wrap:anywhere; }
+  .formula-box .tag{
+    font-family: var(--font-body);
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--amber);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .method{
+    background: rgba(22,35,47,0.05);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.84rem;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .mtitle, .ex-label{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--ink-soft);
+    display:block;
+    margin-bottom: 5px;
+  }
+  .method ol, .method ul{ margin: 4px 0 0; padding-left: 20px; }
+  .method li{ margin-bottom: 4px; }
+
+  .example{
+    background: rgba(242,169,59,0.14);
+    border: 1px dashed var(--amber-deep);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.84rem;
+    line-height: 1.55;
+  }
+  .example .ex-label{ color: var(--amber-deep); }
+  .example.teal{
+    background: rgba(46,125,107,0.12);
+    border-color: var(--teal);
+  }
+  .example.teal .ex-label{ color: var(--teal); }
+  .example p{ margin: 0 0 6px; }
+  .example p:last-child{ margin-bottom: 0; }
+
+  .pitfall{
+    display:flex;
+    align-items:flex-start;
+    gap: 8px;
+    background: rgba(198,129,15,0.12);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-size: 0.82rem;
+    line-height: 1.45;
+    margin-top: 10px;
+  }
+  .pitfall .icon{ flex-shrink:0; }
+
+  .chips{ display:flex; flex-wrap:wrap; gap:6px; margin: 2px 0 12px; }
+  .chip{
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 600;
+    background: var(--ink);
+    color: var(--amber);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
+
+  .table-wrap{ overflow-x:auto; margin: 6px 0 12px; }
+  .mini-table{
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    min-width: 360px;
+  }
+  .mini-table th, .mini-table td{
+    border: 1px solid var(--line);
+    padding: 5px 6px;
+    text-align: center;
+  }
+  .mini-table th{
+    background: rgba(22,35,47,0.06);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 0.76rem;
+  }
+  .mini-table td.hl{ background: rgba(242,169,59,0.3); font-weight: 700; }
+
+  /* Arbres */
+  .tree-layout{
+    display:grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items:start;
+  }
+  @media (max-width: 860px){ .tree-layout{ grid-template-columns: minmax(0,1fr); } }
+  .tree{
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 8px;
+  }
+  .tree svg{ display:block; width:100%; height:auto; }
+  .tree figcaption{
+    font-size: 0.76rem;
+    color: var(--ink-soft);
+    text-align:center;
+    padding: 6px 4px 2px;
+    line-height: 1.4;
+  }
+  .legend{ display:flex; flex-wrap:wrap; gap: 6px 14px; justify-content:center; font-size: 0.74rem; color: var(--ink-soft); padding: 4px 0 2px; }
+  .legend span{ display:inline-flex; align-items:center; gap:5px; }
+  .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+
+  .rules{ list-style:none; margin: 0; padding: 0; counter-reset: r; }
+  .rules li{
+    counter-increment: r;
+    position: relative;
+    padding: 9px 12px 9px 46px;
+    background: rgba(22,35,47,0.05);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+  }
+  .rules li::before{
+    content: "R" counter(r);
+    position:absolute;
+    left: 10px; top: 9px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.74rem;
+    background: var(--teal);
+    color: #fff;
+    border-radius: 5px;
+    padding: 1px 5px;
+  }
+  .rules li strong{ color: var(--ink); }
+
+  /* Réflexes */
+  .reflexes{
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 12px;
+    padding: 16px 20px 18px;
+    margin: 26px 0 20px;
+  }
+  .reflexes h2{
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    margin: 0 0 10px;
+  }
+  .reflexes h2 .accent{ color: var(--amber); }
+  .reflex-row{
+    display:grid;
+    grid-template-columns: minmax(0, 0.75fr) auto minmax(0, 1.6fr);
+    gap: 10px;
+    align-items:center;
+    padding: 8px 0;
+    border-top: 1px solid rgba(228,234,239,0.15);
+    font-size: 0.86rem;
+  }
+  .reflex-row:first-of-type{ border-top: none; }
+  .reflex-row .arrow{ color: var(--amber); font-family: var(--font-mono); }
+  .reflex-row .then{ font-family: var(--font-mono); font-size: 0.82rem; }
+  .reflex-row .then b{ color: var(--amber); }
+  @media (max-width: 640px){
+    .reflex-row{ grid-template-columns: 1fr; gap: 2px; }
+    .reflex-row .arrow{ display:none; }
+  }
+
+  /* Checklist */
+  .checklist{ list-style:none; margin: 0; padding: 0; }
+  .checklist li{ margin-bottom: 6px; }
+  .checklist label{
+    display:flex;
+    gap: 10px;
+    align-items:flex-start;
+    font-size: 0.88rem;
+    line-height: 1.45;
+    cursor:pointer;
+    padding: 6px 8px;
+    border-radius: 8px;
+  }
+  .checklist label:hover{ background: rgba(22,35,47,0.05); }
+  .checklist input{ margin-top: 3px; accent-color: var(--teal); width: 16px; height: 16px; flex-shrink:0; }
+  .checklist a{ color: var(--teal); font-weight: 600; }
+
+  .to-qcm{
+    display:inline-block;
+    margin-top: 12px;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: var(--ink);
+    color: var(--paper);
+    text-decoration: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+  }
+  .to-qcm:hover{ color: var(--amber); }
+
+  footer{
+    text-align:center;
+    margin-top: 26px;
+    font-size: 0.76rem;
+    color: var(--ink-faint);
+  }
+
+  .site-navbar{
+    position: sticky; top: 0; z-index: 999;
+    background: #16232F; color:#E4EAEF;
+    padding: 0.65rem 1.2rem;
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.78rem;
+    display:flex; align-items:center; justify-content:space-between; gap: 12px;
+  }
+  .site-navbar a{
+    color:#E4EAEF; text-decoration:none; font-weight:600;
+    display:inline-flex; align-items:center; gap:0.4rem;
+    transition: color .15s ease;
+  }
+  .site-navbar a:hover{ color:#F2A93B; }
+  .nav-right{ display:flex; align-items:center; gap: 10px; }
+  .site-navbar a.nav-chrono{ background:#F2A93B; color:#16232F; padding: 4px 10px; border-radius: 6px; }
+  .site-navbar a.nav-chrono:hover{ color:#16232F; opacity: .85; }
+  .print-btn{
+    font-family: "IBM Plex Mono", monospace;
+    font-size: 0.74rem;
+    font-weight: 600;
+    background: transparent;
+    color: #E4EAEF;
+    border: 1px solid rgba(228,234,239,0.4);
+    border-radius: 6px;
+    padding: 4px 10px;
+    cursor: pointer;
+  }
+  .print-btn:hover{ border-color:#F2A93B; color:#F2A93B; }
+
+  @media print{
+    body{ background: #fff; }
+    .site-navbar, .toc, .print-btn, .to-qcm{ display:none !important; }
+    .sheet{ padding: 0; max-width: none; }
+    .card, .reflexes, .tree{ break-inside: avoid; }
+    .grid{ gap: 12px; }
+    .reflexes{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .formula-box, .chip, .num, .rules li::before{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<nav class="site-navbar" aria-label="Navigation du site">
+  <a href="../index.html">&#8592; Accueil</a>
+  <span class="nav-right">
+    <button class="print-btn" type="button" onclick="window.print()">🖨 Imprimer</button>
+    <a class="nav-chrono" href="minuteur.html">⏱ Chrono</a>
+  </span>
+</nav>
+
+<main class="sheet">
+
+  <header>
+    <div>
+      <p class="eyebrow">Fiche de révision · Terminale Bac Pro</p>
+      <h1>Probabilités : <span class="accent">tout le chapitre</span></h1>
+    </div>
+    <p class="header-note">Les rappels de première (parties 1 à 5), puis les arbres, les probabilités totales et l'indépendance. Les numéros correspondent aux parties du cours.</p>
+  </header>
+
+  <ul class="toc" aria-label="Sommaire">
+    <li><a href="#p1">1 · Vocabulaire</a></li>
+    <li><a href="#p2">2 · Probabilité</a></li>
+    <li><a href="#p3">3 · Contraire, ∩, ∪</a></li>
+    <li><a href="#p4">4 · Tableau croisé</a></li>
+    <li><a href="#p5">5 · Conditionnelles</a></li>
+    <li><a href="#p6">6 · Arbres</a></li>
+    <li><a href="#p7">7 · Probabilités totales</a></li>
+    <li><a href="#p8">8 · Indépendance</a></li>
+    <li><a href="#reflexes">Les réflexes</a></li>
+    <li><a href="#check">Je sais faire ?</a></li>
+  </ul>
+
+  <!-- ============ RAPPELS ============ -->
+  <h2 class="section-title">Rappels de première · parties 1 à 5</h2>
+
+  <div class="grid">
+
+    <section class="card c-ink" id="p1">
+      <div class="card-head"><span class="num">1</span><h2>Vocabulaire</h2></div>
+      <p class="def">Une expérience est <strong>aléatoire</strong> quand elle a plusieurs résultats possibles, les <strong>issues</strong>, et qu'on ne peut pas prévoir lequel va se produire.</p>
+      <div class="formula-box"><span>Ω = ensemble de toutes les issues</span><span class="tag">univers</span></div>
+      <p class="def">Un <strong>événement</strong> A est une partie de l'univers : <code>A ⊂ Ω</code>.</p>
+      <div class="example">
+        <span class="ex-label">Exemple</span>
+        On lance un dé à six faces : <code>Ω = {1 ; 2 ; 3 ; 4 ; 5 ; 6}</code>.<br>
+        « Obtenir un nombre pair » : <code>A = {2 ; 4 ; 6}</code>.
+      </div>
+    </section>
+
+    <section class="card c-teal" id="p2">
+      <div class="card-head"><span class="num">2</span><h2>Probabilité</h2></div>
+      <p class="def">Un nombre <strong>entre 0 et 1</strong>. <code>P(A)</code> est la <strong>somme des probabilités des issues</strong> qui réalisent A. La somme des probabilités de toutes les issues vaut 1.</p>
+      <div class="formula-box"><span>P(A) = issues favorables / issues au total</span><span class="tag">équiprobabilité</span></div>
+      <div class="example teal">
+        <span class="ex-label">Exemple</span>
+        Jeu de 52 cartes, F : « obtenir une figure » (4 valets, 4 dames, 4 rois).<br>
+        <code>P(F) = 12/52 = 3/13</code>
+      </div>
+    </section>
+
+    <section class="card c-amber" id="p3">
+      <div class="card-head"><span class="num">3</span><h2>Contraire, intersection, réunion</h2></div>
+      <div class="formula-box"><span>P(<span class="ov">A</span>) = 1 − P(A)</span><span class="tag">contraire</span></div>
+      <p class="def"><code>A ∩ B</code> : A <strong>et</strong> B (les deux à la fois).<br><code>A ∪ B</code> : A <strong>ou</strong> B (au moins l'un des deux).</p>
+      <div class="formula-box"><span>P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</span></div>
+      <div class="method">
+        <span class="mtitle">Cas particulier</span>
+        A et B <strong>incompatibles</strong> (<code>A ∩ B = ∅</code>) : <code>P(A ∪ B) = P(A) + P(B)</code>.
+      </div>
+      <div class="example">
+        <span class="ex-label">Exemple</span>
+        30 % font du foot, 40 % de l'athlétisme, 10 % les deux :<br>
+        <code>P(A ∪ B) = 0,30 + 0,40 − 0,10 = 0,60</code>
+      </div>
+    </section>
+
+    <section class="card c-ink" id="p4">
+      <div class="card-head"><span class="num">4</span><h2>Tableau croisé</h2></div>
+      <p class="def">Il range les effectifs selon deux critères : on y lit directement chaque <strong>intersection</strong> et chaque total.</p>
+      <div class="table-wrap">
+        <table class="mini-table">
+          <tr><th></th><th>Interne</th><th>Externe</th><th>Demi-pens. (D)</th><th>Total</th></tr>
+          <tr><th>Fille (F)</th><td>2</td><td>3</td><td class="hl">11</td><td>16</td></tr>
+          <tr><th>Garçon</th><td>1</td><td>2</td><td>15</td><td>18</td></tr>
+          <tr><th>Total</th><td>3</td><td>5</td><td>26</td><td>34</td></tr>
+        </table>
+      </div>
+      <div class="example teal">
+        <span class="ex-label">On lit</span>
+        <code>P(F) = 16/34</code> ; <code>P(D) = 26/34</code> ; <code>P(F ∩ D) = 11/34</code> (fille <strong>et</strong> demi-pensionnaire).
+      </div>
+    </section>
+
+  </div>
+
+  <section class="card c-teal wide" id="p5">
+    <div class="card-head"><span class="num">5</span><h2>Probabilités conditionnelles</h2></div>
+    <div class="grid" style="margin-bottom:0">
+      <div>
+        <p class="def">La probabilité de B <strong>sachant que</strong> A est réalisé se note <code>P<sub>A</sub>(B)</code>. On sait déjà quelque chose : on ne regarde plus que la population A.</p>
+        <div class="formula-box"><span>P<sub>A</sub>(B) = P(A ∩ B) / P(A)</span><span class="tag">P(A) ≠ 0</span></div>
+        <div class="formula-box"><span>P(A ∩ B) = P(A) × P<sub>A</sub>(B)</span><span class="tag">intersection</span></div>
+        <p class="def" style="margin-bottom:4px"><strong>Les mots qui annoncent une probabilité conditionnelle :</strong></p>
+        <div class="chips"><span class="chip">sachant que</span><span class="chip">parmi</span><span class="chip">si</span><span class="chip">lorsque</span><span class="chip">quand</span></div>
+      </div>
+      <div>
+        <div class="example teal">
+          <span class="ex-label">Exemple (tableau de la partie 4)</span>
+          <p>On choisit une <strong>fille</strong> : on ne regarde que sa ligne (16 élèves), dont 11 demi-pensionnaires.<br><code>P<sub>F</sub>(D) = 11/16</code></p>
+          <p>On choisit un <strong>demi-pensionnaire</strong> : on ne regarde que sa colonne (26 élèves).<br><code>P<sub>D</sub>(F) = 11/26</code></p>
+        </div>
+        <div class="pitfall"><span class="icon">⚠️</span><span><code>P<sub>F</sub>(D)</code> et <code>P<sub>D</sub>(F)</code> ne sont <strong>pas égales</strong> : la condition change la population de référence (16 filles d'un côté, 26 demi-pensionnaires de l'autre).</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TERMINALE ============ -->
+  <h2 class="section-title">Le programme de terminale · parties 6 à 8</h2>
+
+  <section class="card c-amber wide" id="p6">
+    <div class="card-head"><span class="num">6</span><h2>Arbres de probabilités pondérés</h2></div>
+    <p class="def">Un arbre représente une expérience en plusieurs étapes. Il part d'une <strong>racine</strong> ; ses <strong>branches</strong> mènent à des <strong>nœuds</strong> (des événements) et portent chacune une probabilité, le <strong>poids</strong>. Un <strong>chemin</strong> va de la racine au bout de l'arbre : il représente une <strong>intersection</strong>.</p>
+
+    <div class="tree-layout">
+      <figure class="tree" style="margin:0">
+        <svg viewBox="0 0 560 270" role="img" aria-labelledby="t1title t1desc">
+          <title id="t1title">Arbre pondéré de la situation de Léa</title>
+          <desc id="t1desc">Premier niveau : bus avec probabilité 0,7, vélo avec 0,3. Deuxième niveau : après le bus, retard 0,1 et à l'heure 0,9 ; après le vélo, retard 0,2 et à l'heure 0,8. Le chemin bus puis retard a une probabilité de 0,07.</desc>
+          <g font-family="IBM Plex Mono, monospace" font-size="15" font-weight="600">
+            <!-- branches -->
+            <line x1="32" y1="135" x2="186" y2="70" stroke="#C6810F" stroke-width="4"/>
+            <line x1="32" y1="135" x2="186" y2="200" stroke="#16232F" stroke-width="2"/>
+            <line x1="214" y1="70" x2="356" y2="32" stroke="#C6810F" stroke-width="4"/>
+            <line x1="214" y1="70" x2="356" y2="108" stroke="#16232F" stroke-width="2"/>
+            <line x1="214" y1="200" x2="356" y2="162" stroke="#16232F" stroke-width="2"/>
+            <line x1="214" y1="200" x2="356" y2="238" stroke="#16232F" stroke-width="2"/>
+            <!-- poids -->
+            <text x="96" y="90" fill="#C6810F">0,7</text>
+            <text x="112" y="196" fill="#16232F">0,3</text>
+            <text x="268" y="40" fill="#C6810F">0,1</text>
+            <text x="284" y="112" fill="#16232F">0,9</text>
+            <text x="268" y="170" fill="#16232F">0,2</text>
+            <text x="284" y="242" fill="#16232F">0,8</text>
+            <!-- racine -->
+            <circle cx="30" cy="135" r="7" fill="#C6810F"/>
+            <!-- noeuds -->
+            <g fill="#fff" stroke="#2E7D6B" stroke-width="2">
+              <circle cx="200" cy="70" r="15"/><circle cx="200" cy="200" r="15"/>
+              <circle cx="370" cy="32" r="15"/><circle cx="370" cy="108" r="15"/>
+              <circle cx="370" cy="162" r="15"/><circle cx="370" cy="238" r="15"/>
+            </g>
+            <g fill="#2E7D6B" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700">
+              <text x="200" y="75">B</text>
+              <text x="200" y="205" text-decoration="overline">B</text>
+              <text x="370" y="37">R</text>
+              <text x="370" y="113" text-decoration="overline">R</text>
+              <text x="370" y="167">R</text>
+              <text x="370" y="243" text-decoration="overline">R</text>
+            </g>
+            <!-- chemins -->
+            <g font-size="13.5">
+              <text x="400" y="37" fill="#C6810F">0,7×0,1 = 0,07</text>
+              <text x="400" y="113" fill="#555">0,7×0,9 = 0,63</text>
+              <text x="400" y="167" fill="#555">0,3×0,2 = 0,06</text>
+              <text x="400" y="243" fill="#555">0,3×0,8 = 0,24</text>
+            </g>
+            <text x="400" y="12" font-size="11" font-family="Inter, sans-serif" font-weight="500" fill="#777">probabilité du chemin</text>
+          </g>
+        </svg>
+        <div class="legend">
+          <span><i class="dot" style="background:#C6810F"></i>racine</span>
+          <span><i class="dot" style="background:#fff;border:2px solid #2E7D6B"></i>nœud</span>
+          <span><i class="dot" style="background:#C6810F;border-radius:2px;width:16px;height:4px"></i>chemin B ∩ R</span>
+        </div>
+        <figcaption>Le matin, Léa prend le bus (B) dans 70 % des cas, sinon le vélo. Elle arrive en retard (R) dans 10 % des cas en bus, 20 % à vélo.</figcaption>
+      </figure>
+
+      <div>
+        <ol class="rules">
+          <li><strong>Les nœuds.</strong> La somme des probabilités des branches qui partent d'un même nœud vaut <code>1</code>.</li>
+          <li><strong>Les branches.</strong> 1<sup>er</sup> niveau : <code>P(A)</code>, <code>P(<span class="ov">A</span>)</code>. 2<sup>e</sup> niveau : des probabilités <strong>conditionnelles</strong> ; la branche de A vers B porte <code>P<sub>A</sub>(B)</code>.</li>
+          <li><strong>Les chemins.</strong> On <strong>multiplie</strong> les probabilités le long du chemin : <code>P(A ∩ B) = P(A) × P<sub>A</sub>(B)</code>.</li>
+          <li><strong>Les événements.</strong> On <strong>additionne</strong> les probabilités des chemins qui mènent à l'événement.</li>
+        </ol>
+        <div class="method">
+          <span class="mtitle">Construire l'arbre à partir d'un énoncé</span>
+          <ol>
+            <li>Repérer les deux étapes et nommer les événements.</li>
+            <li>1<sup>er</sup> niveau : les probabilités données directement (« 70 % des… »).</li>
+            <li>2<sup>e</sup> niveau : les « parmi… », « si… », « sachant que… ».</li>
+            <li>Compléter les branches manquantes avec la règle 1.</li>
+          </ol>
+        </div>
+        <div class="pitfall"><span class="icon">✅</span><span>Vérification : la somme des probabilités de <strong>tous les chemins</strong> vaut 1. Ici : <code>0,07 + 0,63 + 0,06 + 0,24 = 1</code>.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card c-ink wide" id="p7">
+    <div class="card-head"><span class="num">7</span><h2>Formule des probabilités totales</h2></div>
+    <div class="tree-layout">
+      <div>
+        <p class="def">Quand <strong>plusieurs chemins</strong> mènent au même événement B, on additionne leurs probabilités (c'est la règle 4).</p>
+        <div class="formula-box"><span>P(B) = P(A ∩ B) + P(<span class="ov">A</span> ∩ B)</span></div>
+        <div class="formula-box"><span>P(B) = P(A) × P<sub>A</sub>(B) + P(<span class="ov">A</span>) × P<sub><span class="ov">A</span></sub>(B)</span></div>
+        <div class="method">
+          <span class="mtitle">Méthode</span>
+          <ol>
+            <li>Repérer <strong>tous</strong> les chemins qui mènent à l'événement cherché.</li>
+            <li>Calculer la probabilité de chaque chemin (produit).</li>
+            <li>Additionner ces probabilités.</li>
+          </ol>
+        </div>
+        <div class="pitfall"><span class="icon">💡</span><span>Ça marche aussi avec <strong>trois branches</strong> (ou plus) au 1<sup>er</sup> niveau : on additionne alors trois chemins.</span></div>
+      </div>
+      <div>
+        <figure class="tree" style="margin:0 0 12px">
+          <svg viewBox="0 0 560 270" role="img" aria-labelledby="t2title t2desc">
+            <title id="t2title">Les deux chemins qui mènent au retard</title>
+            <desc id="t2desc">Dans l'arbre de Léa, les chemins bus puis retard (0,07) et vélo puis retard (0,06) sont mis en évidence ; leur somme donne 0,13.</desc>
+            <g font-family="IBM Plex Mono, monospace" font-size="15" font-weight="600">
+              <line x1="32" y1="135" x2="186" y2="70" stroke="#2E7D6B" stroke-width="4"/>
+              <line x1="32" y1="135" x2="186" y2="200" stroke="#2E7D6B" stroke-width="4"/>
+              <line x1="214" y1="70" x2="356" y2="32" stroke="#2E7D6B" stroke-width="4"/>
+              <line x1="214" y1="70" x2="356" y2="108" stroke="#16232F" stroke-width="1.5" stroke-opacity="0.4"/>
+              <line x1="214" y1="200" x2="356" y2="162" stroke="#2E7D6B" stroke-width="4"/>
+              <line x1="214" y1="200" x2="356" y2="238" stroke="#16232F" stroke-width="1.5" stroke-opacity="0.4"/>
+              <text x="96" y="90" fill="#2E7D6B">0,7</text>
+              <text x="112" y="196" fill="#2E7D6B">0,3</text>
+              <text x="268" y="40" fill="#2E7D6B">0,1</text>
+              <text x="284" y="112" fill="#999">0,9</text>
+              <text x="268" y="170" fill="#2E7D6B">0,2</text>
+              <text x="284" y="242" fill="#999">0,8</text>
+              <circle cx="30" cy="135" r="7" fill="#C6810F"/>
+              <g fill="#fff" stroke="#2E7D6B" stroke-width="2">
+                <circle cx="200" cy="70" r="15"/><circle cx="200" cy="200" r="15"/>
+                <circle cx="370" cy="32" r="15"/><circle cx="370" cy="108" r="15" stroke-opacity="0.4"/>
+                <circle cx="370" cy="162" r="15"/><circle cx="370" cy="238" r="15" stroke-opacity="0.4"/>
+              </g>
+              <g fill="#2E7D6B" text-anchor="middle" font-family="Inter, sans-serif" font-size="15" font-weight="700">
+                <text x="200" y="75">B</text>
+                <text x="200" y="205" text-decoration="overline">B</text>
+                <text x="370" y="37">R</text>
+                <text x="370" y="113" text-decoration="overline" fill-opacity="0.4">R</text>
+                <text x="370" y="167">R</text>
+                <text x="370" y="243" text-decoration="overline" fill-opacity="0.4">R</text>
+              </g>
+              <g font-size="13.5" fill="#2E7D6B">
+                <text x="400" y="37">0,07</text>
+                <text x="400" y="167">0,06</text>
+              </g>
+              <path d="M470 32 q14 0 14 14 v88 q0 14 14 14" fill="none" stroke="#2E7D6B" stroke-width="1.5" stroke-dasharray="none"/>
+              <path d="M470 162 q14 0 14 -14" fill="none" stroke="#2E7D6B" stroke-width="1.5"/>
+              <text x="502" y="153" font-size="14" fill="#16232F">0,13</text>
+            </g>
+          </svg>
+        </figure>
+        <div class="example">
+          <span class="ex-label">Exemple : Léa arrive en retard</span>
+          <code>P(R) = 0,7 × 0,1 + 0,3 × 0,2 = 0,07 + 0,06 = 0,13</code><br>
+          Léa arrive en retard 13 % des matins.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="card c-teal wide" id="p8">
+    <div class="card-head"><span class="num">8</span><h2>Indépendance de deux événements</h2></div>
+    <div class="grid" style="margin-bottom:0">
+      <div>
+        <p class="def">A et B (de probabilités non nulles) sont <strong>indépendants</strong> quand savoir que l'un est réalisé <strong>ne change pas</strong> la probabilité de l'autre : <code>P<sub>A</sub>(B) = P(B)</code>.</p>
+        <div class="formula-box"><span>P(A ∩ B) = P(A) × P(B)</span><span class="tag">si et seulement si indépendants</span></div>
+        <div class="method">
+          <span class="mtitle">Méthode : montrer que A et B sont indépendants</span>
+          <ol>
+            <li>Calculer <code>P(A)</code>, <code>P(B)</code>, puis le produit <code>P(A) × P(B)</code>.</li>
+            <li>Calculer <code>P(A ∩ B)</code>.</li>
+            <li>Comparer : égaux → <strong>indépendants</strong> ; différents → <strong>dépendants</strong>.</li>
+          </ol>
+        </div>
+        <div class="pitfall"><span class="icon">🎲</span><span>Une expérience <strong>répétée dans les mêmes conditions</strong> (deux lancers de dé, tirages <strong>avec remise</strong>…) donne des résultats indépendants : dans l'arbre, le 2<sup>e</sup> niveau porte les mêmes probabilités sur toutes les branches.</span></div>
+      </div>
+      <div>
+        <div class="table-wrap">
+          <table class="mini-table">
+            <tr><th></th><th>Lunettes (L)</th><th>Pas de lunettes</th><th>Total</th></tr>
+            <tr><th>Née janv.–juin (J)</th><td class="hl">5</td><td>15</td><td>20</td></tr>
+            <tr><th>Née juil.–déc.</th><td>5</td><td>15</td><td>20</td></tr>
+            <tr><th>Total</th><td>10</td><td>30</td><td>40</td></tr>
+          </table>
+        </div>
+        <div class="example teal">
+          <span class="ex-label">Exemple : L et J sont-ils indépendants ?</span>
+          <p>1. <code>P(L) = 10/40 = 0,25</code> ; <code>P(J) = 20/40 = 0,5</code> ; <code>P(L) × P(J) = 0,125</code></p>
+          <p>2. <code>P(L ∩ J) = 5/40 = 0,125</code></p>
+          <p>3. Égaux : <strong>L et J sont indépendants</strong>. Le mois de naissance n'influence pas le port de lunettes.</p>
+        </div>
+        <div class="example" style="margin-top:10px">
+          <span class="ex-label">Exemple : deux lancers d'un dé à 4 faces</span>
+          Obtenir deux fois « 2 » : <code>1/4 × 1/4 = 1/16</code>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ REFLEXES ============ -->
+  <section class="reflexes" id="reflexes">
+    <h2>🧠 Les <span class="accent">réflexes</span> face à un énoncé</h2>
+    <div class="reflex-row"><span>« parmi », « sachant que », « si »</span><span class="arrow">→</span><span class="then">probabilité <b>conditionnelle</b> P<sub>A</sub>(B), sur une branche du 2<sup>e</sup> niveau</span></div>
+    <div class="reflex-row"><span>« … et … » sur un arbre</span><span class="arrow">→</span><span class="then">on <b>multiplie</b> le long du chemin</span></div>
+    <div class="reflex-row"><span>plusieurs chemins mènent à B</span><span class="arrow">→</span><span class="then">on <b>additionne</b> les chemins (probabilités totales)</span></div>
+    <div class="reflex-row"><span>une branche manque</span><span class="arrow">→</span><span class="then">somme = <b>1</b> à chaque nœud</span></div>
+    <div class="reflex-row"><span>« sont-ils indépendants ? »</span><span class="arrow">→</span><span class="then">comparer <b>P(A ∩ B)</b> et <b>P(A) × P(B)</b></span></div>
+    <div class="reflex-row"><span>« au moins un… »</span><span class="arrow">→</span><span class="then">passer par le <b>contraire</b> : 1 − P(aucun)</span></div>
+  </section>
+
+  <!-- ============ CHECKLIST ============ -->
+  <section class="card c-amber" id="check">
+    <div class="card-head"><span class="num">✓</span><h2>Je sais faire ?</h2></div>
+    <p class="def">Coche ce que tu sais faire sans regarder le cours. Pour le reste, relis la partie indiquée.</p>
+    <ul class="checklist">
+      <li><label><input type="checkbox" data-k="c1"> <span>Calculer une probabilité, celle d'un contraire, d'une intersection et d'une réunion (<a href="#p3">partie 3</a>).</span></label></li>
+      <li><label><input type="checkbox" data-k="c2"> <span>Lire et compléter un tableau croisé (<a href="#p4">partie 4</a>).</span></label></li>
+      <li><label><input type="checkbox" data-k="c3"> <span>Repérer et calculer une probabilité conditionnelle <code>P<sub>A</sub>(B)</code> (<a href="#p5">partie 5</a>).</span></label></li>
+      <li><label><input type="checkbox" data-k="c4"> <span>Représenter une situation par un arbre pondéré (<a href="#p6">partie 6</a>).</span></label></li>
+      <li><label><input type="checkbox" data-k="c5"> <span>Lire un arbre pour calculer la probabilité d'un chemin (<a href="#p6">partie 6</a>).</span></label></li>
+      <li><label><input type="checkbox" data-k="c6"> <span>Calculer une probabilité avec la formule des probabilités totales (<a href="#p7">partie 7</a>).</span></label></li>
+      <li><label><input type="checkbox" data-k="c7"> <span>Montrer que deux événements sont indépendants, ou ne le sont pas (<a href="#p8">partie 8</a>).</span></label></li>
+    </ul>
+    <a class="to-qcm" href="qcm-probas-revision.html">Je m'entraîne avec le QCM de révision →</a>
+  </section>
+
+</main>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+<script>
+  (function(){
+    var KEY = 'fiche-revision-probas-terminale';
+    var saved = {};
+    try { saved = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch(e){ saved = {}; }
+    document.querySelectorAll('.checklist input').forEach(function(box){
+      var k = box.getAttribute('data-k');
+      if (saved[k]) box.checked = true;
+      box.addEventListener('change', function(){
+        saved[k] = box.checked;
+        try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch(e){}
+      });
+    });
+  })();
+</script>
+</body>
+</html>

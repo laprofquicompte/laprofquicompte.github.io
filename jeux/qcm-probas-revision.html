@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QCM de révision – Probabilités | La Prof qui Compte</title>
+<meta name="description" content="QCM interactif de révision sur les probabilités : expérience aléatoire, événement contraire, union, intersection, événements incompatibles et probabilités conditionnelles. Correction immédiate.">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/qcm-probas-revision.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="QCM de révision – Probabilités">
+<meta property="og:description" content="10 questions pour réviser les probabilités, avec correction expliquée.">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/qcm-probas-revision.html">
+<meta property="og:site_name" content="La Prof qui Compte">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="QCM de révision – Probabilités">
+<meta name="twitter:description" content="10 questions pour réviser les probabilités, avec correction expliquée.">
+<style>
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+:root{
+  --paper:#E4EAEF; --paper-dark:#D6DEE6; --ink:#16232F; --amber:#F2A93B; --teal:#2E8B87; --red:#D64541;
+  --card:#F4F7F9; --line:#D6DEE6; --muted:#5B6B78;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);background-image:linear-gradient(var(--paper-dark) 1px,transparent 1px),linear-gradient(90deg,var(--paper-dark) 1px,transparent 1px);background-size:28px 28px;color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.5}
+nav{position:sticky;top:0;z-index:10;background:var(--ink);display:flex;justify-content:space-between;align-items:center;padding:.7rem 1.2rem}
+nav a{color:var(--paper);text-decoration:none;font-family:'Oswald',sans-serif;letter-spacing:.04em;font-size:1rem}
+nav a:hover{color:var(--amber)}
+.chrono{background:var(--amber);color:var(--ink)!important;padding:.3rem .8rem;border-radius:6px}
+main{max-width:760px;margin:0 auto;padding:1.5rem 1rem 3rem}
+h1{font-family:'Oswald',sans-serif;font-size:2rem;margin:.3rem 0 .2rem;letter-spacing:.02em}
+.sub{color:var(--muted);margin:0 0 1rem}
+.badge{display:inline-block;background:var(--teal);color:#fff;font-family:'Oswald',sans-serif;font-size:.8rem;padding:.15rem .6rem;border-radius:4px;letter-spacing:.05em}
+.consigne{background:var(--card);border-left:5px solid var(--amber);padding:.8rem 1rem;border-radius:6px;margin-bottom:1.2rem}
+.scorebar{position:sticky;top:3.1rem;z-index:5;background:var(--paper);padding:.5rem 0;display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:.95rem;border-bottom:1px solid var(--line);margin-bottom:1rem}
+.q{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:1rem 1.1rem;margin-bottom:1rem}
+.q h2{font-family:'Oswald',sans-serif;font-size:1.15rem;margin:0 0 .4rem;color:var(--teal)}
+.q p{margin:.2rem 0 .8rem}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.5rem}
+.opts.long{grid-template-columns:1fr}
+button.opt{font:inherit;text-align:left;background:#fff;border:2px solid var(--line);border-radius:8px;padding:.55rem .8rem;cursor:pointer;color:var(--ink);transition:border-color .15s,background .15s}
+button.opt:hover:not(:disabled){border-color:var(--amber)}
+button.opt b{font-family:'IBM Plex Mono',monospace;margin-right:.35rem}
+button.opt.good{background:#e1f2ef;border-color:var(--teal)}
+button.opt.bad{background:#f8e1dd;border-color:var(--red)}
+button.opt:disabled{cursor:default}
+.fb{display:none;margin-top:.8rem;padding:.7rem .9rem;border-radius:6px;font-size:.95rem}
+.fb.show{display:block}
+.fb.ok{background:#e1f2ef;border-left:4px solid var(--teal)}
+.fb.ko{background:#f8e1dd;border-left:4px solid var(--red)}
+.bar{text-decoration:overline}
+.math{font-family:'IBM Plex Mono',monospace;white-space:nowrap}
+#final{display:none;text-align:center;background:var(--ink);color:var(--paper);border-radius:10px;padding:1.4rem;margin-top:1.5rem}
+#final a{color:var(--amber);font-weight:600}
+#final h2{font-family:'Oswald',sans-serif;color:var(--amber);margin:0 0 .4rem;font-size:1.6rem}
+.btn{font-family:'Oswald',sans-serif;font-size:1rem;letter-spacing:.04em;background:var(--amber);color:var(--ink);border:none;border-radius:6px;padding:.55rem 1.2rem;cursor:pointer}
+.btn:hover{filter:brightness(1.07)}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:1.5rem 1rem;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html">← Accueil</a>
+  <a class="chrono" href="minuteur.html">⏱ Chrono</a>
+</nav>
+
+<main>
+  <span class="badge">TERMINALE PRO · PROBABILITÉS</span>
+  <h1>QCM de révision – Probabilités</h1>
+  <p class="sub">10 questions pour s'entraîner avant l'interro.</p>
+  <div class="consigne">Pour chaque question, <strong>une seule réponse est correcte</strong>. Clique sur ta réponse : la correction s'affiche tout de suite. Lis bien l'explication, surtout quand tu t'es trompé·e !</div>
+
+  <div class="scorebar"><span id="progress">Répondues : 0 / 10</span><span id="score">Score : 0</span></div>
+
+  <div id="quiz"></div>
+
+  <div id="final">
+    <h2 id="finalTitle"></h2>
+    <p id="finalMsg"></p>
+    <button class="btn" onclick="resetQuiz()">↻ Recommencer</button>
+  </div>
+</main>
+
+<footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+<script>
+const QUESTIONS = [
+  {
+    q: "Laquelle de ces expériences est aléatoire ?",
+    long: true,
+    o: ["Peser un paquet de farine d'1 kg",
+        "Tirer une boule dans une urne contenant 3 boules rouges et 2 vertes",
+        "Calculer le périmètre d'un carré de côté 5 cm",
+        "Compter le nombre de jours dans une semaine"],
+    a: 1,
+    e: "Une expérience est <strong>aléatoire</strong> quand on connaît tous les résultats possibles mais qu'on ne peut pas prévoir lequel va se produire. Pour l'urne, on sait qu'on aura « rouge » ou « verte », mais on ne sait pas laquelle à l'avance. Les trois autres situations donnent toujours le même résultat."
+  },
+  {
+    q: "On lance un dé équilibré à six faces. On note B : « obtenir un multiple de 3 ». Que vaut P(B) ?",
+    o: ["1/2", "1/6", "2/3", "1/3"],
+    a: 3,
+    e: "Les multiples de 3 entre 1 et 6 sont <span class='math'>3</span> et <span class='math'>6</span> : 2 issues favorables sur 6 issues possibles. <span class='math'>P(B) = 2/6 = 1/3</span>."
+  },
+  {
+    q: "Selon la météo, la probabilité qu'il pleuve demain est P(R) = 0,28. Que vaut P(<span class='bar'>R</span>) ?",
+    o: ["0,72", "0,28", "1,28", "0,82"],
+    a: 0,
+    e: "L'événement contraire <span class='bar'>R</span> (« il ne pleut pas ») vérifie <span class='math'>P(<span class='bar'>R</span>) = 1 − P(R)</span>, donc <span class='math'>1 − 0,28 = 0,72</span>."
+  },
+  {
+    q: "Malik tire une carte au hasard dans un jeu de 32 cartes. Quelle est la probabilité qu'il tire un cœur ?",
+    o: ["1/8", "1/32", "1/4", "1/2"],
+    a: 2,
+    e: "Un jeu de 32 cartes contient 4 couleurs (cœur, carreau, pique, trèfle) de 8 cartes chacune. <span class='math'>P = 8/32 = 1/4</span>."
+  },
+  {
+    q: "L'événement A ∪ B est réalisé lorsque :",
+    long: true,
+    o: ["A et B sont réalisés en même temps",
+        "ni A ni B n'est réalisé",
+        "A est réalisé mais pas B",
+        "au moins l'un des deux événements est réalisé"],
+    a: 3,
+    e: "<strong>A ∪ B</strong> se lit « A <strong>ou</strong> B » : il suffit qu'<strong>au moins un</strong> des deux soit réalisé (A seul, B seul, ou les deux). Attention à ne pas confondre avec <strong>A ∩ B</strong> (« A <strong>et</strong> B »), où les deux doivent être réalisés en même temps."
+  },
+  {
+    q: "On sait que P(A) = 0,6 ; P(B) = 0,3 et P(A ∩ B) = 0,1. Que vaut P(A ∪ B) ?",
+    o: ["0,9", "0,8", "1", "0,7"],
+    a: 1,
+    e: "On utilise <span class='math'>P(A ∪ B) = P(A) + P(B) − P(A ∩ B)</span>.<br><span class='math'>P(A ∪ B) = 0,6 + 0,3 − 0,1 = 0,8</span>. Le piège 0,9 : on a oublié d'enlever l'intersection (comptée deux fois)."
+  },
+  {
+    q: "A et B sont deux événements incompatibles avec P(A) = 0,25 et P(B) = 0,4. Que vaut P(A ∪ B) ?",
+    o: ["0,65", "0,1", "0,55", "0,35"],
+    a: 0,
+    e: "Incompatibles signifie <span class='math'>A ∩ B = ∅</span>, donc <span class='math'>P(A ∩ B) = 0</span>. La formule devient <span class='math'>P(A ∪ B) = P(A) + P(B) = 0,25 + 0,4 = 0,65</span>."
+  },
+  {
+    q: "Une école de musique compte 80 élèves. 40 jouent de la batterie (B). Parmi eux, 10 chantent aussi dans la chorale (C). Que vaut P<sub>B</sub>(C) ?",
+    o: ["0,125", "0,5", "0,25", "0,4"],
+    a: 2,
+    e: "P<sub>B</sub>(C) : on se place <strong>uniquement parmi les batteurs</strong> (40 élèves). Parmi eux, 10 chantent. <span class='math'>P<sub>B</sub>(C) = 10/40 = 0,25</span>. Le piège 0,125 = 10/80 : on a divisé par l'effectif total au lieu de l'effectif de B."
+  },
+  {
+    q: "Dans une ville, on note L : « la personne lit au moins un livre par mois » et S : « la personne fait du sport ». La phrase « Parmi les personnes qui lisent au moins un livre par mois, 55 % font du sport » se traduit par :",
+    o: ["P<sub>S</sub>(L) = 0,55", "P<sub>L</sub>(S) = 0,55", "P(L ∩ S) = 0,55", "P(S) = 0,55"],
+    a: 1,
+    e: "« <strong>Parmi</strong> les lecteurs » indique la condition : on se restreint à L. L se met donc en indice : <span class='math'>P<sub>L</sub>(S) = 0,55</span>."
+  },
+  {
+    q: "Dans une expérience aléatoire, on a P(A) = 0,4 et P<sub>A</sub>(B) = 0,5. Que vaut P(A ∩ B) ?",
+    o: ["0,9", "0,1", "0,8", "0,2"],
+    a: 3,
+    e: "On utilise <span class='math'>P(A ∩ B) = P(A) × P<sub>A</sub>(B)</span>.<br><span class='math'>P(A ∩ B) = 0,4 × 0,5 = 0,2</span>. On multiplie : on ne fait ni la somme (0,9), ni la différence (0,1), ni le quotient (0,8)."
+  }
+];
+
+const LETTERS = ["A", "B", "C", "D"];
+let answered = 0, score = 0;
+
+function render() {
+  const quiz = document.getElementById("quiz");
+  quiz.innerHTML = "";
+  QUESTIONS.forEach((item, i) => {
+    const div = document.createElement("div");
+    div.className = "q";
+    div.innerHTML = `<h2>Question ${i + 1}</h2><p>${item.q}</p>
+      <div class="opts${item.long ? " long" : ""}">
+        ${item.o.map((txt, j) => `<button class="opt" data-q="${i}" data-o="${j}"><b>${LETTERS[j]})</b>${txt}</button>`).join("")}
+      </div>
+      <div class="fb" id="fb${i}"></div>`;
+    quiz.appendChild(div);
+  });
+  quiz.querySelectorAll("button.opt").forEach(b => b.addEventListener("click", choose));
+}
+
+function choose(ev) {
+  const btn = ev.currentTarget;
+  const qi = +btn.dataset.q, oi = +btn.dataset.o, item = QUESTIONS[qi];
+  const buttons = btn.parentElement.querySelectorAll("button.opt");
+  buttons.forEach(b => b.disabled = true);
+  buttons[item.a].classList.add("good");
+  const fb = document.getElementById("fb" + qi);
+  if (oi === item.a) {
+    score++;
+    fb.className = "fb show ok";
+    fb.innerHTML = "<strong>✔ Bravo !</strong> " + item.e;
+  } else {
+    btn.classList.add("bad");
+    fb.className = "fb show ko";
+    fb.innerHTML = `<strong>✘ La bonne réponse était ${LETTERS[item.a]}).</strong> ` + item.e;
+  }
+  answered++;
+  document.getElementById("progress").textContent = `Répondues : ${answered} / ${QUESTIONS.length}`;
+  document.getElementById("score").textContent = `Score : ${score}`;
+  if (answered === QUESTIONS.length) showFinal();
+}
+
+function showFinal() {
+  const f = document.getElementById("final");
+  document.getElementById("finalTitle").textContent = `Score final : ${score} / ${QUESTIONS.length}`;
+  let msg;
+  const fiche = '<a href="fiche-revision-probabilites-terminale.html">fiche de révision</a>';
+  if (score === 10) msg = "Parfait ! Tu es prêt·e pour l'interro.";
+  else if (score >= 7) msg = "Très bien ! Relis les explications des questions ratées, puis recommence.";
+  else if (score >= 4) msg = "C'est un bon début. Relis ta " + fiche + " et refais le QCM.";
+  else msg = "Pas de panique : reprends la " + fiche + ", puis recommence tranquillement.";
+  document.getElementById("finalMsg").innerHTML = msg;
+  f.style.display = "block";
+  f.scrollIntoView({ behavior: "smooth" });
+}
+
+function resetQuiz() {
+  answered = 0; score = 0;
+  document.getElementById("progress").textContent = `Répondues : 0 / ${QUESTIONS.length}`;
+  document.getElementById("score").textContent = "Score : 0";
+  document.getElementById("final").style.display = "none";
+  render();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+render();
+</script>
+</body>
+</html>
