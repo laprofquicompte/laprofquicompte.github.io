@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Le Casse du Casino Monte-Carlo — Escape game probabilités | La Prof qui Compte</title>
+<meta name="description" content="Escape game de probabilités pour la Première bac pro : univers, événements, équiprobabilité, événement contraire et probabilités conditionnelles. Reconstitue le code du coffre en 30 minutes !">
+<meta property="og:title" content="Le Casse du Casino Monte-Carlo — Escape game probabilités">
+<meta property="og:description" content="Traverse les 5 salles du casino en résolvant des questions de probabilités pour ouvrir le coffre avant la relève.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://laprofquicompte.github.io/jeux/casse-casino-probabilites.html">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="La Prof qui Compte">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Le Casse du Casino Monte-Carlo — Escape game probabilités">
+<meta name="twitter:description" content="Traverse les 5 salles du casino en résolvant des questions de probabilités pour ouvrir le coffre avant la relève.">
+<link rel="canonical" href="https://laprofquicompte.github.io/jeux/casse-casino-probabilites.html">
+<style>
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'Oswald';src:url('../fonts/Oswald-700.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-400.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-500.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'Inter';src:url('../fonts/Inter-600.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-Medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap;}
+@font-face{font-family:'IBM Plex Mono';src:url('../fonts/IBMPlexMono-SemiBold.woff2') format('woff2');font-weight:600;font-style:normal;font-display:swap;}
+</style>
+<style>
+  :root{
+    --paper:#f4efe4;
+    --paper-line:#ddd3bb;
+    --ink:#211d17;
+    --ink-soft:#5c5546;
+    --amber:#c9821c;
+    --amber-deep:#a3660f;
+    --red:#a5372a;
+    --teal:#2f6e64;
+    --card:#fffdf7;
+    --shadow: 0 8px 24px rgba(33,29,23,0.12);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:'Inter',sans-serif;
+    color:var(--ink);
+    background:
+      linear-gradient(var(--paper-line) 1px, transparent 1px) 0 0/100% 32px,
+      linear-gradient(90deg, var(--paper-line) 1px, transparent 1px) 0 0/32px 100%,
+      var(--paper);
+    min-height:100vh;
+  }
+
+  .page{
+    padding:24px 16px 60px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .wrap{width:100%;max-width:760px;}
+
+  /* ---------- navbar du site ---------- */
+  .site-nav{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    background:#16232F; padding:0.65rem 1.5rem;
+    font-family:'IBM Plex Mono',monospace; font-size:0.78rem; font-weight:600; letter-spacing:0.02em;
+  }
+  .site-nav a{text-decoration:none;}
+  .site-nav-home{color:#E4EAEF;}
+  .site-nav-home:hover{color:#F2A93B;}
+  .site-nav-chrono{color:#16232F; background:#F2A93B; padding:0.4rem 0.85rem; border-radius:6px; transition:opacity .15s ease;}
+  .site-nav-chrono:hover{opacity:0.85;}
+  .lb-note{font-size:0.75rem; color:var(--ink-soft); margin-top:8px;}
+
+  h1,h2,h3{font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.02em; margin:0;}
+
+  .topbar{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    gap:12px; margin-bottom:10px; flex-wrap:wrap;
+  }
+  .title-block h1{font-size:1.5rem; color:var(--ink);}
+
+  .timer-block{display:flex; flex-direction:column; align-items:center; gap:2px;}
+  .timer{
+    font-family:'IBM Plex Mono',monospace;
+    background:var(--ink); color:var(--paper);
+    padding:10px 16px; border-radius:8px; font-size:1.3rem; font-weight:700;
+    min-width:100px; text-align:center;
+  }
+  .timer.low{background:var(--red); animation:pulse 1s infinite;}
+  @keyframes pulse{0%{opacity:1;}50%{opacity:0.55;}100%{opacity:1;}}
+  .timer-label{font-size:0.65rem; text-transform:uppercase; letter-spacing:0.06em; color:var(--ink-soft);}
+
+  .tension-bar{
+    background:#f3e2d8; border:1px solid var(--red); color:var(--red);
+    border-radius:8px; padding:8px 14px; font-size:0.85rem; font-weight:600;
+    margin-bottom:16px; text-align:center; display:none;
+  }
+  .tension-bar.show{display:block;}
+
+  .panel{
+    background:var(--card);
+    border:1px solid var(--paper-line);
+    border-radius:14px;
+    box-shadow:var(--shadow);
+    padding:26px 24px;
+    margin-bottom:18px;
+  }
+
+  /* progress */
+  .progress{display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap;}
+  .step{
+    flex:1; min-width:56px;
+    text-align:center;
+    padding:8px 4px;
+    border-radius:8px;
+    background:#eee6d3;
+    border:1px solid var(--paper-line);
+    font-size:1.3rem;
+    opacity:0.55;
+    transition:all .2s;
+  }
+  .step.active{opacity:1; background:var(--amber); color:#fff; transform:translateY(-2px);}
+  .step.done{opacity:1; background:var(--teal); color:#fff;}
+
+  .codebook{
+    display:flex; gap:10px; justify-content:center; margin:10px 0 4px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .digit-slot{
+    width:42px; height:52px; border:2px dashed var(--paper-line);
+    border-radius:8px; display:flex; align-items:center; justify-content:center;
+    font-size:1.5rem; font-weight:700; color:var(--ink-soft);
+    background:#fbf8f0;
+  }
+  .digit-slot.filled{border:2px solid var(--teal); color:var(--teal); background:#eef6f4;}
+
+  .story{
+    font-size:0.96rem; line-height:1.55; color:var(--ink);
+    background:#fbf3e2; border-left:4px solid var(--amber);
+    padding:12px 14px; border-radius:6px; margin-bottom:20px;
+  }
+  .story b{color:var(--amber-deep);}
+
+  .qlabel{font-size:0.75rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-soft); margin-bottom:6px;}
+  .qtext{font-size:1.08rem; font-weight:500; margin-bottom:16px; line-height:1.5;}
+
+  .options{display:flex; flex-direction:column; gap:10px; margin-bottom:6px;}
+  .opt{
+    text-align:left;
+    padding:13px 16px; border-radius:9px;
+    border:1.5px solid var(--paper-line);
+    background:#fff; cursor:pointer; font-family:'Inter',sans-serif;
+    font-size:0.98rem; transition:all .15s;
+  }
+  .opt:hover{border-color:var(--amber); background:#fdf6e8;}
+  .opt.correct{background:#e4f2ec; border-color:var(--teal); color:var(--teal); font-weight:600;}
+  .opt.wrong{background:#f8e6e2; border-color:var(--red); color:var(--red);}
+  .opt:disabled{cursor:default;}
+
+  .numeric-row{display:flex; gap:10px; align-items:center; margin-bottom:6px; flex-wrap:wrap;}
+  .numeric-row input{
+    width:90px; padding:12px 14px; font-size:1.1rem;
+    border:1.5px solid var(--paper-line); border-radius:9px;
+    font-family:'IBM Plex Mono',monospace; text-align:center;
+  }
+  .numeric-row input:focus{outline:2px solid var(--amber); border-color:var(--amber);}
+  .frac-slash{font-size:1.4rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace;}
+  .btn{
+    font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:0.03em;
+    background:var(--amber); color:#fff; border:none; border-radius:9px;
+    padding:12px 22px; font-size:0.95rem; cursor:pointer; font-weight:600;
+    transition:background .15s;
+  }
+  .btn:hover{background:var(--amber-deep);}
+  .btn.secondary{background:transparent; color:var(--ink); border:1.5px solid var(--ink);}
+  .btn.secondary:hover{background:var(--ink); color:#fff;}
+  .btn:disabled{opacity:0.5; cursor:not-allowed;}
+
+  .feedback{
+    margin-top:14px; padding:12px 14px; border-radius:8px; font-size:0.92rem; line-height:1.5;
+    display:none;
+  }
+  .feedback.show{display:block;}
+  .feedback.ok{background:#e4f2ec; border-left:4px solid var(--teal); color:#1d4a43;}
+  .feedback.bad{background:#f8e6e2; border-left:4px solid var(--red); color:#7a281d;}
+
+  .actions{display:flex; justify-content:flex-end; gap:10px; margin-top:18px;}
+
+  input[type=text]{
+    padding:12px 14px; font-size:1rem; border:1.5px solid var(--paper-line);
+    border-radius:9px; font-family:'Inter',sans-serif; width:100%;
+  }
+  input[type=text]:focus{outline:2px solid var(--amber); border-color:var(--amber);}
+
+  .center{text-align:center;}
+  .icon-big{font-size:3rem; margin-bottom:8px;}
+
+  .outro-text{
+    font-size:1rem; line-height:1.6; background:#eef6f4; border-left:4px solid var(--teal);
+    padding:14px 16px; border-radius:6px; margin:14px 0; text-align:left;
+  }
+
+  .suspect-wrap{
+    background:var(--card); border:1px solid var(--paper-line); border-radius:14px;
+    box-shadow:var(--shadow); padding:18px 20px; margin-bottom:18px; display:none;
+  }
+  .suspect-grid{
+    display:grid; grid-template-columns:repeat(5,1fr); gap:8px;
+  }
+  .suspect-card{
+    background:#fff; border:1.5px solid var(--paper-line); border-radius:8px;
+    text-align:center; padding:8px 2px; font-size:1.3rem; transition:all .35s;
+  }
+  .suspect-card .num{
+    font-family:'IBM Plex Mono',monospace; font-size:0.65rem; color:var(--ink-soft); margin-top:2px;
+  }
+  .suspect-card.eliminated{opacity:0.2; filter:grayscale(100%); background:#eee;}
+  .suspect-card.winner{border-color:var(--red); box-shadow:0 0 0 2px var(--red); background:#fdf0ee;}
+
+  .vault-input{
+    display:flex; gap:8px; justify-content:center; margin:18px 0;
+  }
+  .vault-input input{
+    width:52px; height:60px; text-align:center; font-size:1.6rem;
+    font-family:'IBM Plex Mono',monospace; font-weight:700;
+    border:2px solid var(--ink); border-radius:8px;
+  }
+
+  .leaderboard{margin-top:8px;}
+  .lb-row{
+    display:flex; justify-content:space-between; padding:8px 12px;
+    border-bottom:1px solid var(--paper-line); font-family:'IBM Plex Mono',monospace; font-size:0.9rem;
+  }
+  .lb-row:first-child{font-weight:700; color:var(--amber-deep);}
+
+  .twist{
+    background:#f3e2d8; border-left:4px solid var(--red);
+    padding:14px 16px; border-radius:6px; margin:16px 0; text-align:left;
+    font-size:0.95rem; line-height:1.6;
+  }
+
+  footer{
+    margin-top:26px; text-align:center; font-size:0.78rem; color:var(--ink-soft);
+  }
+
+  @media (max-width:480px){
+    .title-block h1{font-size:1.2rem;}
+    .panel{padding:20px 16px;}
+    .digit-slot{width:34px; height:44px; font-size:1.2rem;}
+    .vault-input input{width:40px; height:50px; font-size:1.3rem;}
+    .suspect-grid{grid-template-columns:repeat(4,1fr);}
+  }
+</style>
+</head>
+<body>
+<nav class="site-nav">
+  <a class="site-nav-home" href="../index.html">← Accueil</a>
+  <a class="site-nav-chrono" href="minuteur.html">⏱ Chrono</a>
+</nav>
+<div class="page">
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="title-block">
+      <h1>🎰 Le Casse du Casino Monte-Carlo</h1>
+    </div>
+    <div class="timer-block">
+      <div class="timer" id="timerDisplay">30:00</div>
+      <div class="timer-label">avant la relève</div>
+    </div>
+  </div>
+
+  <div class="tension-bar" id="tensionBar"></div>
+
+  <div class="progress" id="progressBar"></div>
+
+  <div class="codebook" id="codebook"></div>
+
+  <div class="suspect-wrap" id="suspectBoardWrap"></div>
+
+  <div id="app"></div>
+
+  <footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+</div>
+</div>
+
+<script>
+/* ---------- PLATEAU DES SUSPECTS (Chambre forte) ---------- */
+const SUSPECTS = [];
+for(let i=1;i<=20;i++){
+  SUSPECTS.push({ id:i, gender: i<=8 ? "F" : "H" });
+}
+// Femmes qui connaissent le code : 2, 5, 8 (dont 5 = administration, 2 et 8 = salle de jeux)
+// Hommes qui connaissent le code : 11, 17
+const NON_SUSPECTS = [1,3,4,6,7,9,10,12,13,14,15,16,18,19,20]; // ne connaissent pas le code
+const HOMMES_SUSPECTS = [11,17];
+const FEMMES_SALLE_DE_JEUX = [2,8];
+// il ne reste alors que la suspecte n°5 (administration)
+
+/* ---------- DONNÉES DU JEU ---------- */
+const STAGES = [
+  {
+    icon: "🎲",
+    name: "Le Hall",
+    story: "Vous avez <b>30 minutes</b> avant le changement de garde. Passé ce délai, l'alarme se déclenche et c'est la case prison direct — alors on ne traîne pas. Premier obstacle : le vigile, un certain M. Laplace Jr., fait tourner une roue à <b>8 secteurs numérotés de 1 à 8</b> pour vous attribuer une table, et teste au passage votre vocabulaire des probabilités.",
+    outro: "Vous passez le premier contrôle sans encombre. M. Laplace Jr. s'écarte et vous laisse entrer dans la salle de jeux principale.",
+    questions: [
+      {
+        type:"qcm",
+        text:"La roue de M. Laplace Jr. comporte 8 secteurs numérotés de 1 à 8. Comment appelle-t-on l'ensemble de tous les résultats possibles {1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8} ?",
+        options:["Un événement","L'univers","Une issue"],
+        correct:1,
+        explain:"L'univers, souvent noté Ω, regroupe toutes les issues possibles d'une expérience aléatoire."
+      },
+      {
+        type:"qcm",
+        text:"« Obtenir un numéro impair » sur cette roue est...",
+        options:["Un événement élémentaire","Un événement","L'univers"],
+        correct:1,
+        explain:"Un événement élémentaire ne contient qu'une seule issue. Ici, « numéro impair » regroupe 4 issues (1, 3, 5, 7) : c'est un événement, pas un événement élémentaire."
+      },
+      {
+        type:"numeric",
+        text:"Combien d'issues réalisent l'événement « obtenir un diviseur de 8 » (c'est-à-dire 1, 2, 4 ou 8) ?",
+        answer:4,
+        explain:"1, 2, 4 et 8 divisent 8 : il y a donc 4 issues favorables. C'est le 1ᵉʳ chiffre du code !"
+      }
+    ]
+  },
+  {
+    icon:"🎡",
+    name:"La Roulette",
+    story:"Pour ne pas éveiller les soupçons, vous devez passer par la table de la roulette et <b>miser comme un vrai joueur</b>. La roue comporte <b>9 cases numérotées de 1 à 9</b>, toutes équiprobables. Le croupier vous propose trois paris différents. Autant choisir celui qui vous donne le plus de chances de gagner...",
+    outro: "La bille tourne... et s'arrête sur le 5. Vous ressortez malheureusement perdant de ce pari, mais au moins vous avez joué le jeu sans éveiller les soupçons. Direction le vestiaire.",
+    questions:[
+      {
+        type:"qcm",
+        text:"Puisque la roulette est équilibrée (équiprobabilité), quelle formule utilise-t-on pour calculer P(A) ?",
+        options:[
+          "P(A) = nombre d'issues de A",
+          "P(A) = nombre d'issues de A / nombre d'issues total",
+          "P(A) = nombre d'issues total / nombre d'issues de A"
+        ],
+        correct:1,
+        explain:"En situation d'équiprobabilité : P(A) = (nombre d'issues favorables) / (nombre d'issues total)."
+      },
+      {
+        type:"numeric",
+        text:"Premier pari proposé : « obtenir un nombre pair » (2, 4, 6 ou 8). Combien d'issues favorisent ce pari, sur les 9 cases ?",
+        answer:4,
+        explain:"2, 4, 6 et 8 sont pairs : 4 issues favorables sur 9."
+      },
+      {
+        type:"numeric",
+        text:"Second pari proposé : « obtenir un multiple de 3 » (3, 6 ou 9). Combien d'issues favorisent ce pari ?",
+        answer:3,
+        explain:"3, 6 et 9 sont multiples de 3 : 3 issues favorables sur 9."
+      },
+      {
+        type:"numeric",
+        text:"Troisième pari proposé : « obtenir un diviseur de 9 » (1, 3 ou 9). Combien d'issues favorisent ce pari ?",
+        answer:3,
+        explain:"1, 3 et 9 divisent 9 : 3 issues favorables sur 9."
+      },
+      {
+        type:"qcm",
+        text:"Quel pari a la plus grande probabilité de vous faire gagner ?",
+        options:["Nombre pair (4 chances sur 9)","Multiple de 3 (3 chances sur 9)","Diviseur de 9 (3 chances sur 9)"],
+        correct:0,
+        explain:"4/9 est strictement supérieur à 3/9 : malgré l'égalité entre les deux autres paris, « nombre pair » reste le meilleur choix."
+      },
+      {
+        type:"numeric",
+        text:"Vous misez sur le pari gagnant (« obtenir un nombre pair ») pour rester crédible aux yeux du croupier. Combien d'issues favorables compte ce pari ?",
+        answer:4,
+        explain:"Le pari « nombre pair » compte 4 issues favorables. C'est le 2ᵉ chiffre du code !"
+      }
+    ]
+  },
+  {
+    icon:"🃏",
+    name:"Le Vestiaire",
+    story:"Direction le vestiaire pour changer de tenue. Un informateur vous glisse à l'oreille que la pièce compte <b>20 casiers</b>, et que la probabilité de tomber sur un <b>casier piégé</b> (relié à une alarme silencieuse) est de <b>0,65</b>. Un seul mauvais geste et le casse est terminé.",
+    outro: "Vous choisissez le 3ᵉ casier... ouf, il n'était pas piégé ! Vous vous emparez du pass qui ouvre la porte de la salle de surveillance.",
+    questions:[
+      {
+        type:"qcm",
+        text:"Si vous ouvrez un casier piégé, l'alarme se déclenche aussitôt. Quel est l'événement contraire de « tomber sur un casier piégé » ?",
+        options:["Tomber sur un casier sûr","Tomber sur deux casiers piégés","Ne choisir aucun casier"],
+        correct:0,
+        explain:"L'événement contraire regroupe toutes les issues qui ne réalisent PAS l'événement de départ : ici, les casiers non piégés."
+      },
+      {
+        type:"numeric",
+        text:"Sachant que P(casier piégé) = 0,65 et qu'il y a 20 casiers au total, combien de casiers sont sûrs (non piégés) ?",
+        answer:7,
+        explain:"P(sûr) = 1 − P(piégé) = 1 − 0,65 = 0,35. Puis 0,35 × 20 = 7 casiers sûrs."
+      },
+      {
+        type:"fraction",
+        text:"Vous ouvrez un premier casier sûr et le retirez du lot. Il reste maintenant 19 casiers, dont 13 toujours piégés. Quelle est la probabilité de tomber sur un casier sûr si vous devez en ouvrir un second ? Donnez la fraction (numérateur / dénominateur).",
+        num:6, den:19,
+        explain:"Il restait 7 casiers sûrs, dont 1 déjà ouvert : il en reste 6, sur un total de 19 casiers restants. La probabilité est donc 6/19."
+      },
+      {
+        type:"numeric",
+        text:"Vous ouvrez avec succès ce second casier. Combien de casiers sûrs restait-il, sur les 19, au moment de ce tirage ?",
+        answer:6,
+        explain:"Il restait 6 casiers sûrs sur les 19. C'est le 3ᵉ chiffre du code !"
+      }
+    ]
+  },
+  {
+    icon:"🎥",
+    name:"La Surveillance",
+    story:"Dans la salle de contrôle, vous repérez le planning des <b>10 vigiles de nuit</b> : <b>6</b> sont armés (A), <b>5</b> ont un chien (B), et <b>3</b> ont les deux à la fois. Deux itinéraires sont accessibles : le couloir Nord, réservé aux vigiles armés (6 vigiles peuvent y être affectés), et le couloir Sud, réservé aux vigiles accompagnés d'un chien (5 vigiles peuvent y être affectés). Un vigile est tiré au sort pour chacun. Vous devez choisir l'itinéraire où le risque de croiser la double menace (armé ET avec un chien) est le plus faible.",
+    outro: "Vous empruntez le couloir Nord. Aucun vigile ne croise votre chemin : vous atteignez la porte de la chambre forte sans un bruit.",
+    questions:[
+      {
+        type:"numeric",
+        text:"Sur les 6 vigiles pouvant être affectés au couloir Nord (les armés), combien ont aussi un chien ?",
+        answer:3,
+        explain:"Ce sont exactement les vigiles de A ∩ B : 3 vigiles armés ont aussi un chien."
+      },
+      {
+        type:"numeric",
+        text:"Sur les 5 vigiles pouvant être affectés au couloir Sud (ceux avec un chien), combien sont aussi armés ?",
+        answer:3,
+        explain:"C'est le même groupe A ∩ B (3 vigiles), mais rapporté cette fois à une population de départ différente (5 au lieu de 6)."
+      },
+      {
+        type:"qcm",
+        text:"En comparant les deux proportions (3 sur 6 pour le Nord, contre 3 sur 5 pour le Sud), quel couloir présente le risque de double menace le plus faible ?",
+        options:["Le couloir Nord (3/6)","Le couloir Sud (3/5)","Le risque est identique"],
+        correct:0,
+        explain:"3/6 = 0,5 alors que 3/5 = 0,6 : la proportion de vigiles à double menace est plus faible sur le couloir Nord."
+      },
+      {
+        type:"numeric",
+        text:"Vous empruntez le couloir Nord. Combien de vigiles, sur les 6 qui pouvaient y être affectés, représentent potentiellement un danger (armés ET avec un chien) ?",
+        answer:3,
+        explain:"3 vigiles sur les 6 armés du couloir Nord représentent potentiellement un danger (armés ET avec un chien). C'est le 4ᵉ chiffre du code !"
+      }
+    ]
+  },
+  {
+    icon:"🔐",
+    name:"La Chambre Forte",
+    story:"Vous voilà devant le coffre. Un mot griffonné à la hâte indique qu'une fuite a eu lieu : quelqu'un du personnel connaît le vrai code. On note F l'événement « l'employé choisi est une femme » et C l'événement « l'employé choisi connaît le code ». La direction vous a transmis les chiffres : sur les <b>20 employés</b> (visibles sur le plateau ci-dessous, numérotés de 1 à 20), il y a <b>8 femmes</b> et <b>12 hommes</b>. Au total, <b>5 employés</b> sont susceptibles de connaître le vrai code du coffre, dont <b>3 femmes</b>. Vous n'avez droit à aucune erreur : un mauvais chiffre et le mécanisme se bloque définitivement.",
+    outro: "Votre complice s'est glissé dans les bureaux de l'administration et a réussi à soutirer le code à la suspecte n°5. Le sésame en main, vous composez fébrilement le code sur le clavier numérique du coffre...",
+    questions:[
+      {
+        type:"qcm",
+        text:"Comment note-t-on « la probabilité qu'un employé connaisse le code sachant que c'est une femme » ?",
+        options:["P(F) ∩ P(C)","P<sub>F</sub>(C)","P<sub>C</sub>(F)"],
+        correct:1,
+        explain:"P<sub>F</sub>(C) se lit « probabilité de C sachant F » : on réduit l'univers aux femmes (F), puis on regarde parmi elles celles qui connaissent le code (C)."
+      },
+      {
+        type:"numeric",
+        text:"Combien d'hommes connaissent le code ?",
+        answer:2,
+        explain:"5 − 3 = 2 hommes connaissent le code. Le plateau s'éclaircit : les 15 employés qui ne connaissent pas le code sont écartés de l'enquête.",
+        eliminateIds: NON_SUSPECTS
+      },
+      {
+        type:"fraction",
+        text:"Calculez P<sub>F</sub>(C), la probabilité qu'un employé connaisse le code sachant que c'est une femme. Donnez la fraction complète (numérateur / dénominateur).",
+        num:3, den:8,
+        explain:"P<sub>F</sub>(C) = (femmes qui connaissent le code) / (total des femmes) = 3/8."
+      },
+      {
+        type:"fraction",
+        text:"Calculez maintenant P<sub>H</sub>(C), la probabilité qu'un employé connaisse le code sachant que c'est un homme. Donnez la fraction complète, sans la simplifier.",
+        num:2, den:12,
+        explain:"P<sub>H</sub>(C) = (hommes qui connaissent le code) / (total des hommes) = 2/12."
+      },
+      {
+        type:"qcm",
+        text:"En comparant P<sub>F</sub>(C) = 3/8 = 0,375 et P<sub>H</sub>(C) = 2/12 ≈ 0,167, dans quel groupe a-t-on le plus de chances de tomber sur la personne susceptible de connaître le code et de vous le vendre ?",
+        options:["Les femmes","Les hommes","Impossible à dire"],
+        correct:0,
+        explain:"0,375 > 0,167 : proportionnellement, davantage de femmes sont susceptibles de connaître le code. Les 2 suspects masculins restants sont innocentés : il ne reste que 3 suspectes.",
+        eliminateIds: HOMMES_SUSPECTS
+      },
+      {
+        type:"numeric",
+        text:"Un dernier indice tombe : seul le personnel de l'administration avait accès au boîtier de sécurité trafiqué. Parmi les 3 suspectes restantes, deux travaillent à la salle de jeux (cartes n°2 et n°8) : elles sont innocentées. Quel est le numéro de la suspecte qui reste, celle qui va vous vendre le code ?",
+        answer:5,
+        explain:"Il ne reste que la suspecte n°5, employée de l'administration : c'est elle qui va vous vendre le code. C'est le 5ᵉ et dernier chiffre du code !",
+        eliminateIds: FEMMES_SALLE_DE_JEUX
+      }
+    ]
+  }
+];
+
+const VAULT_CODE = STAGES.map(s => String(s.questions[s.questions.length-1].answer)).join("");
+
+const TENSION_MESSAGES = [
+  {at:25*60, msg:"⏱️ Encore 25 minutes avant la relève de la sécurité."},
+  {at:20*60, msg:"🎲 20 minutes... la partie continue, restez discrets."},
+  {at:15*60, msg:"🚨 Un vigile vient de repasser près du hall. Restez concentrés !"},
+  {at:10*60, msg:"⏱️ Plus que 10 minutes avant le changement d'équipe."},
+  {at:5*60, msg:"🔴 Les caméras redémarrent dans 5 minutes. Accélérez !"},
+  {at:60, msg:"🔴 Une minute. C'est maintenant ou jamais."}
+];
+const TOTAL_DURATION = 30*60;
+
+/* ---------- ÉTAT ---------- */
+let state = {
+  screen:"intro", // intro | stage | outro | vault | success
+  stageIndex:0,
+  qIndex:0,
+  answered:false,
+  collectedDigits:[],
+  teamName:"",
+  startTime:null,
+  timeLeft:TOTAL_DURATION,
+  timerId:null,
+  tensionHideTimeout:null,
+  triggeredTensions:new Set(),
+  eliminated:new Set()
+};
+
+const app = document.getElementById("app");
+const progressBar = document.getElementById("progressBar");
+const codebook = document.getElementById("codebook");
+const timerDisplay = document.getElementById("timerDisplay");
+const tensionBar = document.getElementById("tensionBar");
+const suspectBoardWrap = document.getElementById("suspectBoardWrap");
+
+/* ---------- MINUTEUR (basé sur l'horloge réelle pour rester fiable) ---------- */
+function formatTime(s){
+  const m = Math.floor(s/60);
+  const sec = s%60;
+  return String(m).padStart(2,"0")+":"+String(sec).padStart(2,"0");
+}
+function showTension(msg){
+  tensionBar.textContent = msg;
+  tensionBar.classList.add("show");
+  if(state.tensionHideTimeout) clearTimeout(state.tensionHideTimeout);
+  state.tensionHideTimeout = setTimeout(()=>{
+    tensionBar.classList.remove("show");
+  }, 60000);
+}
+function startTimer(){
+  if(state.timerId) return;
+  state.timerId = setInterval(()=>{
+    const elapsedReal = Math.floor((Date.now()-state.startTime)/1000);
+    const remaining = Math.max(0, TOTAL_DURATION - elapsedReal);
+    if(remaining !== state.timeLeft){
+      state.timeLeft = remaining;
+      timerDisplay.textContent = formatTime(state.timeLeft);
+      timerDisplay.classList.toggle("low", state.timeLeft<=120);
+      TENSION_MESSAGES.forEach(t=>{
+        if(state.timeLeft<=t.at && !state.triggeredTensions.has(t.at)){
+          state.triggeredTensions.add(t.at);
+          showTension(t.msg);
+        }
+      });
+    }
+    if(remaining<=0){
+      clearInterval(state.timerId);
+      tensionBar.textContent = "🚨 Temps écoulé ! La relève arrive... tentez d'ouvrir le coffre au plus vite !";
+      tensionBar.classList.add("show");
+    }
+  },500);
+}
+
+/* ---------- PROGRESS + CODEBOOK ---------- */
+function renderProgress(){
+  progressBar.innerHTML = "";
+  STAGES.forEach((s,i)=>{
+    const div = document.createElement("div");
+    const isDone = i<state.stageIndex || state.screen==="vault" || state.screen==="success" || (i===state.stageIndex && state.screen==="outro");
+    div.className = "step" + (i===state.stageIndex && state.screen==="stage" ? " active" : "") + (isDone ? " done" : "");
+    div.textContent = s.icon;
+    progressBar.appendChild(div);
+  });
+}
+function renderCodebook(){
+  codebook.innerHTML = "";
+  for(let i=0;i<5;i++){
+    const d = document.createElement("div");
+    d.className = "digit-slot" + (state.collectedDigits[i]!==undefined ? " filled" : "");
+    d.textContent = state.collectedDigits[i]!==undefined ? state.collectedDigits[i] : "?";
+    codebook.appendChild(d);
+  }
+}
+
+/* ---------- PLATEAU DES SUSPECTS ---------- */
+function renderSuspectBoard(){
+  const inChambreForte = state.stageIndex===4 && state.screen==="stage";
+  if(!inChambreForte){
+    suspectBoardWrap.style.display = "none";
+    suspectBoardWrap.innerHTML = "";
+    return;
+  }
+  suspectBoardWrap.style.display = "block";
+  const remaining = SUSPECTS.length - state.eliminated.size;
+  suspectBoardWrap.innerHTML = `
+    <div class="qlabel" style="margin-bottom:10px;">🔎 Plateau des suspects — ${remaining} restant${remaining>1?"s":""}</div>
+    <div class="suspect-grid">
+      ${SUSPECTS.map(s=>{
+        const isElim = state.eliminated.has(s.id);
+        const isWinner = !isElim && remaining===1;
+        return `<div class="suspect-card ${isElim?"eliminated":""} ${isWinner?"winner":""}">
+          <div>${s.gender==="F" ? "👩" : "🧑"}</div>
+          <div class="num">#${s.id}</div>
+        </div>`;
+      }).join("")}
+    </div>
+  `;
+}
+
+/* ---------- ÉCRANS ---------- */
+function renderIntro(){
+  app.innerHTML = `
+    <div class="panel center">
+      <div class="icon-big">🎰</div>
+      <h2>Prêts pour le casse ?</h2>
+      <p style="line-height:1.6; margin:14px 0;">
+        Votre équipe doit traverser <b>5 salles</b> du Casino Monte-Carlo pour atteindre la chambre forte.
+        Dans chaque salle, répondez aux questions de probabilités pour obtenir <b>un chiffre du code final</b>.
+        Vous avez <b>30 minutes</b> avant la relève de la sécurité : passé ce délai, impossible de dire ce qu'il vous en coûtera.
+        Reconstituez le code à 5 chiffres et ouvrez le coffre avant que le temps ne soit écoulé !
+      </p>
+      <label class="qlabel" for="teamInput">Nom de votre équipe</label>
+      <input type="text" id="teamInput" placeholder="Ex : Les As du Calcul" style="margin:10px 0 18px;">
+      <div>
+        <button class="btn" id="startBtn">Commencer le casse</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("startBtn").addEventListener("click", ()=>{
+    const name = document.getElementById("teamInput").value.trim();
+    state.teamName = name || "Équipe mystère";
+    state.startTime = Date.now();
+    state.screen = "stage";
+    state.stageIndex = 0;
+    state.qIndex = 0;
+    state.eliminated = new Set();
+    state.triggeredTensions = new Set();
+    startTimer();
+    render();
+  });
+}
+
+function renderStage(){
+  const stage = STAGES[state.stageIndex];
+  const q = stage.questions[state.qIndex];
+
+  let questionHtml = "";
+  if(q.type==="qcm"){
+    questionHtml = `
+      <div class="qlabel">Question ${state.qIndex+1} / ${stage.questions.length}</div>
+      <div class="qtext">${q.text}</div>
+      <div class="options" id="optionsWrap">
+        ${q.options.map((opt,i)=>`<button class="opt" data-i="${i}">${opt}</button>`).join("")}
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions" id="actionsWrap"></div>
+    `;
+  } else if(q.type==="fraction"){
+    questionHtml = `
+      <div class="qlabel">Question ${state.qIndex+1} / ${stage.questions.length}</div>
+      <div class="qtext">${q.text}</div>
+      <div class="numeric-row">
+        <input type="number" id="numInput" placeholder="num">
+        <span class="frac-slash">/</span>
+        <input type="number" id="denInput" placeholder="dén">
+        <button class="btn" id="checkBtn">Valider</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions" id="actionsWrap"></div>
+    `;
+  } else {
+    questionHtml = `
+      <div class="qlabel">Question ${state.qIndex+1} / ${stage.questions.length}</div>
+      <div class="qtext">${q.text}</div>
+      <div class="numeric-row">
+        <input type="number" id="numInput" placeholder="?">
+        <button class="btn" id="checkBtn">Valider</button>
+      </div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions" id="actionsWrap"></div>
+    `;
+  }
+
+  app.innerHTML = `
+    <div class="panel">
+      <h2>${stage.icon} ${stage.name}</h2>
+      <div class="story">${stage.story}</div>
+      ${questionHtml}
+    </div>
+  `;
+
+  renderSuspectBoard();
+
+  if(q.type==="qcm"){
+    document.querySelectorAll("#optionsWrap .opt").forEach(btn=>{
+      btn.addEventListener("click", ()=>handleQcmAnswer(parseInt(btn.dataset.i)));
+    });
+  } else if(q.type==="fraction"){
+    document.getElementById("checkBtn").addEventListener("click", handleFractionAnswer);
+    document.getElementById("denInput").addEventListener("keydown",(e)=>{
+      if(e.key==="Enter") handleFractionAnswer();
+    });
+  } else {
+    document.getElementById("checkBtn").addEventListener("click", handleNumericAnswer);
+    document.getElementById("numInput").addEventListener("keydown",(e)=>{
+      if(e.key==="Enter") handleNumericAnswer();
+    });
+  }
+}
+
+function applyElimination(q){
+  if(q.eliminateIds){
+    q.eliminateIds.forEach(id=>state.eliminated.add(id));
+    renderSuspectBoard();
+  }
+}
+
+function showFeedback(ok, text){
+  const fb = document.getElementById("feedback");
+  fb.className = "feedback show " + (ok?"ok":"bad");
+  fb.innerHTML = (ok? "✅ Correct ! " : "❌ Pas tout à fait. ") + text;
+  const actions = document.getElementById("actionsWrap");
+  if(ok){
+    const stage = STAGES[state.stageIndex];
+    const isLastQ = state.qIndex === stage.questions.length-1;
+    const label = isLastQ ? "Continuer" : "Question suivante";
+    actions.innerHTML = `<button class="btn" id="nextBtn">${label}</button>`;
+    document.getElementById("nextBtn").addEventListener("click", advance);
+  } else {
+    actions.innerHTML = "";
+  }
+}
+
+function handleQcmAnswer(i){
+  const stage = STAGES[state.stageIndex];
+  const q = stage.questions[state.qIndex];
+  const btns = document.querySelectorAll("#optionsWrap .opt");
+  btns.forEach(b=>b.disabled=true);
+  if(i===q.correct){
+    btns[i].classList.add("correct");
+    applyElimination(q);
+    showFeedback(true, q.explain);
+  } else {
+    btns[i].classList.add("wrong");
+    btns[q.correct].classList.add("correct");
+    showFeedback(false, q.explain);
+    btns.forEach(b=>b.disabled=false);
+  }
+}
+
+function handleNumericAnswer(){
+  const stage = STAGES[state.stageIndex];
+  const q = stage.questions[state.qIndex];
+  const input = document.getElementById("numInput");
+  const val = parseFloat(input.value);
+  const checkBtn = document.getElementById("checkBtn");
+  if(val===q.answer){
+    input.disabled = true;
+    checkBtn.disabled = true;
+    applyElimination(q);
+    showFeedback(true, q.explain);
+    if(state.qIndex === stage.questions.length-1){
+      state.collectedDigits[state.stageIndex] = String(q.answer).slice(-1);
+      renderCodebook();
+    }
+  } else {
+    showFeedback(false, "Recalculez et réessayez.");
+  }
+}
+
+function handleFractionAnswer(){
+  const stage = STAGES[state.stageIndex];
+  const q = stage.questions[state.qIndex];
+  const numInput = document.getElementById("numInput");
+  const denInput = document.getElementById("denInput");
+  const numVal = parseFloat(numInput.value);
+  const denVal = parseFloat(denInput.value);
+  const checkBtn = document.getElementById("checkBtn");
+  if(numVal===q.num && denVal===q.den){
+    numInput.disabled = true;
+    denInput.disabled = true;
+    checkBtn.disabled = true;
+    applyElimination(q);
+    showFeedback(true, q.explain);
+  } else {
+    showFeedback(false, "Recalculez le numérateur et le dénominateur, puis réessayez.");
+  }
+}
+
+function advance(){
+  const stage = STAGES[state.stageIndex];
+  if(state.qIndex < stage.questions.length-1){
+    state.qIndex++;
+    render();
+  } else {
+    state.screen = "outro";
+    render();
+  }
+}
+
+function renderOutro(){
+  const stage = STAGES[state.stageIndex];
+  const isLastStage = state.stageIndex === STAGES.length-1;
+  app.innerHTML = `
+    <div class="panel center">
+      <div class="icon-big">${stage.icon}</div>
+      <h2>${stage.name} — franchie</h2>
+      <div class="outro-text">${stage.outro}</div>
+      <button class="btn" id="continueBtn">${isLastStage ? "Aller au coffre" : "Salle suivante"}</button>
+    </div>
+  `;
+  document.getElementById("continueBtn").addEventListener("click", ()=>{
+    if(state.stageIndex < STAGES.length-1){
+      state.stageIndex++;
+      state.qIndex=0;
+      state.screen="stage";
+    } else {
+      state.screen="vault";
+    }
+    render();
+  });
+}
+
+function renderVault(){
+  app.innerHTML = `
+    <div class="panel center">
+      <div class="icon-big">🔐</div>
+      <h2>La chambre forte</h2>
+      <p style="line-height:1.6;">Vous avez collecté les 5 chiffres. Un seul essai compte vraiment : entrez le code du coffre pour terminer le casse !</p>
+      <div class="vault-input" id="vaultInputs">
+        ${[0,1,2,3,4].map(i=>`<input type="text" maxlength="1" inputmode="numeric" data-i="${i}">`).join("")}
+      </div>
+      <div class="feedback" id="vaultFeedback"></div>
+      <div>
+        <button class="btn" id="vaultBtn">Ouvrir le coffre</button>
+      </div>
+    </div>
+  `;
+  const inputs = document.querySelectorAll("#vaultInputs input");
+  inputs.forEach((inp,idx)=>{
+    inp.addEventListener("input", ()=>{
+      if(inp.value && idx<4) inputs[idx+1].focus();
+    });
+  });
+  document.getElementById("vaultBtn").addEventListener("click", ()=>{
+    const code = Array.from(inputs).map(i=>i.value).join("");
+    const fb = document.getElementById("vaultFeedback");
+    if(code===VAULT_CODE){
+      clearInterval(state.timerId);
+      state.screen="success";
+      render();
+    } else {
+      fb.className="feedback show bad";
+      fb.textContent = "❌ Ce n'est pas le bon code. Revérifiez vos 5 chiffres collectés en haut de l'écran.";
+    }
+  });
+}
+
+function renderSuccess(){
+  const elapsed = Math.floor((Date.now()-state.startTime)/1000);
+  const elapsedStr = formatTime(elapsed);
+
+  app.innerHTML = `
+    <div class="panel center">
+      <div class="icon-big">🔓</div>
+      <h2>Le coffre s'ouvre...</h2>
+      <p style="line-height:1.6;">
+        Bravo <b>${escapeHtml(state.teamName)}</b> ! La porte blindée pivote lentement, en <b>${elapsedStr}</b>. À vous la richesse...
+      </p>
+      <div class="twist">
+        🧮 ... sauf qu'à la place des liasses de billets, vous trouvez une pile de <b>copies de probabilités non corrigées</b> et un post-it :
+        <br><br>
+        <i>« Bien joué, matheux ! Le vrai trésor, c'était les probabilités qu'on a calculées en chemin. Signé : Mme Boudier. »</i>
+      </div>
+      <button class="btn" id="saveScoreBtn">Enregistrer au classement</button>
+      <div class="leaderboard" id="leaderboardWrap"></div>
+    </div>
+  `;
+
+  const saveBtn = document.getElementById("saveScoreBtn");
+  saveBtn.addEventListener("click", ()=>{
+    const entries = readScores();
+    entries.push({team:state.teamName, seconds:elapsed});
+    try{ localStorage.setItem(LB_KEY, JSON.stringify(entries)); }catch(e){}
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Score enregistré ✓";
+    loadLeaderboard();
+  });
+
+  loadLeaderboard();
+}
+
+/* Classement enregistré sur l'appareil (navigateur) utilisé */
+const LB_KEY = "lpqc-casse-casino-scores";
+function readScores(){
+  try{
+    const raw = localStorage.getItem(LB_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  }catch(e){ return []; }
+}
+function escapeHtml(t){
+  return String(t).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function loadLeaderboard(){
+  const wrap = document.getElementById("leaderboardWrap");
+  if(!wrap) return;
+  const entries = readScores().sort((a,b)=>a.seconds-b.seconds);
+  if(entries.length===0){
+    wrap.innerHTML = "<p class='lb-note'>Aucun score enregistré sur cet appareil pour l'instant.</p>";
+    return;
+  }
+  wrap.innerHTML = `<div class="lb-row"><span>Équipe</span><span>Temps</span></div>` +
+    entries.slice(0,10).map(e=>`<div class="lb-row"><span>${escapeHtml(e.team)}</span><span>${formatTime(e.seconds)}</span></div>`).join("") +
+    `<p class="lb-note">Classement enregistré sur cet appareil.</p>`;
+}
+
+function render(){
+  renderProgress();
+  renderCodebook();
+  if(state.screen==="intro") renderIntro();
+  else if(state.screen==="stage") renderStage();
+  else if(state.screen==="outro"){ renderOutro(); renderSuspectBoard(); }
+  else if(state.screen==="vault"){ renderVault(); renderSuspectBoard(); }
+  else if(state.screen==="success"){ renderSuccess(); renderSuspectBoard(); }
+}
+
+timerDisplay.textContent = formatTime(state.timeLeft);
+render();
+</script>
+</body>
+</html>
