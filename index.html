@@ -326,6 +326,436 @@
     main{ padding:1.8rem 1.2rem 2.6rem; }
   }
 
+  /* ---------- Onglet du calendrier de l'Avent ---------- */
+  .tab.tab-avent{ color:#A63A24; }
+  .tab.tab-avent.active{ color:#A63A24; border-bottom-color:#A63A24; }
+#panel-avent{
+    color-scheme:light;
+    --paper:#E4EAEF;
+    --ink:#16232F;
+    --ink-soft:#3D4F5F;
+    --amber:#F2A93B;
+    --amber-deep:#C6810F;
+    --teal:#2E7D6B;
+    --red:#B3432B;
+    --white:#FFFFFF;
+    --locked:#C5D0D9;
+    --sapin:#4DB39B;
+    --note:#FFF3D6;
+    --rouge-noel:#A63A24;
+    --vert-noel:#1E6153;
+    --creme:#FFF8E7;
+    --display:'Oswald',Arial,sans-serif;
+    --body:'Inter',Arial,sans-serif;
+    --mono:'IBM Plex Mono','Courier New',monospace;
+  }
+#panel-avent *{box-sizing:border-box;}
+#panel-avent [hidden]{display:none !important;}
+#panel-avent .page{
+    max-width:980px;
+    margin:0 auto;
+    padding-block:20px 32px;
+    padding-left:max(16px, env(safe-area-inset-left,0px));
+    padding-right:max(16px, env(safe-area-inset-right,0px));
+    display:grid;
+    gap:20px;
+  }
+#panel-avent .apercu{
+    background:var(--note);
+    border:2px dashed var(--amber-deep);
+    border-radius:10px;
+    padding:10px 14px;
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:8px 16px;
+    font-size:0.85rem;
+  }
+#panel-avent .apercu strong{font-family:var(--mono);font-weight:600;letter-spacing:0.04em;}
+#panel-avent .apercu label{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:600;}
+#panel-avent .apercu input{width:150px;max-width:100%;accent-color:var(--amber-deep);}
+#panel-avent .apercu output{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums;}
+#panel-avent .apercu-actions{display:flex;gap:8px;margin-left:auto;flex-wrap:wrap;}
+#panel-avent .apercu p{flex-basis:100%;margin:0;color:var(--ink-soft);}
+#panel-avent .apercu button{
+    font-family:var(--body);
+    font-size:0.8rem;
+    font-weight:600;
+    background:var(--white);
+    color:var(--ink);
+    border:2px solid var(--ink);
+    border-radius:8px;
+    padding:4px 10px;
+    cursor:pointer;
+  }
+#panel-avent .entete h2{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(2rem, 7vw, 3rem);
+    line-height:1.1;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    margin:0 0 6px;
+    text-wrap:balance;
+  }
+#panel-avent .entete h2 span{color:var(--amber-deep);}
+#panel-avent .entete p{margin:0;max-width:62ch;color:var(--ink-soft);}
+#panel-avent .layout{
+    display:grid;
+    grid-template-columns:minmax(0,440px) minmax(0,1fr);
+    gap:28px;
+    align-items:start;
+  }
+@media (max-width:760px){
+#panel-avent .layout{grid-template-columns:minmax(0,1fr);}
+#panel-avent .plateau-col{max-width:460px;width:100%;margin:0 auto;}}
+#panel-avent .plateau-col{display:grid;gap:10px;min-width:0;}
+#panel-avent .plateau{
+    position:relative;
+    width:100%;
+    aspect-ratio:4 / 6;
+    border:3px solid var(--ink);
+    border-radius:14px;
+    box-shadow:8px 8px 0 var(--ink);
+    overflow:hidden;
+    background:var(--ink);
+  }
+#panel-avent .plateau svg.sapin{position:absolute;inset:0;width:100%;height:100%;display:block;}
+#panel-avent .portes{
+    position:absolute;
+    inset:0;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    grid-template-rows:repeat(6,1fr);
+    perspective:900px;
+  }
+#panel-avent .porte{
+    position:relative;
+    appearance:none;
+    margin:0;
+    padding:0;
+    border:0;
+    background:transparent;
+    cursor:pointer;
+    min-width:0;
+  }
+#panel-avent .porte-face{
+    --papier:var(--rouge-noel);
+    --ruban:none,none;
+    --motif:none;
+    --taille:30px 30px;
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border:1px solid var(--ink);
+    background-color:var(--papier);
+    background-image:var(--ruban),var(--motif);
+    background-size:100% 100%,100% 100%,var(--taille);
+    transform-origin:left center;
+    transition:transform .7s cubic-bezier(.3,.7,.3,1), opacity .25s linear .5s;
+  }
+#panel-avent .papier-rouge{--papier:var(--rouge-noel);}
+#panel-avent .papier-vert{--papier:var(--vert-noel);}
+#panel-avent .motif-0{--motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cpath d='M15 6v18M7 10.5l16 9M23 10.5l-16 9' stroke='white' stroke-width='1.6' stroke-linecap='round' opacity='.34' fill='none'/%3E%3C/svg%3E");}
+#panel-avent .motif-1{--motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cpath d='M15 6l2.6 5.8 6.3.7-4.7 4.2 1.3 6.2-5.5-3.2-5.5 3.2 1.3-6.2-4.7-4.2 6.3-.7z' fill='white' opacity='.28'/%3E%3C/svg%3E");}
+#panel-avent .motif-2{--motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cpath d='M15 5l5 7h-2.5l5 7h-3l3.5 5H7l3.5-5h-3l5-7H10z' fill='white' opacity='.28'/%3E%3C/svg%3E");}
+#panel-avent .motif-3{--motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Ccircle cx='15' cy='17' r='6.5' fill='white' opacity='.28'/%3E%3Crect x='13' y='7.5' width='4' height='3.5' fill='white' opacity='.4'/%3E%3C/svg%3E");}
+#panel-avent .motif-4{--motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cpath d='M15 6c-4 0-5.5 3.5-5.5 7 0 4-1.5 5.5-3 7h17c-1.500-1.500-3-3-3-7 0-3.500-1.500-7-5.500-7zM12.500 22a2.500 2.500 0 0 0 5 0z' fill='white' opacity='.28'/%3E%3C/svg%3E");}
+#panel-avent .motif-5{--motif:radial-gradient(circle,rgba(255,255,255,.3) 2.5px,transparent 3px);--taille:15px 15px;}
+#panel-avent .motif-6{--motif:repeating-linear-gradient(45deg,rgba(255,255,255,.17) 0 9px,transparent 9px 18px);--taille:100% 100%;}
+#panel-avent .etiquette{
+    position:relative;
+    z-index:1;
+    width:2.05em;
+    height:2.05em;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    background:var(--creme);
+    border:2px solid var(--ink);
+    color:var(--ink);
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(1rem, 4.8vw, 1.32rem);
+    line-height:1;
+  }
+#panel-avent .porte.passee .porte-face::after,
+#panel-avent .porte.du-jour .porte-face::after{
+    content:"";
+    position:absolute;
+    z-index:2;
+    top:4%;
+    left:50%;
+    width:34%;
+    aspect-ratio:1;
+    transform:translateX(-50%);
+    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cg fill='%23F2A93B' stroke='%2316232F' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath d='M15 15C10 5 3 6 3 11s7 6 12 4zM15 15c5-10 12-9 12-4s-7 6-12 4z'/%3E%3Ccircle cx='15' cy='14.5' r='3'/%3E%3C/g%3E%3C/svg%3E") center/contain no-repeat;
+  }
+#panel-avent .porte.du-jour .porte-face::after{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30'%3E%3Cg fill='%23B3432B' stroke='%2316232F' stroke-width='1.5' stroke-linejoin='round'%3E%3Cpath d='M15 15C10 5 3 6 3 11s7 6 12 4zM15 15c5-10 12-9 12-4s-7 6-12 4z'/%3E%3Ccircle cx='15' cy='14.5' r='3'/%3E%3C/g%3E%3C/svg%3E");}
+#panel-avent .porte.a-venir .porte-face{filter:saturate(.42) brightness(1.18);}
+#panel-avent .porte.a-venir .etiquette{border-width:1px;color:var(--ink-soft);}
+#panel-avent .porte.a-venir{cursor:help;}
+#panel-avent .porte.passee .porte-face{--ruban:linear-gradient(90deg,transparent 44%,var(--amber) 44%,var(--amber) 56%,transparent 56%),linear-gradient(0deg,transparent 44%,var(--amber) 44%,var(--amber) 56%,transparent 56%);}
+#panel-avent .porte.du-jour .porte-face{--papier:var(--amber);--ruban:linear-gradient(90deg,transparent 44%,var(--red) 44%,var(--red) 56%,transparent 56%),linear-gradient(0deg,transparent 44%,var(--red) 44%,var(--red) 56%,transparent 56%);}
+#panel-avent .porte.passee:hover .porte-face,
+#panel-avent .porte.du-jour:hover .porte-face{transform:rotateY(-14deg);}
+#panel-avent .porte.ouverte .porte-face,
+#panel-avent .porte.ouverte:hover .porte-face{transform:rotateY(-105deg);opacity:0;pointer-events:none;}
+#panel-avent .porte-num{
+    position:absolute;
+    top:3px;
+    left:3px;
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:0.62rem;
+    line-height:1;
+    padding:2px 4px;
+    border-radius:4px;
+    background:rgba(22,35,47,0.72);
+    color:var(--paper);
+    opacity:0;
+    transition:opacity .2s linear .6s;
+  }
+#panel-avent .porte.ouverte .porte-num{opacity:1;}
+#panel-avent .portes.finies .porte-num{display:none;}
+#panel-avent .porte:focus-visible{outline:none;z-index:2;}
+#panel-avent .porte:focus-visible .porte-face,
+#panel-avent .porte.ouverte:focus-visible{box-shadow:inset 0 0 0 4px var(--white), inset 0 0 0 6px var(--ink);}
+#panel-avent .decompte{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:2px 12px;
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:10px;
+    padding:9px 14px;
+  }
+#panel-avent .decompte-label{font-size:0.85rem;font-weight:600;}
+#panel-avent .decompte-temps{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:1.1rem;
+    color:var(--amber);
+    font-variant-numeric:tabular-nums;
+    white-space:nowrap;
+  }
+#panel-avent .statut{
+    margin:8px 0 0;
+    min-height:1.5em;
+    font-size:0.88rem;
+    font-weight:600;
+  }
+#panel-avent .cote{display:grid;gap:22px;min-width:0;}
+#panel-avent .cote h2{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:1.3rem;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    margin:0 0 8px;
+  }
+#panel-avent .message{display:flex;flex-wrap:wrap;gap:10px 16px;}
+#panel-avent .mot{display:flex;gap:3px;align-items:flex-end;}
+#panel-avent .case-lettre{
+    width:1.55rem;
+    height:2rem;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:var(--white);
+    border:2px solid var(--ink);
+    border-radius:5px;
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:1.05rem;
+  }
+#panel-avent .case-lettre.vide{background:transparent;border-style:dashed;border-color:var(--ink-soft);}
+#panel-avent .ponct{font-family:var(--mono);font-weight:600;font-size:1.05rem;padding-bottom:3px;}
+#panel-avent .compteur{
+    margin:10px 0 0;
+    font-family:var(--mono);
+    font-weight:500;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+    font-variant-numeric:tabular-nums;
+  }
+#panel-avent .regles{margin:0;padding-left:1.1em;display:grid;gap:6px;font-size:0.93rem;max-width:60ch;}
+#panel-avent .fin{
+    background:var(--white);
+    border:3px solid var(--ink);
+    border-radius:14px;
+    box-shadow:5px 5px 0 var(--teal);
+    padding:16px 18px;
+  }
+#panel-avent .fin h2{color:var(--teal);}
+#panel-avent .fin p{margin:0 0 8px;font-size:0.95rem;}
+#panel-avent .fin p:last-child{margin-bottom:0;}
+#panel-avent .credit{
+    text-align:center;
+    font-size:0.8rem;
+    color:var(--ink-soft);
+    margin-top:8px;
+  }
+#panel-avent dialog{
+    width:min(520px, calc(100vw - 32px));
+    max-height:calc(100dvh - 32px);
+    overflow-y:auto;
+    border:3px solid var(--ink);
+    border-radius:16px;
+    box-shadow:8px 8px 0 var(--ink);
+    padding:22px 22px 20px;
+    background:var(--white);
+    color:var(--ink);
+  }
+#panel-avent dialog::backdrop{background:rgba(22,35,47,0.6);}
+#panel-avent .fermer{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:36px;
+    height:36px;
+    font-size:1.25rem;
+    line-height:1;
+    background:transparent;
+    color:var(--ink);
+    border:0;
+    border-radius:8px;
+    cursor:pointer;
+  }
+#panel-avent .fermer:hover{background:var(--paper);}
+#panel-avent .surtitre{
+    margin:0 40px 4px 0;
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:0.78rem;
+    letter-spacing:0.03em;
+    color:var(--teal);
+  }
+#panel-avent dialog h2{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:1.6rem;
+    line-height:1.15;
+    text-transform:uppercase;
+    margin:0 40px 10px 0;
+  }
+#panel-avent .enonce{margin:0 0 14px;font-size:1.02rem;}
+#panel-avent .figure{display:block;width:150px;height:150px;margin:0 auto 14px;}
+#panel-avent .saisie{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+#panel-avent .saisie input{
+    flex:1 1 120px;
+    min-width:0;
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:1.15rem;
+    padding:10px 12px;
+    border:3px solid var(--ink);
+    border-radius:10px;
+    background:var(--white);
+    color:var(--ink);
+  }
+#panel-avent .btn{
+    font-family:var(--display);
+    font-weight:700;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    font-size:1rem;
+    border:3px solid var(--ink);
+    border-radius:10px;
+    padding:9px 18px;
+    cursor:pointer;
+    background:var(--amber-deep);
+    color:var(--white);
+    box-shadow:3px 3px 0 var(--ink);
+  }
+#panel-avent .btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink);}
+#panel-avent .btn.teal{background:var(--teal);}
+#panel-avent .choix{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin-bottom:10px;}
+#panel-avent .choix button{
+    font-family:var(--body);
+    font-weight:600;
+    font-size:1rem;
+    padding:10px 8px;
+    background:var(--white);
+    color:var(--ink);
+    border:3px solid var(--ink);
+    border-radius:10px;
+    cursor:pointer;
+  }
+#panel-avent .choix button:hover:not(:disabled){background:var(--paper);}
+#panel-avent .choix button:disabled{opacity:0.4;text-decoration:line-through;cursor:default;}
+#panel-avent .liens{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:8px;}
+#panel-avent .lien{
+    appearance:none;
+    background:none;
+    border:0;
+    padding:2px 0;
+    font-family:var(--body);
+    font-size:0.9rem;
+    font-weight:600;
+    color:var(--teal);
+    text-decoration:underline;
+    cursor:pointer;
+  }
+#panel-avent .indice{margin:0 0 10px;padding:8px 12px;background:var(--paper);border-radius:8px;font-size:0.93rem;}
+#panel-avent .retour{margin:0 0 8px;font-weight:600;color:var(--red);min-height:0;}
+#panel-avent .resultat{
+    border-top:2px solid var(--paper);
+    padding-top:12px;
+    margin-top:4px;
+  }
+#panel-avent .resultat h3{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:1.15rem;
+    text-transform:uppercase;
+    margin:0 0 6px;
+    color:var(--teal);
+  }
+#panel-avent .resultat p{margin:0 0 12px;}
+#panel-avent .maths{background:var(--paper);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:0.95rem;overflow-x:auto;}
+#panel-avent .maths h4{font-family:var(--mono);font-weight:600;font-size:0.78rem;letter-spacing:0.03em;margin:0 0 6px;color:var(--teal);text-transform:uppercase;}
+#panel-avent .maths p{margin:0 0 6px;}
+#panel-avent .maths p:last-child{margin-bottom:0;}
+#panel-avent .maths var{font-style:italic;font-weight:600;}
+#panel-avent .eq{margin:0 0 6px;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;}
+#panel-avent .frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;font-size:0.8em;line-height:1.1;}
+#panel-avent .frac span:first-child{border-bottom:1.5px solid currentColor;padding:0 2px;}
+#panel-avent .systeme{display:flex;align-items:center;gap:4px;margin:0 0 8px;font-weight:600;white-space:nowrap;}
+#panel-avent .accolade{font-size:3.1rem;font-weight:400;line-height:1;transform:translateY(-3px);}
+#panel-avent .fin h3{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:1.05rem;
+    letter-spacing:0.5px;
+    text-transform:uppercase;
+    margin:14px 0 6px;
+  }
+#panel-avent .fin .btn{margin-top:4px;}
+#panel-avent .etapes{display:block;width:100%;max-width:330px;height:auto;margin:6px auto 10px;}
+#panel-avent .lettre-gagnee{display:flex;align-items:center;gap:12px;margin-bottom:14px;font-weight:600;}
+#panel-avent :focus-visible{outline:3px solid var(--amber-deep);outline-offset:2px;}
+@media (prefers-reduced-motion:reduce){
+#panel-avent .porte-face,
+#panel-avent .porte-num{transition:none;}
+#panel-avent .porte.passee:hover .porte-face,
+#panel-avent .porte.du-jour:hover .porte-face{transform:none;}}
+#panel-avent .entete{text-align:center;}
+#panel-avent .entete p{margin:0 auto;max-width:880px;}
+#panel-avent .layout{grid-template-columns:minmax(0,1fr);justify-items:center;gap:32px;}
+#panel-avent .plateau-col{max-width:460px;width:100%;margin:0 auto;}
+#panel-avent .cote{width:100%;max-width:880px;}
+#panel-avent .cote > section > h2{text-align:center;}
+#panel-avent .message{justify-content:center;}
+#panel-avent .regles{max-width:none;}
+#panel-avent .page{padding:0;max-width:none;}
+
+
   /* ---------- navbar du site ---------- */
   .site-nav{
     position:sticky;
@@ -368,7 +798,8 @@
 
 <nav class="tabs" aria-label="Choisir une classe">
   <div class="tabs-scroll" role="tablist">
-    <div class="tab active" role="tab" id="tab-cap" aria-controls="panel-cap" aria-selected="true" tabindex="0" data-panel="cap">CAP 2A</div>
+    <div class="tab tab-avent active" role="tab" id="tab-avent" aria-controls="panel-avent" aria-selected="true" tabindex="0" data-panel="avent">Calendrier de l'Avent</div>
+    <div class="tab" role="tab" id="tab-cap" aria-controls="panel-cap" aria-selected="false" tabindex="-1" data-panel="cap">CAP 2A</div>
     <div class="tab" role="tab" id="tab-premiere" aria-controls="panel-premiere" aria-selected="false" tabindex="-1" data-panel="premiere">Première Pro</div>
     <div class="tab" role="tab" id="tab-terminale" aria-controls="panel-terminale" aria-selected="false" tabindex="-1" data-panel="terminale">Terminale Pro</div>
     <div class="tab" role="tab" id="tab-sciences" aria-controls="panel-sciences" aria-selected="false" tabindex="-1" data-panel="sciences">Sciences</div>
@@ -377,8 +808,79 @@
 
 <main>
 
+  <!-- ================= Calendrier de l'Avent (affiché jusqu'au 6 janvier) ================= -->
+  <section class="panel active" id="panel-avent" role="tabpanel" aria-labelledby="tab-avent">
+<div class="page">
+
+  <aside class="apercu" id="apercu" hidden>
+    <strong>PROTOTYPE</strong>
+    <label for="dateSimulee">On fait comme si on était le
+      <input type="range" id="dateSimulee" min="1" max="24" value="6">
+      <output id="dateAffichee" for="dateSimulee">6 décembre</output>
+    </label>
+    <span class="apercu-actions">
+      <button type="button" id="voirFin">Voir la fin</button>
+      <button type="button" id="recommencer">Recommencer</button>
+    </span>
+    <p>Les 24 énigmes sont en place. Ce bandeau disparaîtra de la version finale.</p>
+  </aside>
+
+  <div class="entete">
+    <h2>L'Avent <span>en énigmes</span></h2>
+    <p>Une énigme par jour jusqu'au 24 décembre, à résoudre seul ou en famille. Chaque bonne réponse ouvre une case du sapin et donne une lettre du message caché. Qui accèdera à l'énigme finale et découvrira les secrets du calendrier ?</p>
+  </div>
+
+  <div class="layout">
+    <section class="plateau-col" aria-label="Calendrier">
+      <div class="decompte">
+        <span class="decompte-label" id="decompteLabel">Prochaine case dans</span>
+        <span class="decompte-temps" id="decompteTemps"></span>
+      </div>
+      <div class="plateau">
+        <svg class="sapin" id="sapin" viewBox="0 0 400 600" role="img" aria-label="Un sapin de Noël formé d'un triangle fractal de Sierpiński, décoré de boules portant des symboles mathématiques, avec une étoile au sommet et des cadeaux au pied."></svg>
+        <div class="portes" id="portes"></div>
+      </div>
+      <p class="statut" id="statut" role="status"></p>
+    </section>
+
+    <div class="cote">
+      <section class="fin" id="fin" hidden>
+        <h2>Calendrier terminé !</h2>
+        <p id="finBilan"></p>
+        <h3>Le secret du sapin</h3>
+        <p>Le sapin est un triangle de Sierpiński, une figure décrite en 1915 par le mathématicien polonais Wacław Sierpiński. On part d'un triangle plein, on relie les milieux de ses trois côtés et on retire le triangle du centre. Puis on recommence avec chacun des triangles qui restent.</p>
+        <div id="figureFin"></div>
+        <p>Chaque morceau est une copie réduite de la figure entière : c'est ce qu'on appelle une fractale.</p>
+        <button class="btn" type="button" id="ouvrirBonus">Résoudre l'énigme bonus</button>
+      </section>
+
+      <section>
+        <h2>Le message caché</h2>
+        <div class="message" id="message" aria-live="polite"></div>
+      </section>
+
+      <section>
+        <h2>Comment ça marche</h2>
+        <ul class="regles">
+          <li>La case du jour est dorée. Les cases des jours passés gardent leur ruban et restent ouvertes, pour rattraper ton retard.</li>
+          <li>Un indice est disponible pour chaque énigme. Après plusieurs essais, tu peux afficher la réponse et garder ta lettre.</li>
+          <li>Ta progression reste sur cet appareil et ce navigateur. Aucun compte, aucune donnée envoyée.</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</div>
+
+<dialog id="fenetre" aria-labelledby="enigmeTitre">
+  <button type="button" class="fermer" id="fermer" aria-label="Fermer l'énigme">×</button>
+  <p class="surtitre" id="enigmeSurtitre"></p>
+  <h2 id="enigmeTitre"></h2>
+  <div id="enigmeCorps"></div>
+</dialog>
+  </section>
+
   <!-- ================= CAP 2A ================= -->
-  <section class="panel active" id="panel-cap" role="tabpanel" aria-labelledby="tab-cap">
+  <section class="panel" id="panel-cap" role="tabpanel" aria-labelledby="tab-cap">
 
     <div class="chapter-grid">
       <div class="chapter-card" data-target="cap-automatismes" role="button" tabindex="0" aria-label="Ouvrir le chapitre">
@@ -811,6 +1313,678 @@
 </main>
 
 <footer>Conçu par Mme Boudier (à l'aide d'une IA, soyons réalistes).</footer>
+
+<script>
+/* ---------- Calendrier de l'Avent ---------- */
+(function(){
+  // Après le 6 janvier, l'onglet disparaît et l'accueil s'ouvre de nouveau sur CAP 2A.
+  if (new Date() >= new Date(2027, 0, 7)) {
+    document.getElementById('tab-avent').remove();
+    document.getElementById('panel-avent').remove();
+    const cap = document.getElementById('tab-cap');
+    cap.classList.add('active'); cap.setAttribute('aria-selected', 'true'); cap.tabIndex = 0;
+    document.getElementById('panel-cap').classList.add('active');
+    return;
+  }
+
+/* ---------- Réglages ---------- */
+const APERCU = false;              // false pour la mise en ligne : bandeau retiré, vraie date utilisée
+const ANNEE = 2026;
+const MESSAGE = "HO HO ! LES MATHS, C’EST UN CADEAU !";
+const CLE = "lpqc-avent-" + ANNEE + (APERCU ? "-apercu" : "");
+
+/* Numéros des cases sur le plateau, ligne par ligne. */
+const PLATEAU = [
+  17, 4, 22, 9,
+  2, 13, 7, 20,
+  11, 24, 15, 5,
+  19, 1, 10, 23,
+  6, 16, 3, 12,
+  21, 8, 18, 14
+];
+
+/* Quelle lettre du message chaque jour révèle : l'ordre est mélangé pour que la phrase ne se devine pas trop tôt. */
+const ORDRE_LETTRES = [9,0,17,5,21,12,3,14,23,7,1,19,10,16,4,22,8,13,2,18,6,20,11,15];
+
+const ENCRE = "#16232F", ROUGE = "#B3432B", VERT = "#2E7D6B", OR = "#F2A93B", CREME = "#FFF3D6";
+const POLICE = "font-family=\"'IBM Plex Mono','Courier New',monospace\" font-weight=\"600\"";
+
+/* Grille 3 × 3, vide ou remplie de nombres. */
+function grille3(nombres, label) {
+  let txt = "";
+  if (nombres) nombres.forEach((n, i) => {
+    txt += `<text x="${27 + (i % 3) * 48}" y="${29 + Math.floor(i / 3) * 48}" fill="${ENCRE}" ${POLICE} font-size="26" text-anchor="middle" dominant-baseline="central">${n}</text>`;
+  });
+  return `<svg class="figure" viewBox="0 0 150 150" role="img" aria-label="${label}"><rect x="3" y="3" width="144" height="144" fill="${CREME}" stroke="${ENCRE}" stroke-width="4"/><path d="M51 3V147M99 3V147M3 51H147M3 99H147" stroke="${ENCRE}" stroke-width="4" fill="none"/>${txt}</svg>`;
+}
+const FIGURE_CARRES = grille3(null, "Un carré découpé en une grille de 3 lignes et 3 colonnes.");
+const FIGURE_MAGIQUE = grille3([2, 7, 6, 9, 5, 1, 4, 3, 8], "Un carré magique : 2, 7, 6 sur la première ligne ; 9, 5, 1 sur la deuxième ; 4, 3, 8 sur la troisième.");
+
+const FIGURE_TARTE = `<svg class="figure" viewBox="0 0 150 150" role="img" aria-label="Une tarte ronde coupée par 3 coups de couteau qui se croisent en 3 points différents : on obtient 7 parts."><defs><clipPath id="clipTarte"><circle cx="75" cy="75" r="68"/></clipPath></defs><circle cx="75" cy="75" r="68" fill="#D9A25B" stroke="${ENCRE}" stroke-width="3"/><circle cx="75" cy="75" r="58" fill="${OR}"/><path clip-path="url(#clipTarte)" d="M0 50L150 62M30 0L95 150M130 0L40 150" stroke="${ENCRE}" stroke-width="3" fill="none"/></svg>`;
+
+const FIGURE_GUIRLANDE = (() => {
+  const couleurs = [ROUGE, VERT, OR];
+  let fil = "M6 22", ampoules = "";
+  for (let i = 0; i < 9; i++) {
+    const x = 22 + i * 32, y = i % 2 ? 30 : 20;
+    fil += ` Q${x - 16} ${i % 2 ? 14 : 34} ${x} ${y}`;
+    ampoules += `<rect x="${x - 4}" y="${y - 2}" width="8" height="7" fill="${ENCRE}"/><ellipse cx="${x}" cy="${y + 15}" rx="8" ry="11" fill="${couleurs[i % 3]}" stroke="${ENCRE}" stroke-width="1.5"/>`;
+  }
+  return `<svg class="etapes" viewBox="0 0 330 64" role="img" aria-label="Une guirlande dont les ampoules se suivent dans l'ordre rouge, vert, doré, rouge, vert, doré, et ainsi de suite."><path d="${fil}" stroke="${ENCRE}" stroke-width="2" fill="none"/>${ampoules}<text x="314" y="42" fill="${ENCRE}" ${POLICE} font-size="22" text-anchor="middle">…</text></svg>`;
+})();
+
+const FIGURE_NUMEROS = (() => {
+  let cases = "";
+  for (let n = 1; n <= 24; n++) {
+    const x = 5 + ((n - 1) % 6) * 50, y = 5 + Math.floor((n - 1) / 6) * 34;
+    const chiffres = [...String(n)].map(c => c === "1" ? `<tspan fill="${ROUGE}" font-weight="700">1</tspan>` : c).join("");
+    cases += `<rect x="${x}" y="${y}" width="46" height="30" rx="4" fill="${CREME}" stroke="${ENCRE}" stroke-width="1.5"/><text x="${x + 23}" y="${y + 16}" fill="${ENCRE}" ${POLICE} font-size="17" text-anchor="middle" dominant-baseline="central">${chiffres}</text>`;
+  }
+  return `<svg class="etapes" viewBox="0 0 310 146" role="img" aria-label="Les nombres de 1 à 24, avec chaque chiffre 1 en rouge : 1, 10, 11 (deux fois), 12 à 19 et 21.">${cases}</svg>`;
+})();
+
+const boule = (x, y) => `<circle cx="${x}" cy="${y}" r="9" fill="${OR}" stroke="${ENCRE}" stroke-width="1.5"/>`;
+
+const FIGURE_PYRAMIDE = (() => {
+  let b = "";
+  for (let k = 1; k <= 4; k++) for (let i = 0; i < k; i++) b += boule(110 - (k - 1) * 10 + i * 20, 14 + (k - 1) * 18);
+  return `<svg class="etapes" style="max-width:220px" viewBox="0 0 220 84" role="img" aria-label="Une pyramide de boules vue de côté : 4 étages, la boule du sommet posée sur les étages du dessous.">${b}<path d="M50 80H170" stroke="${ENCRE}" stroke-width="2"/></svg>`;
+})();
+
+const FIGURE_ETAGES = (() => {
+  let d = "";
+  [[1, 30], [2, 100], [3, 185], [4, 285]].forEach(([k, cx]) => {
+    for (let i = 0; i < k; i++) for (let j = 0; j < k; j++) d += boule(cx - (k - 1) * 10 + i * 20, 50 - (k - 1) * 10 + j * 20);
+    d += `<text x="${cx}" y="114" fill="${ENCRE}" ${POLICE} font-size="12" text-anchor="middle">${k === 1 ? "1" : `${k} × ${k} = ${k * k}`}</text>`;
+  });
+  return `<svg class="etapes" viewBox="0 0 330 124" role="img" aria-label="Les 4 étages vus de dessus : 1 boule, puis 2 × 2 = 4, 3 × 3 = 9 et 4 × 4 = 16 boules.">${d}</svg>`;
+})();
+
+const frac = (a, b) => `<span class="frac"><span>${a}</span><span>${b}</span></span>`;
+const systeme = (l1, l2) => `<div class="systeme"><span class="accolade" aria-hidden="true">{</span><div><div>${l1}</div><div>${l2}</div></div></div>`;
+
+const ENIGMES = {
+  1: {
+    niveau: "facile", titre: "La boîte de chocolats",
+    texte: "Dans une boîte de 24 chocolats, Léa en mange la moitié. Son frère mange ensuite le tiers de ce qui reste. Combien de chocolats reste-t-il ?",
+    reponse: 8,
+    indice: "Procède dans l'ordre : combien reste-t-il après le passage de Léa ?",
+    explication: "Léa en mange 12, il en reste 12. Son frère en mange 12 ÷ 3 = 4. Il reste donc 12 − 4 = 8 chocolats.",
+    maths: `<p>Après Léa, il reste ${frac(1,2)} de la boîte. Après son frère, il reste ${frac(2,3)} de ce résultat :</p><p class="eq">24 × ${frac(1,2)} × ${frac(2,3)} = 8</p>`
+  },
+  2: {
+    niveau: "moyen", titre: "Le partage de la tarte",
+    texte: "Avec 3 coups de couteau bien droits, sans déplacer les morceaux entre deux coups, en combien de parts au maximum peut-on couper une tarte ? Les parts n'ont pas besoin d'avoir la même taille.",
+    reponse: 7, unite: "parts",
+    figureCorrection: FIGURE_TARTE,
+    indice: "Pour faire le plus de parts possible, chaque nouveau coup doit croiser tous les coups précédents, mais pas au même endroit.",
+    explication: "Le 1er coup fait 2 parts. Le 2e le croise et ajoute 2 parts : on en a 4. Le 3e croise les deux premiers en deux endroits différents et ajoute 3 parts : on en a 7. Avec 3 coups qui passent tous par le centre, on n'aurait que 6 parts.",
+    maths: `<p>Le <var>n</var>-ième coup ajoute <var>n</var> parts. Avec <var>n</var> coups, on obtient au maximum :</p><p class="eq">1 + 1 + 2 + … + <var>n</var> = 1 + ${frac("<var>n</var>(<var>n</var> + 1)", 2)}</p><p class="eq">Pour <var>n</var> = 3 : 1 + 1 + 2 + 3 = 7</p>`
+  },
+  3: {
+    niveau: "piège", titre: "Le tiroir dans le noir",
+    texte: "Ton tiroir contient 10 chaussettes rouges et 10 chaussettes bleues, mélangées. Il fait complètement noir. Combien dois-tu en prendre, au minimum, pour avoir à coup sûr deux chaussettes de la même couleur ?",
+    reponse: 3, unite: "chaussettes",
+    indice: "Imagine le pire des cas : les premières chaussettes sont toutes différentes.",
+    explication: "Avec 2 chaussettes, tu peux tomber sur une rouge et une bleue. La 3e sera forcément de la même couleur que l'une des deux.",
+    maths: `<p>C'est le principe des tiroirs : avec <var>n</var> couleurs, il faut <var>n</var> + 1 chaussettes pour être certain d'avoir une paire.</p><p class="eq">2 + 1 = 3</p>`
+  },
+  4: {
+    niveau: "piège", titre: "La bûche à scier",
+    texte: "Il faut 6 minutes pour scier une bûche en 3 morceaux. En sciant à la même vitesse, combien de minutes faut-il pour scier une bûche identique en 6 morceaux ?",
+    reponse: 15, unite: "minutes",
+    indice: "Compte les coups de scie plutôt que les morceaux.",
+    explication: "3 morceaux demandent 2 coupes, donc une coupe dure 3 minutes. 6 morceaux demandent 5 coupes : 5 × 3 = 15 minutes.",
+    maths: `<p>Pour <var>n</var> morceaux, il faut <var>n</var> − 1 coupes. La durée en minutes est donc :</p><p class="eq"><var>t</var>(<var>n</var>) = 3(<var>n</var> − 1)</p><p class="eq"><var>t</var>(3) = 3 × 2 = 6 et <var>t</var>(6) = 3 × 5 = 15</p>`
+  },
+  5: {
+    niveau: "moyen", titre: "Le papier cadeau",
+    texte: "Combien de carrés peut-on voir, en tout, sur ce motif de papier cadeau ?",
+    figure: FIGURE_CARRES,
+    reponse: 14, unite: "carrés",
+    indice: "Tous les carrés n'ont pas la même taille. Compte-les taille par taille.",
+    explication: "Il y a 9 petits carrés, 4 carrés de 2 cases de côté et 1 grand carré : 9 + 4 + 1 = 14.",
+    maths: `<p>Le nombre de carrés de chaque taille est lui-même un carré :</p><p class="eq">3² + 2² + 1² = 9 + 4 + 1 = 14</p>`
+  },
+  6: {
+    niveau: "moyen", titre: "La tirelire",
+    texte: "Une tirelire contient 10 pièces : des pièces de 1 € et des pièces de 2 €. Le total des pièces fait 16 €. Combien y a-t-il de pièces de 2 € ?",
+    reponse: 6, unite: "pièces",
+    indice: "Si les 10 pièces valaient 1 €, quel serait le total ? Que change chaque pièce de 2 € ?",
+    explication: "10 pièces de 1 € feraient 10 €. Il manque 6 €, et chaque pièce de 2 € ajoute 1 €. Il y a donc 6 pièces de 2 € et 4 pièces de 1 € : 12 + 4 = 16 €.",
+    maths: `<p>Soit <var>x</var> le nombre de pièces de 1 € et <var>y</var> le nombre de pièces de 2 € :</p>${systeme("<var>x</var> + <var>y</var> = 10", "<var>x</var> + 2<var>y</var> = 16")}<p>En soustrayant la première équation à la seconde :</p><p class="eq"><var>y</var> = 16 − 10 = 6</p><p class="eq"><var>x</var> = 10 − 6 = 4</p><p>Vérification : 4 × 1 + 6 × 2 = 16 €.</p>`
+  },
+  7: {
+    niveau: "facile", titre: "Le goûter de Noël",
+    texte: "Sam achète 4 chocolats chauds identiques et une gaufre à 5 €. Il paie 17 € en tout. Combien coûte un chocolat chaud, en euros ?",
+    reponse: 3, unite: "€",
+    indice: "Commence par enlever le prix de la gaufre.",
+    explication: "Sans la gaufre, les 4 chocolats chauds coûtent 17 − 5 = 12 €. Un chocolat chaud coûte donc 12 ÷ 4 = 3 €.",
+    maths: `<p>Soit <var>x</var> le prix d'un chocolat chaud :</p><p class="eq">4<var>x</var> + 5 = 17</p><p class="eq">4<var>x</var> = 12</p><p class="eq"><var>x</var> = 3</p>`
+  },
+  8: {
+    niveau: "moyen", titre: "La guirlande",
+    texte: "Sur une guirlande, les ampoules se suivent toujours dans le même ordre : rouge, vert, doré, rouge, vert, doré… De quelle couleur est la 100e ampoule ?",
+    figure: FIGURE_GUIRLANDE,
+    choix: ["Rouge", "Vert", "Doré"], reponse: "Rouge",
+    indice: "Les couleurs reviennent toutes les 3 ampoules. De quelle couleur est la 99e ampoule ?",
+    explication: "Le motif se répète toutes les 3 ampoules. Comme 99 est dans la table de 3, la 99e ampoule termine un motif : elle est dorée. La 100e recommence le motif : elle est rouge.",
+    maths: `<p>On fait la division euclidienne de 100 par 3 :</p><p class="eq">100 = 3 × 33 + 1</p><p>Il y a 33 motifs complets, puis il reste 1 ampoule : c'est la 1re couleur du motif, le rouge.</p>`
+  },
+  9: {
+    niveau: "facile", titre: "Le pull de Noël",
+    texte: "Karim repère un pull de Noël à 40 €. Il est soldé à −25 %. Combien Karim va-t-il le payer, en euros ?",
+    reponse: 30, unite: "€",
+    indice: "25 %, c'est un quart.",
+    explication: "25 % de 40 €, c'est un quart de 40 €, soit 10 €. Le pull coûte donc 40 − 10 = 30 €.",
+    maths: `<p>Baisser un prix de 25 %, c'est le multiplier par 1 − 0,25 = 0,75 :</p><p class="eq">40 × 0,75 = 30</p>`
+  },
+  10: {
+    niveau: "piège", titre: "La file du marché de Noël",
+    texte: "Au marché de Noël, Nora fait la queue pour un chocolat chaud. Elle est la 7e en partant du début de la file, et la 5e en partant de la fin. Combien de personnes y a-t-il dans la file ?",
+    reponse: 11, unite: "personnes",
+    indice: "Dessine la file avec des petits ronds. Attention à ne pas compter Nora deux fois.",
+    explication: "Devant Nora, il y a 6 personnes. Derrière elle, il y en a 4. Avec Nora : 6 + 1 + 4 = 11 personnes.",
+    maths: `<p>Nora est comptée dans les deux nombres, il faut donc l'enlever une fois :</p><p class="eq">7 + 5 − 1 = 11</p>`
+  },
+  11: {
+    niveau: "facile", titre: "Les sablés",
+    texte: "Pour faire 20 sablés de Noël, Hugo utilise 150 g de beurre. Combien de grammes de beurre lui faut-il pour 30 sablés ?",
+    reponse: 225, unite: "g",
+    indice: "Combien faut-il de beurre pour 10 sablés ?",
+    explication: "Pour 10 sablés, il faut 150 ÷ 2 = 75 g de beurre. Pour 30 sablés, il en faut 3 fois plus : 3 × 75 = 225 g.",
+    maths: `<p>La quantité de beurre est proportionnelle au nombre de sablés. Chaque sablé demande :</p><p class="eq">150 ÷ 20 = 7,5 g</p><p class="eq">30 × 7,5 = 225 g</p>`
+  },
+  12: {
+    niveau: "moyen", titre: "Les numéros du calendrier",
+    texte: "On écrit les numéros des cases du calendrier, de 1 à 24. Combien de fois écrit-on le chiffre 1 ?",
+    reponse: 13, unite: "fois",
+    figureCorrection: FIGURE_NUMEROS,
+    indice: "N'oublie pas que 11 contient deux fois le chiffre 1.",
+    explication: "Le chiffre 1 apparaît dans 1, 10, 11 (deux fois), 12, 13, 14, 15, 16, 17, 18, 19 et 21. Cela fait 13 fois.",
+    maths: `<p>On compte séparément les deux positions :</p><p class="eq">Chiffre des dizaines : de 10 à 19, soit 10 fois</p><p class="eq">Chiffre des unités : 1, 11 et 21, soit 3 fois</p><p class="eq">10 + 3 = 13</p>`
+  },
+  13: {
+    niveau: "piège", titre: "Les flocons en papier",
+    texte: "5 personnes découpent 5 flocons en papier en 5 minutes. Combien de minutes faut-il à 100 personnes pour découper 100 flocons ?",
+    reponse: 5, unite: "minutes",
+    indice: "Combien de temps faut-il à une seule personne pour découper un seul flocon ?",
+    explication: "Chaque personne découpe 1 flocon en 5 minutes. Si 100 personnes travaillent en même temps, elles découpent 100 flocons en 5 minutes.",
+    maths: `<p>Chaque personne découpe 1 flocon en 5 minutes. Le nombre de flocons est proportionnel au nombre de personnes, la durée ne change pas :</p><p class="eq">100 personnes × 1 flocon = 100 flocons en 5 minutes</p>`
+  },
+  14: {
+    niveau: "piège", titre: "L'escargot",
+    texte: "Une biologiste observe un escargot au fond d'un puits de 10 m. Chaque jour, il monte de 3 m. Chaque nuit, il glisse de 2 m vers le bas. Au bout de combien de jours sort-il du puits ?",
+    reponse: 8, unite: "jours",
+    indice: "Une fois en haut, l'escargot ne glisse plus. Regarde où il se trouve chaque matin.",
+    explication: "Chaque jour complet (jour et nuit), l'escargot gagne 1 m. Au matin du 8e jour, il est à 7 m. Dans la journée, il monte de 3 m et atteint 10 m : il sort avant de glisser. La réponse n'est donc pas 10 jours.",
+    maths: `<p>Au matin du jour <var>n</var>, l'escargot est à <var>n</var> − 1 mètres. Il sort ce jour-là si :</p><p class="eq">(<var>n</var> − 1) + 3 ≥ 10</p><p class="eq"><var>n</var> ≥ 8</p>`
+  },
+  15: {
+    niveau: "moyen", titre: "Le carré magique",
+    texte: "On place les nombres de 1 à 9 dans cette grille, un par case, de sorte que chaque ligne, chaque colonne et chaque diagonale ait la même somme. Quelle est cette somme ?",
+    figure: FIGURE_CARRES,
+    figureCorrection: FIGURE_MAGIQUE,
+    reponse: 15,
+    indice: "Additionne tous les nombres de 1 à 9, puis partage ce total entre les 3 lignes.",
+    explication: "1 + 2 + … + 9 = 45. Les 3 lignes contiennent tous les nombres et ont la même somme : 45 ÷ 3 = 15. Voici un carré magique possible.",
+    maths: `<p>Si <var>S</var> est la somme d'une ligne, les 3 lignes réunies contiennent tous les nombres de 1 à 9 :</p><p class="eq">3<var>S</var> = 1 + 2 + … + 9 = 45</p><p class="eq"><var>S</var> = 15</p><p>Vérification sur la première ligne : 2 + 7 + 6 = 15.</p>`
+  },
+  16: {
+    niveau: "piège", titre: "La boule et la guirlande",
+    texte: "Une boule de Noël et une guirlande coûtent 11 € ensemble. La guirlande coûte 10 € de plus que la boule. Combien coûte la boule, en centimes ?",
+    reponse: 50, unite: "centimes", aussi: [0.5],
+    indice: "Si la boule coûtait 1 €, combien coûterait la guirlande ? Vérifie le total.",
+    explication: "Si la boule coûtait 1 €, la guirlande coûterait 11 € et le total ferait 12 €. La boule coûte en fait 0,50 € et la guirlande 10,50 € : 0,50 + 10,50 = 11 €.",
+    maths: `<p>Soit <var>b</var> le prix de la boule en euros. La guirlande coûte <var>b</var> + 10 :</p><p class="eq"><var>b</var> + (<var>b</var> + 10) = 11</p><p class="eq">2<var>b</var> = 1</p><p class="eq"><var>b</var> = 0,50 €, soit 50 centimes</p>`
+  },
+  17: {
+    niveau: "moyen", titre: "L'atelier paquets cadeaux",
+    texte: "Pour emballer un cadeau, Lina met 6 minutes et son père, plus rapide, 3 minutes. Ils emballent en même temps pendant 36 minutes. Combien de cadeaux emballent-ils en tout ?",
+    reponse: 18, unite: "cadeaux",
+    indice: "Compte d'abord les cadeaux de Lina, puis ceux de son père.",
+    explication: "En 36 minutes, Lina emballe 36 ÷ 6 = 6 cadeaux et son père 36 ÷ 3 = 12 cadeaux. Ensemble : 6 + 12 = 18 cadeaux.",
+    maths: `<p>Lina emballe ${frac(1,6)} de cadeau par minute et son père ${frac(1,3)}. Ensemble :</p><p class="eq">${frac(1,6)} + ${frac(1,3)} = ${frac(1,2)} cadeau par minute</p><p class="eq">36 × ${frac(1,2)} = 18</p>`
+  },
+  18: {
+    niveau: "moyen", titre: "La pyramide de boules",
+    texte: "Au marché de Noël, des boules sont empilées en pyramide, comme des oranges sur un étal. Il y a 1 boule au sommet, posée sur un carré de 2 × 2 boules, lui-même posé sur un carré de 3 × 3 boules, et ainsi de suite. La pyramide a 4 étages. Combien de boules y a-t-il en tout ?",
+    figure: FIGURE_PYRAMIDE,
+    figureCorrection: FIGURE_ETAGES,
+    reponse: 30, unite: "boules",
+    indice: "L'étage du bas est un carré de 4 boules sur 4. Compte les boules étage par étage.",
+    explication: "Vus de dessus, les étages contiennent 1, 4, 9 et 16 boules : 1 + 4 + 9 + 16 = 30.",
+    maths: `<p>Chaque étage est un carré, comme pour le papier cadeau du 5 décembre :</p><p class="eq">1² + 2² + 3² + 4² = 1 + 4 + 9 + 16 = 30</p>`
+  },
+  19: {
+    niveau: "moyen", titre: "Le double de l'âge",
+    texte: "Emma a 12 ans et sa mère 39 ans. Dans combien d'années sa mère aura-t-elle exactement le double de l'âge d'Emma ?",
+    reponse: 15, unite: "ans",
+    indice: "Les deux vieillissent en même temps : ajoute le même nombre d'années aux deux âges.",
+    explication: "Dans 15 ans, Emma aura 27 ans et sa mère 54 ans. Et 54 = 2 × 27.",
+    maths: `<p>Soit <var>x</var> le nombre d'années :</p><p class="eq">39 + <var>x</var> = 2(12 + <var>x</var>)</p><p class="eq">39 + <var>x</var> = 24 + 2<var>x</var></p><p class="eq"><var>x</var> = 15</p>`
+  },
+  20: {
+    niveau: "moyen", titre: "Les douze jours de Noël",
+    texte: "Dans une chanson anglaise, on reçoit 1 cadeau le 1er jour de Noël, 1 + 2 = 3 cadeaux le 2e jour, 1 + 2 + 3 = 6 cadeaux le 3e jour, et ainsi de suite pendant 12 jours. Combien de cadeaux reçoit-on le 12e jour ?",
+    reponse: 78, unite: "cadeaux",
+    indice: "Il faut calculer 1 + 2 + 3 + … + 12. Essaie d'associer les nombres deux par deux : 1 avec 12, 2 avec 11…",
+    explication: "1 + 12 = 13, 2 + 11 = 13, 3 + 10 = 13… On obtient 6 paires qui valent chacune 13 : 6 × 13 = 78.",
+    maths: `<p>La somme des entiers de 1 à <var>n</var> vaut :</p><p class="eq">1 + 2 + … + <var>n</var> = ${frac("<var>n</var>(<var>n</var> + 1)", 2)}</p><p class="eq">${frac("12 × 13", 2)} = 78</p><p><strong>Pour aller plus loin :</strong> sur les 12 jours, on reçoit 364 cadeaux en tout. C'est presque un cadeau par jour de l'année !</p>`
+  },
+  21: {
+    niveau: "difficile", titre: "Le repas de Noël",
+    texte: "À la fin du repas de Noël, chaque invité trinque une seule fois avec chacun des autres. On entend 28 tintements en tout. Combien y a-t-il d'invités ?",
+    reponse: 8, unite: "invités",
+    indice: "Essaie avec 3 invités, puis 4, puis 5. Combien de tintements entend-on à chaque fois ?",
+    explication: "Avec 3 invités, on entend 3 tintements ; avec 4, 6 tintements ; avec 5, 10 ; avec 6, 15 ; avec 7, 21 ; et avec 8, 28. Il y a donc 8 invités.",
+    maths: `<p>Soit <var>n</var> le nombre d'invités. Chacun trinque avec <var>n</var> − 1 personnes, et chaque tintement concerne deux personnes :</p><p class="eq">${frac("<var>n</var>(<var>n</var> − 1)", 2)} = 28</p><p class="eq"><var>n</var>(<var>n</var> − 1) = 56 = 8 × 7</p><p class="eq"><var>n</var> = 8</p>`
+  },
+  22: {
+    niveau: "difficile", titre: "Jade et son grand-père",
+    texte: "Jade et son grand-père ont 80 ans à eux deux. Il y a 10 ans, le grand-père avait 5 fois l'âge de Jade. Quel âge a Jade aujourd'hui ?",
+    reponse: 20, unite: "ans",
+    indice: "Essaie des âges qui font 80 ans en tout, puis enlève 10 ans à chacun pour vérifier.",
+    explication: "Jade a 20 ans et son grand-père 60 ans : 20 + 60 = 80. Il y a 10 ans, ils avaient 10 ans et 50 ans, et 50 = 5 × 10.",
+    maths: `<p>Soit <var>j</var> l'âge de Jade et <var>g</var> celui de son grand-père :</p>${systeme("<var>j</var> + <var>g</var> = 80", "<var>g</var> − 10 = 5(<var>j</var> − 10)")}<p>La seconde équation donne <var>g</var> = 5<var>j</var> − 40. On remplace dans la première :</p><p class="eq"><var>j</var> + 5<var>j</var> − 40 = 80</p><p class="eq">6<var>j</var> = 120, donc <var>j</var> = 20 et <var>g</var> = 60</p>`
+  },
+  23: {
+    niveau: "difficile", titre: "La somme du calendrier",
+    texte: "Si tu additionnes tous les numéros des cases du calendrier, 1 + 2 + 3 + … + 24, quel total obtiens-tu ?",
+    reponse: 300,
+    indice: "Comme pour le 20 décembre : associe 1 avec 24, 2 avec 23… Que remarques-tu ?",
+    explication: "1 + 24 = 25, 2 + 23 = 25, 3 + 22 = 25… On obtient 12 paires qui valent chacune 25 : 12 × 25 = 300. On raconte que le mathématicien Carl Friedrich Gauss a trouvé cette astuce à l'école, vers 9 ans, pour additionner les nombres de 1 à 100 en quelques secondes.",
+    maths: `<p>Avec la formule du 20 décembre :</p><p class="eq">1 + 2 + … + 24 = ${frac("24 × 25", 2)} = 300</p>`
+  },
+  24: {
+    niveau: "difficile", titre: "Le nombre mystère",
+    texte: "Je suis un nombre à deux chiffres. La somme de mes chiffres vaut 9. Si on inverse mes deux chiffres, j'augmente de 27. Qui suis-je ?",
+    reponse: 36,
+    indice: "Fais la liste des nombres à deux chiffres dont la somme des chiffres vaut 9 : 18, 27, 36… Puis inverse leurs chiffres.",
+    explication: "3 + 6 = 9, et en inversant les chiffres on obtient 63. Or 63 − 36 = 27.",
+    maths: `<p>Soit <var>a</var> le chiffre des dizaines et <var>b</var> celui des unités. Le nombre vaut 10<var>a</var> + <var>b</var> :</p>${systeme("<var>a</var> + <var>b</var> = 9", "(10<var>b</var> + <var>a</var>) − (10<var>a</var> + <var>b</var>) = 27")}<p>La seconde équation donne 9<var>b</var> − 9<var>a</var> = 27, soit <var>b</var> − <var>a</var> = 3. En ajoutant les deux équations :</p><p class="eq">2<var>b</var> = 12, donc <var>b</var> = 6 et <var>a</var> = 3</p>`
+  },
+  /* Énigme bonus : visible une fois les 24 cases ouvertes, ne donne pas de lettre. */
+  bonus: {
+    niveau: "difficile", titre: "Le secret du sapin",
+    texte: "Le sapin a été construit en répétant 5 fois l'étape de découpage, à partir d'un seul triangle. Combien de petits triangles verts compte-t-il ?",
+    figure: figureEtapes(),
+    reponse: 243, unite: "triangles",
+    indice: "Compte les triangles verts à l'étape 1, puis à l'étape 2. Par combien leur nombre est-il multiplié à chaque étape ?",
+    explication: "À chaque étape, chaque triangle est remplacé par 3 triangles plus petits. Le nombre de triangles est donc multiplié par 3 : 3, 9, 27, 81, puis 243.",
+    maths: `<p>Soit <var>u<sub>n</sub></var> le nombre de triangles après <var>n</var> étapes. C'est une suite géométrique de premier terme <var>u</var><sub>0</sub> = 1 et de raison 3 :</p><p class="eq"><var>u<sub>n</sub></var> = 3<sup><var>n</var></sup></p><p class="eq"><var>u</var><sub>5</sub> = 3<sup>5</sup> = 243</p><p><strong>Pour aller plus loin :</strong> à chaque étape, on retire un quart de l'aire verte. Il en reste donc ${frac(3,4)} à chaque fois :</p><p class="eq">(${frac(3,4)})<sup>5</sup> ≈ 0,24</p><p>Le sapin ne garde qu'environ 24 % de l'aire du triangle de départ. Si l'on continuait à l'infini, le nombre de triangles deviendrait infini, alors que l'aire se rapprocherait de 0.</p>`
+  }
+};
+
+/* Les étapes 0, 1 et 2 de la construction, côte à côte. */
+function figureEtapes() {
+  const chemin = (ax, ay, bx, by, cx, cy, n) => {
+    if (n === 0) return `M${ax} ${ay}L${bx} ${by}L${cx} ${cy}Z`;
+    const ab = [(ax + bx) / 2, (ay + by) / 2], ac = [(ax + cx) / 2, (ay + cy) / 2], bc = [(bx + cx) / 2, (by + cy) / 2];
+    return chemin(ax, ay, ...ab, ...ac, n - 1) + chemin(...ab, bx, by, ...bc, n - 1) + chemin(...ac, ...bc, cx, cy, n - 1);
+  };
+  let dessin = "";
+  [0, 1, 2].forEach(n => {
+    const x = 15 + n * 110;
+    dessin += `<path d="${chemin(x + 45, 8, x, 86, x + 90, 86, n)}" fill="#2E7D6B" stroke="#16232F" stroke-width="1" stroke-linejoin="round"/>`;
+    dessin += `<text x="${x + 45}" y="106" fill="#16232F" font-family="'IBM Plex Mono','Courier New',monospace" font-weight="600" font-size="12" text-anchor="middle">Étape ${n}</text>`;
+    if (n < 2) dessin += `<path d="M${x + 96} 58h10m-4 -4l4 4l-4 4" stroke="#C6810F" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+  });
+  return `<svg class="etapes" viewBox="0 0 330 112" role="img" aria-label="Construction du triangle de Sierpiński : étape 0, un triangle plein ; étape 1, trois triangles ; étape 2, neuf triangles.">${dessin}</svg>`;
+}
+
+/* ---------- Progression (facultative : le jeu marche sans stockage) ---------- */
+let progres = {};
+try { progres = JSON.parse(localStorage.getItem(CLE)) || {}; } catch (e) { progres = {}; }
+let bonus = null;
+try { bonus = localStorage.getItem(CLE + "-bonus"); } catch (e) { bonus = null; }
+const etatEnigme = jour => jour === "bonus" ? bonus : progres[jour];
+function sauver() {
+  try { localStorage.setItem(CLE, JSON.stringify(progres)); } catch (e) { /* navigation privée */ }
+}
+
+/* ---------- Dates ---------- */
+const curseur = document.getElementById("dateSimulee");
+function jourCourant() {
+  if (APERCU) return Number(curseur.value);
+  const d = new Date();
+  if (d.getFullYear() > ANNEE) return 25;
+  if (d.getFullYear() < ANNEE || d.getMonth() < 11) return 0;
+  return d.getDate() > 24 ? 25 : d.getDate();
+}
+
+/* Décompte jusqu'à minuit, heure de l'appareil. En aperçu, on garde l'heure réelle sur la date simulée. */
+let dernierJour = null;
+function majDecompte() {
+  const auj = jourCourant();
+  if (dernierJour !== null && auj !== dernierJour) afficher();   // une nouvelle case vient d'ouvrir
+  dernierJour = auj;
+  const label = document.getElementById("decompteLabel");
+  const temps = document.getElementById("decompteTemps");
+  if (auj >= 24) {
+    label.textContent = "Toutes les cases sont ouvertes.";
+    temps.textContent = "Joyeux Noël !";
+    return;
+  }
+  const r = new Date();
+  const maintenant = APERCU ? new Date(ANNEE, 11, auj, r.getHours(), r.getMinutes(), r.getSeconds()) : r;
+  const cible = new Date(ANNEE, 11, auj + 1);
+  let s = Math.max(0, Math.floor((cible - maintenant) / 1000));
+  const j = Math.floor(s / 86400); s %= 86400;
+  const h = Math.floor(s / 3600); s %= 3600;
+  const m = Math.floor(s / 60); s %= 60;
+  const deux = n => String(n).padStart(2, "0");
+  label.textContent = `La case ${auj + 1} s'ouvre dans`;
+  temps.textContent = (j ? `${j} j ` : "") + `${deux(h)} h ${deux(m)} min ${deux(s)} s`;
+}
+
+/* ---------- Dessin du sapin ---------- */
+function dessinerSapin() {
+  let triangles = "";
+  (function sierpinski(ax, ay, bx, by, cx, cy, n) {
+    if (n === 0) {
+      triangles += `M${ax.toFixed(1)} ${ay.toFixed(1)}L${bx.toFixed(1)} ${by.toFixed(1)}L${cx.toFixed(1)} ${cy.toFixed(1)}Z`;
+      return;
+    }
+    const abx = (ax + bx) / 2, aby = (ay + by) / 2;
+    const acx = (ax + cx) / 2, acy = (ay + cy) / 2;
+    const bcx = (bx + cx) / 2, bcy = (by + cy) / 2;
+    sierpinski(ax, ay, abx, aby, acx, acy, n - 1);
+    sierpinski(abx, aby, bx, by, bcx, bcy, n - 1);
+    sierpinski(acx, acy, bcx, bcy, cx, cy, n - 1);
+  })(200, 72, 44, 470, 356, 470, 5);
+
+  // flocons à positions fixes (générateur pseudo-aléatoire simple)
+  let graine = 7, flocons = "";
+  const hasard = () => (graine = (graine * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 70; i++) {
+    const x = hasard() * 400, y = hasard() * 520, r = 0.8 + hasard() * 1.6;
+    flocons += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${r.toFixed(1)}" fill="#E4EAEF" opacity="${(0.4 + hasard() * 0.5).toFixed(2)}"/>`;
+  }
+
+  const boule = (x, y, r, fond, texte, sym) =>
+    `<circle cx="${x}" cy="${y}" r="${r}" fill="${fond}" stroke="#16232F" stroke-width="2.5"/>` +
+    `<text x="${x}" y="${y}" fill="${texte}" font-family="'IBM Plex Mono','Courier New',monospace" font-weight="600" font-size="${r * 1.15}" text-anchor="middle" dominant-baseline="central">${sym}</text>`;
+
+  const etoile = (() => {
+    let p = "";
+    for (let i = 0; i < 10; i++) {
+      const r = i % 2 ? 11 : 26, a = -Math.PI / 2 + i * Math.PI / 5;
+      p += `${(200 + r * Math.cos(a)).toFixed(1)},${(66 + r * Math.sin(a)).toFixed(1)} `;
+    }
+    return `<polygon points="${p}" fill="#F2A93B" stroke="#16232F" stroke-width="2"/>`;
+  })();
+
+  document.getElementById("sapin").innerHTML = `
+    <rect width="400" height="600" fill="#16232F"/>
+    ${flocons}
+    <path d="M338 58a26 26 0 1 0 22 42a21 21 0 1 1 -22 -42Z" fill="#F2A93B" opacity="0.9"/>
+    <path d="M0 520C90 496 300 496 400 522V600H0Z" fill="#E4EAEF"/>
+    <rect x="182" y="470" width="36" height="46" fill="#7A5230" stroke="#16232F" stroke-width="2"/>
+    <path d="${triangles}" fill="#4DB39B"/>
+    ${etoile}
+    ${boule(200, 176, 17, "#B3432B", "#FFFFFF", "π")}
+    ${boule(121, 330, 17, "#F2A93B", "#16232F", "√")}
+    ${boule(279, 330, 17, "#FFFFFF", "#16232F", "∑")}
+    ${boule(160, 262, 13, "#FFFFFF", "#16232F", "%")}
+    ${boule(240, 262, 13, "#F2A93B", "#16232F", "÷")}
+    ${boule(84, 430, 17, "#B3432B", "#FFFFFF", "∞")}
+    ${boule(200, 436, 17, "#F2A93B", "#16232F", "×")}
+    ${boule(316, 430, 17, "#B3432B", "#FFFFFF", "±")}
+    <g stroke="#16232F" stroke-width="2.5">
+      <rect x="84" y="474" width="66" height="50" fill="#B3432B"/>
+      <rect x="110" y="474" width="14" height="50" fill="#F2A93B"/>
+      <rect x="84" y="492" width="66" height="14" fill="#F2A93B"/>
+      <rect x="250" y="462" width="74" height="62" fill="#2E7D6B"/>
+      <rect x="280" y="462" width="14" height="62" fill="#E4EAEF"/>
+      <rect x="250" y="486" width="74" height="14" fill="#E4EAEF"/>
+    </g>
+    <text x="200" y="572" fill="#16232F" font-family="Oswald,Arial,sans-serif" font-weight="700" font-size="32" letter-spacing="3" text-anchor="middle">JOYEUX NOËL</text>`;
+}
+
+/* ---------- Plateau ---------- */
+const portes = {};
+function creerPortes() {
+  const conteneur = document.getElementById("portes");
+  PLATEAU.forEach((jour, position) => {
+    const ligne = Math.floor(position / 4), colonne = position % 4;
+    const papier = (ligne + colonne) % 2 ? "papier-vert" : "papier-rouge";
+    const b = document.createElement("button");
+    b.type = "button";
+    b.className = "porte";
+    b.id = "porte-" + jour;
+    b.innerHTML = `<span class="porte-num">${jour}</span><span class="porte-face ${papier} motif-${jour % 7}"><span class="etiquette">${jour}</span></span>`;
+    b.addEventListener("click", () => cliquerPorte(jour));
+    conteneur.appendChild(b);
+    portes[jour] = b;
+  });
+}
+
+function afficher() {
+  const auj = jourCourant();
+  PLATEAU.forEach(jour => {
+    const b = portes[jour], fait = progres[jour];
+    b.classList.toggle("ouverte", !!fait);
+    b.classList.toggle("a-venir", !fait && jour > auj);
+    b.classList.toggle("du-jour", !fait && jour === auj);
+    b.classList.toggle("passee", !fait && jour < auj);
+    const etat = fait ? "ouverte, revoir l'énigme" : jour > auj ? `s'ouvre le ${jour} décembre` : "à résoudre";
+    b.setAttribute("aria-label", `Case ${jour}, ${etat}`);
+  });
+  afficherMessage();
+
+  const total = Object.keys(progres).length;
+  const finie = total === 24;
+  document.getElementById("fin").hidden = !finie;
+  document.getElementById("portes").classList.toggle("finies", finie);
+  if (finie) {
+    const seul = Object.values(progres).filter(v => v === "trouve").length;
+    document.getElementById("finBilan").textContent =
+      `Tu as trouvé ${seul} énigme${seul > 1 ? "s" : ""} sur 24 sans afficher la réponse.`;
+    document.getElementById("ouvrirBonus").textContent =
+      bonus ? "Revoir l'énigme bonus" : "Résoudre l'énigme bonus";
+  }
+}
+
+function afficherMessage() {
+  const zone = document.getElementById("message");
+  const lettresObtenues = new Set();
+  Object.keys(progres).forEach(j => lettresObtenues.add(ORDRE_LETTRES[j - 1]));
+  zone.innerHTML = "";
+  let indice = 0;
+  MESSAGE.split(" ").forEach(morceau => {
+    const mot = document.createElement("span");
+    mot.className = "mot";
+    [...morceau].forEach(c => {
+      const el = document.createElement("span");
+      if (/\p{L}/u.test(c)) {
+        const visible = lettresObtenues.has(indice++);
+        el.className = "case-lettre" + (visible ? "" : " vide");
+        el.textContent = visible ? c : "";
+      } else {
+        el.className = "ponct";
+        el.textContent = c;
+      }
+      mot.appendChild(el);
+    });
+    zone.appendChild(mot);
+  });
+  const n = lettresObtenues.size;
+}
+
+function lettreDuJour(jour) {
+  return [...MESSAGE].filter(c => /\p{L}/u.test(c))[ORDRE_LETTRES[jour - 1]];
+}
+
+/* ---------- Fenêtre d'énigme ---------- */
+const fenetre = document.getElementById("fenetre");
+const corps = document.getElementById("enigmeCorps");
+const statut = document.getElementById("statut");
+const titreJour = jour => (Number(jour) === 1 ? "1er" : jour) + " décembre";
+
+function cliquerPorte(jour) {
+  if (!progres[jour] && jour > jourCourant()) {
+    statut.textContent = `Patience : la case ${jour} s'ouvre le ${titreJour(jour)}.`;
+    return;
+  }
+  statut.textContent = "";
+  ouvrirEnigme(jour);
+}
+
+function ouvrirEnigme(jour) {
+  const e = ENIGMES[jour];
+  document.getElementById("enigmeSurtitre").textContent =
+    (jour === "bonus" ? "Énigme bonus" : titreJour(jour)) + (e ? " · " + e.niveau : "");
+  document.getElementById("enigmeTitre").textContent = e ? e.titre : `Case ${jour}`;
+  if (!e) corpsAEcrire(jour);
+  else if (etatEnigme(jour)) corpsResultat(jour, etatEnigme(jour));
+  else corpsQuestion(jour);
+  fenetre.showModal();
+}
+
+/* Uniquement dans le prototype : cases sans énigme pour l'instant. */
+function corpsAEcrire(jour) {
+  corps.innerHTML = `<p class="enonce">Cette énigme reste à écrire pour la version finale.</p>`;
+  if (progres[jour]) {
+    corps.innerHTML += ligneLettre(jour);
+    return;
+  }
+  const b = document.createElement("button");
+  b.className = "btn"; b.type = "button"; b.textContent = "Ouvrir quand même";
+  b.addEventListener("click", () => { noter(jour, "trouve"); fenetre.close(); });
+  corps.appendChild(b);
+}
+
+function ligneLettre(jour) {
+  return `<div class="lettre-gagnee"><span class="case-lettre">${lettreDuJour(jour)}</span><span>Ta lettre pour le message caché</span></div>`;
+}
+
+function noter(jour, comment) {
+  if (jour === "bonus") {
+    bonus = comment;
+    try { localStorage.setItem(CLE + "-bonus", comment); } catch (e) { /* navigation privée */ }
+    return;
+  }
+  progres[jour] = comment;
+  sauver();
+}
+
+function corpsQuestion(jour) {
+  const e = ENIGMES[jour];
+  let erreurs = 0;
+  const maxErreurs = e.choix ? 2 : 3;
+
+  corps.innerHTML = `
+    <p class="enonce">${e.texte}</p>
+    ${e.figure || ""}
+    ${e.choix
+      ? `<div class="choix">${e.choix.map(c => `<button type="button">${c}</button>`).join("")}</div>`
+      : `<form class="saisie" id="formReponse" novalidate>
+           <input id="reponseJour" type="text" inputmode="numeric" autocomplete="off" aria-label="Ta réponse" placeholder="Ta réponse">
+           <button class="btn" type="submit">Valider</button>
+         </form>`}
+    <p class="retour" id="retour" role="alert"></p>
+    <div class="liens">
+      <button type="button" class="lien" id="voirIndice">Voir l'indice</button>
+      <button type="button" class="lien" id="voirReponse" hidden>Afficher la réponse</button>
+    </div>
+    <p class="indice" id="indice" hidden>${e.indice}</p>`;
+
+  const retour = corps.querySelector("#retour");
+  const lienReponse = corps.querySelector("#voirReponse");
+
+  function erreur() {
+    erreurs++;
+    retour.textContent = erreurs === 1 ? "Pas tout à fait. Essaie encore !" : "Toujours pas. Tu peux relire l'énoncé ou voir l'indice.";
+    if (erreurs >= maxErreurs) lienReponse.hidden = false;
+  }
+  function reussite() { noter(jour, "trouve"); corpsResultat(jour, "trouve"); }
+
+  corps.querySelector("#voirIndice").addEventListener("click", ev => {
+    corps.querySelector("#indice").hidden = false;
+    ev.target.hidden = true;
+  });
+  lienReponse.addEventListener("click", () => { noter(jour, "vu"); corpsResultat(jour, "vu"); });
+
+  if (e.choix) {
+    corps.querySelectorAll(".choix button").forEach(b => b.addEventListener("click", () => {
+      if (b.textContent === e.reponse) reussite();
+      else { b.disabled = true; erreur(); }
+    }));
+  } else {
+    const champ = corps.querySelector("#reponseJour");
+    corps.querySelector("#formReponse").addEventListener("submit", ev => {
+      ev.preventDefault();
+      const nombre = champ.value.replace(",", ".").match(/-?\d+(?:\.\d+)?/);
+      if (!nombre) { retour.textContent = "Écris un nombre pour répondre."; champ.focus(); return; }
+      const valeur = Number(nombre[0]);
+      if (valeur === e.reponse || (e.aussi || []).includes(valeur)) reussite();
+      else { erreur(); champ.select(); }
+    });
+  }
+}
+
+function corpsResultat(jour, comment) {
+  const e = ENIGMES[jour];
+  const rep = e.reponse + (e.unite ? "\u00a0" + e.unite : "");
+  corps.innerHTML = `
+    <p class="enonce">${e.texte}</p>
+    ${e.figureCorrection || e.figure || ""}
+    <div class="resultat">
+      <h3>${comment === "trouve" ? `Bravo, c'est bien ${rep} !` : `La réponse : ${rep}`}</h3>
+      <p>${e.explication}</p>
+      <div class="maths"><h4>Avec les maths</h4>${e.maths}</div>
+      ${jour === "bonus" ? "" : ligneLettre(jour)}
+      <button class="btn teal" type="button" id="ouvrirCase">${jour === "bonus" ? "Fermer" : "Voir le sapin"}</button>
+    </div>`;
+  corps.querySelector("#ouvrirCase").addEventListener("click", () => fenetre.close());
+  corps.querySelector("#ouvrirCase").focus();
+}
+
+document.getElementById("fermer").addEventListener("click", () => fenetre.close());
+fenetre.addEventListener("click", ev => { if (ev.target === fenetre) fenetre.close(); });
+/* La porte s'ouvre à la fermeture de la fenêtre, pour qu'on voie l'animation. */
+fenetre.addEventListener("close", afficher);
+document.getElementById("ouvrirBonus").addEventListener("click", () => ouvrirEnigme("bonus"));
+document.getElementById("figureFin").innerHTML = figureEtapes();
+
+/* ---------- Bandeau du prototype ---------- */
+if (APERCU) {
+  document.getElementById("apercu").hidden = false;
+  const sortie = document.getElementById("dateAffichee");
+  curseur.addEventListener("input", () => {
+    sortie.textContent = titreJour(curseur.value);
+    statut.textContent = "";
+    afficher();
+    majDecompte();
+  });
+  document.getElementById("voirFin").addEventListener("click", () => {
+    PLATEAU.forEach(j => { if (!progres[j]) progres[j] = "trouve"; });
+    curseur.value = 24;
+    sortie.textContent = titreJour(24);
+    sauver();
+    afficher();
+  });
+  document.getElementById("recommencer").addEventListener("click", () => {
+    progres = {};
+    bonus = null;
+    try { localStorage.removeItem(CLE + "-bonus"); } catch (e) { /* navigation privée */ }
+    curseur.value = 6;
+    sortie.textContent = titreJour(6);
+    statut.textContent = "";
+    sauver();
+    afficher();
+  });
+}
+
+dessinerSapin();
+creerPortes();
+afficher();
+majDecompte();
+setInterval(majDecompte, 1000);
+
+})();
+</script>
 
 <script>
   // Class-level tabs
